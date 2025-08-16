@@ -1,0 +1,23 @@
+import com.microsoft.playwright.BrowserContext;
+
+public interface teams_microsoft_com {
+
+    /**
+     * Sends a message to a specified recipient in Microsoft Teams.
+     *
+     * @param recipientEmail The email address of the recipient.
+     * @param messageText The text of the message to send.
+     * @return MessageStatus containing the recipient email, message text, and status.
+     */
+    public MessageStatus sendMessage(String recipientEmail, String messageText);
+
+    /**
+     * Sends a message to a specified group chat in Microsoft Teams.
+     *
+     * @param recipientEmail The email address or group chat name.
+     * @param messageText The text of the message to send.
+     * @return MessageStatus containing the recipient email, message text, and status.
+     */
+    public MessageStatus sendToGroupChat(String recipientEmail, String messageText);
+
+}

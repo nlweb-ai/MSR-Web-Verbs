@@ -1,0 +1,71 @@
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * NewsAPI wrapper for searching news articles.
+ * Extends BaseApiClient for HTTP functionality.
+ * Returns explicit result types for news data.
+ */
+public interface News {
+    /**
+     * Search for everything - articles from news sources and blogs.
+     * @param q Keywords or phrases to search for
+     * @return NewsResponse containing articles and metadata
+     */
+    public NewsResponse searchEverything(String q);
+
+    /**
+     * Search for everything with basic parameters.
+     * @param q Keywords or phrases to search for
+     * @param language The 2-letter ISO-639-1 code of the language
+     * @param pageSize The number of results to return per page
+     * @return NewsResponse containing articles and metadata
+     */
+    public NewsResponse searchEverything(String q, String language, int pageSize);
+
+    /**
+     * Search for everything with full customization.
+     * @param q Keywords or phrases to search for
+     * @param searchIn The fields to restrict search to (title, description, content)
+     * @param sources Comma-separated string of source identifiers
+     * @param domains Comma-separated string of domains to include
+     * @param excludeDomains Comma-separated string of domains to exclude
+     * @param fromDate Date for oldest article (as LocalDate, ISO 8601 format)
+     * @param toDate Date for newest article (as LocalDate, ISO 8601 format)
+     * @param language The 2-letter ISO-639-1 code of the language
+     * @param sortBy Sort order (relevancy, popularity, publishedAt)
+     * @param pageSize Number of results per page (max 100)
+     * @param page Page number to retrieve
+     * @return NewsResponse containing articles and metadata
+     */
+    public NewsResponse searchEverything(String q, String searchIn, String sources, String domains,
+                                        String excludeDomains, LocalDate fromDate, LocalDate toDate, String language,
+                                        String sortBy, int pageSize, int page);
+
+    /**
+     * Get top headlines for the US.
+     * @return NewsResponse containing top headlines and metadata
+     */
+    public NewsResponse getTopHeadlines();
+
+    /**
+     * Get top headlines for a specific country and category.
+     * @param country The 2-letter ISO 3166-1 country code (e.g., "us", "gb", "de")
+     * @param category The category (business, entertainment, general, health, science, sports, technology)
+     * @return NewsResponse containing top headlines and metadata
+     */
+    public NewsResponse getTopHeadlines(String country, String category);
+
+    /**
+     * Get top headlines with full customization.
+     * @param country The 2-letter ISO 3166-1 country code (cannot mix with sources)
+     * @param category The category (cannot mix with sources)
+     * @param sources Comma-separated string of source identifiers (cannot mix with country/category)
+     * @param q Keywords or phrases to search for
+     * @param pageSize Number of results per page (max 100)
+     * @param page Page number to retrieve
+     * @return NewsResponse containing top headlines and metadata
+     */
+    public NewsResponse getTopHeadlines(String country, String category, String sources,
+                                       String q, int pageSize, int page);
+}

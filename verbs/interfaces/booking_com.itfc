@@ -1,0 +1,15 @@
+import java.time.LocalDate;
+
+import com.microsoft.playwright.BrowserContext;
+
+public interface booking_com {
+
+    /**
+     * Searches for hotels in a destination for given dates.
+     * @param destination The destination city/location
+     * @param checkinDate Check-in date (LocalDate)
+     * @param checkoutDate Check-out date (LocalDate)
+     * @return HotelSearchResult containing a list of hotels and the search parameters
+     */
+    public HotelSearchResult search_hotel(String destination, LocalDate checkinDate, LocalDate checkoutDate);
+}

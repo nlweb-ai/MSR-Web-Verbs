@@ -1,0 +1,158 @@
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Wikimedia API wrapper for searching Wikipedia articles
+ * Extends BaseApiClient for HTTP functionality
+ */
+public interface Wikimedia {
+
+    /**
+     * Search for Wikipedia articles using the REST API search endpoint.
+     * This method performs a full-text search across Wikipedia articles and returns
+     * matching article titles. The search is performed on article content, not just titles.
+     * 
+     * @param query The search query string to look for in Wikipedia articles
+     * @param languageCode Language code (e.g., "en" for English) to specify which Wikipedia to search
+     * @param limit Maximum number of results to return (typically 1-50)
+     * @return SearchResult object containing a list of matching article titles
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public SearchResult search(String query, String languageCode, int limit) throws IOException, InterruptedException;
+
+    /**
+     * Search for Wikipedia article titles that begin with the provided search terms (autocomplete).
+     * Uses the search/title endpoint for title-based autocomplete functionality.
+     * This is useful for implementing search suggestions or autocomplete features.
+     * 
+     * @param query The search query - returns titles that begin with this text
+     * @param languageCode Language code (e.g., "en" for English), defaults to "en" if null or empty
+     * @param limit Number of results to return (1-100), defaults to 5 if 0 or negative
+     * @return SearchResult object containing article titles that begin with the search terms
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public SearchResult searchTitles(String query, String languageCode, int limit) throws IOException, InterruptedException;
+
+    /**
+     * Search for Wikipedia article titles that begin with the provided search terms using default settings.
+     * This is a convenience method that uses the default language (English) and limit (5 results).
+     * 
+     * @param query The search query - returns titles that begin with this text
+     * @return SearchResult object containing article titles that begin with the search terms
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public SearchResult searchTitles(String query) throws IOException, InterruptedException;
+
+    /**
+     * Get comprehensive information about a specific Wikipedia page using the page/{title}/bare endpoint.
+     * This method retrieves detailed metadata about a Wikipedia page including its ID, title, content model,
+     * license information, and last modification timestamp.
+     * 
+     * @param title The page title to get information for (will be URL encoded automatically)
+     * @param languageCode Language code (e.g., "en" for English), defaults to "en" if null or empty
+     * @return PageInfo object containing comprehensive page metadata
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public PageInfo getPage(String title, String languageCode) throws IOException, InterruptedException;
+
+    /**
+     * Get information about a specific Wikipedia page using the default language (English).
+     * This is a convenience method that retrieves page metadata using English Wikipedia.
+     * 
+     * @param title The page title to get information for
+     * @return PageInfo object containing comprehensive page metadata
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public PageInfo getPage(String title) throws IOException, InterruptedException;
+
+    /**
+     * Get comprehensive HTML content analysis of a specific Wikipedia page using the page/{title}/html endpoint.
+     * This method retrieves and analyzes the HTML content of a Wikipedia page, providing statistics about
+     * headings, links, images, and other structural elements, along with sample content.
+     * 
+     * @param title The page title to get HTML content analysis for (will be URL encoded automatically)
+     * @param languageCode Language code (e.g., "en" for English), defaults to "en" if null or empty
+     * @return HtmlContentInfo object containing content analysis and statistics
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public HtmlContentInfo getHtml(String title, String languageCode) throws IOException, InterruptedException;
+    
+    /**
+     * Get HTML content analysis of a specific Wikipedia page using the default language (English).
+     * This is a convenience method that analyzes page HTML content using English Wikipedia.
+     * 
+     * @param title The page title to get HTML content analysis for
+     * @return HtmlContentInfo object containing content analysis and statistics
+     * @throws IOException if there's a network or I/O error during the request
+     * @throws InterruptedException if the request is interrupted
+     */
+    public HtmlContentInfo getHtml(String title) throws IOException, InterruptedException;
+
+    /**
+     * Simulate creating a new Wikipedia page without actually performing the operation.
+     * This method formats and returns the details of what would be sent to the Wikipedia API
+     * for page creation, including the URL, HTTP method, and request body structure.
+     * No actual page creation occurs to avoid unintended modifications to Wikipedia.
+     * 
+     * @param title The page title to create (e.g., "User:Username/Sandbox")
+     * @param source The page content/source in wikitext format
+     * @param comment The edit comment explaining the page creation purpose
+     * @param contentModel The content model (e.g., "wikitext", "javascript", "css"), defaults to "wikitext" if null
+     * @param languageCode Language code (e.g., "en" for English), defaults to "en" if null or empty
+     * @return PageOperationRequest object containing details of the simulated create operation
+     */
+    public PageOperationRequest createPage(String title, String source, String comment, String contentModel, String languageCode);
+    
+    /**
+     * Simulate creating a new Wikipedia page using default content model and language.
+     * This convenience method uses "wikitext" as the content model and English as the language.
+     * No actual page creation occurs to avoid unintended modifications to Wikipedia.
+     * 
+     * @param title The page title to create
+     * @param source The page content/source in wikitext format
+     * @param comment The edit comment explaining the page creation purpose
+     * @return PageOperationRequest object containing details of the simulated create operation
+     */
+    public PageOperationRequest createPage(String title, String source, String comment);
+
+    /**
+     * Simulate editing an existing Wikipedia page without actually performing the operation.
+     * This method formats and returns the details of what would be sent to the Wikipedia API
+     * for page editing, including the URL, HTTP method, request body, and revision conflict detection.
+     * No actual page editing occurs to avoid unintended modifications to Wikipedia.
+     * 
+     * @param title The page title to edit
+     * @param source The new page content/source in wikitext format
+     * @param comment The edit comment explaining the changes made
+     * @param contentModel The content model (e.g., "wikitext", "javascript", "css"), defaults to "wikitext" if null
+     * @param latestRevisionId The latest revision ID for conflict detection (prevents edit conflicts)
+     * @param languageCode Language code (e.g., "en" for English), defaults to "en" if null or empty
+     * @return PageOperationRequest object containing details of the simulated edit operation
+     */
+    public PageOperationRequest editPage(String title, String source, String comment, String contentModel, long latestRevisionId, String languageCode);
+
+    /**
+     * Simulate editing an existing Wikipedia page using default content model and language.
+     * This convenience method uses "wikitext" as the content model and English as the language.
+     * No actual page editing occurs to avoid unintended modifications to Wikipedia.
+     * 
+     * @param title The page title to edit
+     * @param source The new page content/source in wikitext format
+     * @param comment The edit comment explaining the changes made
+     * @param latestRevisionId The latest revision ID for conflict detection
+     * @return PageOperationRequest object containing details of the simulated edit operation
+     */
+    public PageOperationRequest editPage(String title, String source, String comment, long latestRevisionId);
+    
+    /**
+     * Get the current user agent string for debugging/verification
+     * @return The user agent string being used
+     */
+    public static String getUserAgent();
+}

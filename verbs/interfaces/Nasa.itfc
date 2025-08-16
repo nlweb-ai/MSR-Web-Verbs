@@ -1,0 +1,52 @@
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * NASA API wrapper for various NASA services
+ * Extends BaseApiClient for HTTP functionality
+ */
+public interface Nasa {
+
+    /**
+     * Get the current user agent string for debugging/verification
+     * @return The user agent string being used
+     */
+    public static String getUserAgent();
+    
+    /**
+     * Retrieves the Astronomy Picture of the Day (APOD) from NASA's API.
+     * @param date The date for the APOD in YYYY-MM-DD format (optional, defaults to today)
+     * @param hd Whether to retrieve the high definition image
+     * @return ApodResult containing title, url, explanation, and date
+     * @throws IOException if a network error occurs
+     * @throws InterruptedException if the request is interrupted
+     */
+    public ApodResult getApod(String date, boolean hd);
+    
+    /**
+     * Retrieves a list of Near Earth Objects (NEOs) for a given date range.
+     * @param startDate Start date in YYYY-MM-DD format
+     * @param endDate End date in YYYY-MM-DD format (optional)
+     * @return List of NeoResult objects
+     * @throws IOException if a network error occurs
+     * @throws InterruptedException if the request is interrupted
+     */
+    public List<NeoResult> getNeoFeed(String startDate, String endDate);
+    
+    /**
+     * Looks up a specific Near Earth Object by its NASA JPL small body ID.
+     * @param asteroidId The asteroid ID to lookup
+     * @return NeoResult for the specific asteroid
+     * @throws IOException if a network error occurs
+     * @throws InterruptedException if the request is interrupted
+     */
+    public NeoResult getNeoLookup(int asteroidId);
+    
+    /**
+     * Retrieves a list of Near Earth Objects from the browse endpoint.
+     * @return List of NeoResult objects from the browse endpoint
+     * @throws IOException if a network error occurs
+     * @throws InterruptedException if the request is interrupted
+     */
+    public List<NeoResult> getNeoBrowse();
+}

@@ -1,0 +1,14 @@
+import com.microsoft.playwright.BrowserContext;
+
+public interface redfin_com {
+
+    /**
+     * Search Redfin for apartments for rent in a location and price range.
+     * @param location The city or area to search (e.g., "bellevue, WA").
+     * @param minRent The minimum rent (e.g., 2000).
+     * @param maxRent The maximum rent (e.g., 3000).
+     * @return ApartmentSearchResult containing a list of apartments and any error message.
+     */
+    public ApartmentSearchResult searchApartments(String location, int minRent, int maxRent);
+
+}

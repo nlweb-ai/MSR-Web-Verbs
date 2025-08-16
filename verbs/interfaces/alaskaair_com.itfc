@@ -1,0 +1,14 @@
+import com.microsoft.playwright.BrowserContext;
+
+public interface alaskaair_com   {
+    
+    /**
+     * Searches for flights between the given origin and destination on specified dates.
+     * @param origin Origin AIRPORT CODE
+     * @param destination Destination AIRPORT CODE
+     * @param outboundDate Outbound flight date
+     * @param returnDate Return flight date
+     * @return SearchFlightsResult containing flight info or a message if no flights found
+     */
+    public SearchFlightsResult searchFlights(String origin, String destination, LocalDate outboundDate, LocalDate returnDate);
+}

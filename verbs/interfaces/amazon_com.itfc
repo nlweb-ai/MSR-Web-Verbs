@@ -1,0 +1,16 @@
+import com.microsoft.playwright.BrowserContext;
+
+public interface amazon_com   {
+    
+    /**
+     * Clears all items from the Amazon shopping cart.
+     */
+    public void clearCart();
+
+    /**
+     * Adds an item to the cart and returns cart information.
+     * @param item The item to search for and add to cart
+     * @return CartResult containing cart items and their prices
+     */
+    public CartResult addItemToCart(String item);
+}
