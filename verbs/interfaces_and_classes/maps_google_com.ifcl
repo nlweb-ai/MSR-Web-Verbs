@@ -1,0 +1,61 @@
+import com.microsoft.playwright.BrowserContext;
+
+public class maps_google_com extends com_base {
+    //write a constructor that takes BrowserContext context as an argument
+    public maps_google_com(BrowserContext _context);
+
+    /**
+     * Gets travel information between two locations.
+     * @param source The starting location
+     * @param destination The destination location
+     * @return DirectionResult containing travel time, distance, and route
+     */
+    public DirectionResult get_direction(String source, String destination);
+
+    /**
+     * This method retrieves a list of nearby businesses based on a reference point and business description.
+     *
+     * @param referencePoint The location from which to find nearby businesses (e.g., "Seattle, WA").
+     * @param businessDescription A description of the type of business to search for (e.g., "coffee shop").
+     * @param maxCount The maximum number of businesses to return.
+     * @return NearestBusinessesResult containing a list of the nearest businesses.
+     */
+    public NearestBusinessesResult get_nearestBusinesses(String referencePoint, String businessDescription, int maxCount);
+
+    /**
+     * Represents the result of a direction query, including travel time, distance, and route.
+     */
+    public static class DirectionResult {
+        /** Estimated travel time. */
+        public final String travelTime;
+        /** Distance of the route. */
+        public final String distance;
+        /** Route description. */
+        public final String route;
+        public DirectionResult(String travelTime, String distance, String route);
+    }
+
+    /**
+     * Represents a business with a name and address.
+     */
+    public static class BusinessInfo {
+        /** Name of the business. */
+        public final String name;
+        /** Address of the business. */
+        public final String address;
+        public BusinessInfo(String name, String address);
+    }
+
+    /**
+     * Represents the result of a nearest businesses query.
+     */
+    public static class NearestBusinessesResult {
+        /** The reference point for the search. */
+        public final String referencePoint;
+        /** The business description searched for. */
+        public final String businessDescription;
+        /** List of found businesses. */
+        public final java.util.List<BusinessInfo> businesses;
+        public NearestBusinessesResult(String referencePoint, String businessDescription, java.util.List<BusinessInfo> businesses);
+    }
+}

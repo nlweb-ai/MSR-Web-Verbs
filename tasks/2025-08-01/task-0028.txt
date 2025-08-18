@@ -1,0 +1,2 @@
+Task Description:
+I want to organize a weekend hackathon in Austin from August 22 to August 24, 2025. First, I will use Google Maps to find event spaces in Austin. Then, I will use Redfin to search for short-term rentals for 12 participants. Next, I will use Costco to find energy drinks and snacks for the hackathon. Finally, I will use Alaska Airlines to check flight options for participants coming from Chicago. I will compare event space amenities and snack prices, and select the best rental based on proximity to the event space.

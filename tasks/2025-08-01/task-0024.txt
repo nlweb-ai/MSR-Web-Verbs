@@ -1,0 +1,2 @@
+Task Description:
+I want to organize a tech meetup in San Jose on August 15, 2025. First, I will use Google Maps to find available conference centers in San Jose. Then, I will use Redfin to search for short-term rentals for 6 out-of-town speakers. Next, I will use Costco to find snack and beverage packages for 50 attendees. Finally, I will use Alaska Airlines to check flight options for speakers traveling from Los Angeles. I will calculate the total cost for venue, rentals, and snacks, and select the best flight options based on arrival times.

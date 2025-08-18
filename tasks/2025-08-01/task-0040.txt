@@ -1,0 +1,2 @@
+Task Description:
+I want to prepare a back-to-school shopping and information guide for parents in Dallas on August 7, 2025. First, I will use costco_com to search for school supplies and backpacks. Then, I will use amazon_com to add a lunchbox to my cart. Next, I will use News to find articles about back-to-school tips and trends. Finally, I will use OpenWeather to check the weather forecast for Dallas on August 7, 2025, to help parents plan for the first day. I will compare prices, summarize news, and provide weather tips in the guide.

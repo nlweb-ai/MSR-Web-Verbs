@@ -1,0 +1,1 @@
+I want to get the weather forecast for Phoenix, AZ on August 14, 2025. If the forecast includes extreme heat, I want to search for sun hats at Costco and select the one with the lowest price. Then, I want to find the top 3 Spotify tracks about sun and for each, search for books about deserts in OpenLibrary, picking the book with the most recent publication year for each track.

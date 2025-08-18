@@ -1,0 +1,44 @@
+import java.time.LocalDate;
+
+import com.microsoft.playwright.BrowserContext;
+
+//Functions of Booking.com
+public class booking_com extends com_base {
+    //write a constructor that takes BrowserContext context as an argument
+    public booking_com(BrowserContext _context);
+
+    /**
+     * Searches for hotels in a destination for given dates.
+     * @param destination The destination city/location
+     * @param checkinDate Check-in date (LocalDate)
+     * @param checkoutDate Check-out date (LocalDate)
+     * @return HotelSearchResult containing a list of hotels and the search parameters
+     */
+    public HotelSearchResult search_hotel(String destination, LocalDate checkinDate, LocalDate checkoutDate);
+
+    /**
+     * Represents a hotel search result, including search parameters and a list of hotels.
+     */
+    public static class HotelSearchResult {
+        /** Destination city/location. */
+        public final String destination;
+        /** Check-in date. */
+        public final LocalDate checkinDate;
+        /** Check-out date. */
+        public final LocalDate checkoutDate;
+        /** List of hotels found. */
+        public final java.util.List<HotelInfo> hotels;
+        public HotelSearchResult(String destination, LocalDate checkinDate, LocalDate checkoutDate, java.util.List<HotelInfo> hotels);
+    }
+
+    /**
+     * Represents information about a single hotel, including name and price.
+     */
+    public static class HotelInfo {
+        /** Hotel name. */
+        public final String hotelName;
+        /** Price as CurrencyAmount, or null if not found. */
+        public final CurrencyAmount price;
+        public HotelInfo(String hotelName, CurrencyAmount price);
+    }
+}

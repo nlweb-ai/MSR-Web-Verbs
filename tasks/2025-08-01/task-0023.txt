@@ -1,0 +1,2 @@
+Task Description:
+I am planning a weekend workshop for graduate students in Boston from August 23 to August 25, 2025. I will use Google Maps to find university venues in Boston. Then, I will use Redfin to search for short-term rentals for 8 attendees. Next, I will use Costco to find affordable AV equipment for presentations. Finally, I will use Alaska Airlines to check flight prices for students coming from Atlanta. I will compare venue amenities and AV equipment costs, and select the best rental based on proximity to the venue.

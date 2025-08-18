@@ -1,0 +1,1 @@
+I want to find the top 3 most popular Spotify tracks about rain, then search for books about weather in OpenLibrary. For each book, I want to check if there are any apartments for rent in Portland, OR, under $2100, within 1 mile of a public park. For each matching apartment, I want to get the weather forecast for Portland, OR, for August 22, 2025.

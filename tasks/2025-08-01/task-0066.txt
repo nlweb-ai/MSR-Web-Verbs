@@ -1,0 +1,1 @@
+I want to find the top 4 most popular Spotify artists in the "rock" genre, then search for books about rock music in OpenLibrary. For each artist, I want to check if there are any apartments for rent in Austin, TX, under $2200, within 1 mile of a live music venue. For each matching apartment, I want to get the weather forecast for Austin, TX, for August 20, 2025.

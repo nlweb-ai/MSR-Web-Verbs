@@ -1,0 +1,100 @@
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Wikimedia API wrapper for searching Wikipedia articles
+ * Extends BaseApiClient for HTTP functionality
+ */
+public class Wikimedia extends BaseApiClient {
+
+    /**
+     * Represents Wikipedia search results containing a list of article titles
+     */
+    public static class SearchResult {
+        /** List of article titles found in the search */
+        public List<String> titles;
+
+        public SearchResult();
+        public SearchResult(List<String> titles);
+    }
+
+    /**
+     * Represents detailed information about a Wikipedia page
+     */
+    public static class PageInfo {
+        /** Unique identifier of the page */
+        public long id;
+        /** Title of the page */
+        public String title;
+        /** Page key/path identifier */
+        public String key;
+        /** Content model (e.g., "wikitext", "javascript", "css") */
+        public String contentModel;
+        /** License URL for the page content */
+        public String licenseUrl;
+        /** License title/name */
+        public String licenseTitle;
+        /** HTML URL to view the page */
+        public String htmlUrl;
+        /** Last modification date of the page */
+        public LocalDateTime lastModified;
+
+        public PageInfo();
+    }
+
+    /**
+     * Represents HTML content analysis and statistics of a Wikipedia page
+     */
+    public static class HtmlContentInfo {
+        /** Title extracted from HTML */
+        public String htmlTitle;
+        /** Number of H1 headings */
+        public int h1Count;
+        /** Number of H2 headings */
+        public int h2Count;
+        /** Number of H3 headings */
+        public int h3Count;
+        /** Number of links in the page */
+        public int linkCount;
+        /** Number of images in the page */
+        public int imageCount;
+        /** Number of paragraphs */
+        public int paragraphCount;
+        /** Total character count of the HTML content */
+        public int contentLength;
+        /** Sample H1 headings (up to 3) */
+        public List<String> sampleH1Headings;
+        /** Sample H2 headings (up to 5) */
+        public List<String> sampleH2Headings;
+
+        public HtmlContentInfo();
+    }
+
+    /**
+     * Represents a simulated page creation or edit request with all the details
+     */
+    public static class PageOperationRequest {
+        /** Type of operation: "CREATE" or "EDIT" */
+        public String operationType;
+        /** Target URL for the request */
+        public String url;
+        /** HTTP method (POST for create, PUT for edit) */
+        public String method;
+        /** Page title */
+        public String title;
+        /** Page content/source */
+        public String source;
+        /** Edit comment explaining the operation */
+        public String comment;
+        /** Content model (e.g., "wikitext") */
+        public String contentModel;
+        /** Language code (e.g., "en") */
+        public String languageCode;
+        /** Latest revision ID (for edit operations only) */
+        public Long latestRevisionId;
+        /** Whether this is a simulation (always true for safety) */
+        public boolean isSimulation;
+
+        public PageOperationRequest();
+    }
+}

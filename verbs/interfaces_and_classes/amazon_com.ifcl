@@ -1,0 +1,40 @@
+import java.util.List;
+
+import com.microsoft.playwright.BrowserContext;
+
+public class amazon_com extends com_base {
+
+    public amazon_com(BrowserContext _context);
+
+    /**
+     * Clears all items from the Amazon shopping cart.
+     */
+    public void clearCart();
+
+    /**
+     * Adds an item to the cart and returns cart information.
+     * @param item The item to search for and add to cart
+     * @return CartResult containing cart items and their prices
+     */
+    public CartResult addItemToCart(String item);
+
+    /**
+     * Represents a single item in the Amazon cart.
+     */
+    public static class CartItem {
+        /** Name of the item. */
+        public final String itemName;
+        /** Price of the item as CurrencyAmount. */
+        public final CurrencyAmount price;
+        public CartItem(String itemName, CurrencyAmount price);
+    }
+
+    /**
+     * Represents the result of adding an item to the cart.
+     */
+    public static class CartResult {
+        /** List of items in the cart. */
+        public final List<CartItem> items;
+        public CartResult(List<CartItem> items);
+    }
+}

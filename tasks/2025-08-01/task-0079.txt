@@ -1,0 +1,1 @@
+I want to check the current weather in New York, NY for August 11, 2025. If the air quality index is poor, I want to search for air purifiers at Costco and select the one with the highest price. Then, I want to find the top 2 Spotify tracks about air and for each, search for books about pollution in OpenLibrary, picking the book with the longest title for each track.

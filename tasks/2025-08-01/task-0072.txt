@@ -1,0 +1,1 @@
+I want to check the weather forecast for Seattle, WA on August 12, 2025. If rain is predicted, I want to search for raincoats at Costco and select the most expensive one. Then, I want to find the top 2 Spotify tracks about rain and for each, search for books about rain in OpenLibrary, picking the book with the latest publication year for each track.

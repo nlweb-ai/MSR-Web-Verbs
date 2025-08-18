@@ -1,0 +1,1 @@
+I want to find the top 2 most popular Spotify playlists about summer, then search for books about summer activities in OpenLibrary. For each playlist, I want to check if there are any apartments for rent in Miami, FL, under $2700, within 1 mile of a beach. For each matching apartment, I want to get the weather forecast for Miami, FL, for August 18, 2025.

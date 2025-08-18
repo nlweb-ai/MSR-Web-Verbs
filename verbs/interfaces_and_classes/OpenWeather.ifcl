@@ -1,0 +1,98 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * OpenWeather API wrapper for current weather data
+ * Extends BaseApiClient for HTTP functionality
+ */
+public class OpenWeather extends BaseApiClient {
+    
+    /**
+     * Represents current weather data including temperature, conditions, and environmental factors.
+     */
+    public static class CurrentWeatherData {
+        public String getCityName();
+        public String getCountry();
+        public double getLatitude();
+        public double getLongitude();
+        public LocalDate getDate();
+        public String getCondition();
+        public String getDescription();
+        public double getTemperature();
+        public double getFeelsLike();
+        public double getTempMin();
+        public double getTempMax();
+        public int getHumidity();
+        public int getPressure();
+        public double getWindSpeed();
+        public int getWindDirection();
+        public double getVisibility();
+        public int getCloudiness();
+    }
+
+    /**
+     * Represents weather forecast data for multiple time periods.
+     */
+    public static class WeatherForecastData {
+        public String getCityName();
+        public String getCountry();
+        public double getLatitude();
+        public double getLongitude();
+        public List<ForecastEntry> getForecasts();
+    }
+
+    /**
+     * Represents a single forecast entry.
+     */
+    public static class ForecastEntry {
+        public LocalDateTime getDateTime();
+        public String getCondition();
+        public String getDescription();
+        public double getTemperature();
+        public double getTempMin();
+        public double getTempMax();
+        public int getHumidity();
+        public double getWindSpeed();
+        public int getCloudiness();
+    }
+
+    /**
+     * Represents air pollution data including AQI and pollutant concentrations.
+     */
+    public static class AirPollutionData {
+        public double getLatitude();
+        public double getLongitude();
+        public List<PollutionEntry> getPollutionEntries();
+    }
+
+    /**
+     * Represents a single pollution measurement entry.
+     */
+    public static class PollutionEntry {
+        public LocalDateTime getDateTime();
+        public int getAqi();
+        public double getCo();
+        public double getNo();
+        public double getNo2();
+        public double getO3();
+        public double getSo2();
+        public double getPm2_5();
+        public double getPm10();
+        public double getNh3();
+    }
+
+    /**
+     * Represents location data including name, coordinates, and country information.
+     */
+    public static class LocationData {
+        public String getName();
+        public double getLatitude();
+        public double getLongitude();
+        public String getCountry();
+        public String getState();
+        public String getZipCode();
+    }
+    
+    public OpenWeather();
+}

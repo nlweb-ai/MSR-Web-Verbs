@@ -1,0 +1,2 @@
+Task Description:
+I want to organize a virtual astronomy night for my friends on August 12, 2025. First, I will use Nasa to get the Astronomy Picture of the Day for that date. Then, I will use Wikimedia to find information about the featured astronomical object. Next, I will use Spotify to find a space-themed playlist for the event. Finally, I will use teams_microsoft_com to send an invitation with the event details and fun facts to my friends' group chat. I will summarize the picture, facts, and music, and include them in the invitation message.

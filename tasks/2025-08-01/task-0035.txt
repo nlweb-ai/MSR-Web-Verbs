@@ -1,0 +1,2 @@
+Task Description:
+I want to organize a summer reading challenge for my local library in Boston starting August 3, 2025. First, I will use OpenLibrary to search for popular children's books. Then, I will use News to find articles about the benefits of summer reading for kids. Next, I will use Wikimedia to gather fun facts about famous children's authors. Finally, I will use teams_microsoft_com to send an announcement to the library staff group chat. I will create a reading list, include news highlights, and share author facts in the announcement.

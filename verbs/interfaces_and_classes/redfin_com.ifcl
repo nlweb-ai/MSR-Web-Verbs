@@ -1,0 +1,38 @@
+import com.microsoft.playwright.BrowserContext;
+
+public class redfin_com extends com_base {
+    public redfin_com(BrowserContext _context);
+
+    /**
+     * Search Redfin for apartments for rent in a location and price range.
+     * @param location The city or area to search (e.g., "bellevue, WA").
+     * @param minRent The minimum rent (e.g., 2000).
+     * @param maxRent The maximum rent (e.g., 3000).
+     * @return ApartmentSearchResult containing a list of apartments and any error message.
+     */
+    public ApartmentSearchResult searchApartments(String location, int minRent, int maxRent);
+
+    /**
+     * Represents an apartment listing with address, price, and URL.
+     */
+    public static class ApartmentInfo {
+        /** Address of the apartment. */
+        public final String address;
+        /** Price of the apartment. */
+        public final CurrencyAmount price;
+        /** URL of the listing. */
+        public final String url;
+        public ApartmentInfo(String address, CurrencyAmount price, String url);
+    }
+
+    /**
+     * Represents the result of an apartment search, including a list of apartments and any error message.
+     */
+    public static class ApartmentSearchResult {
+        /** List of found apartments. */
+        public final java.util.List<ApartmentInfo> apartments;
+        /** Error message, if any. */
+        public final String error;
+        public ApartmentSearchResult(java.util.List<ApartmentInfo> apartments, String error);
+    }
+}

@@ -1,0 +1,113 @@
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * Spotify Web API client
+ * Provides methods to interact with Spotify's Web API for search operations
+ */
+public class Spotify extends BaseApiClient {
+    
+    /**
+     * Represents a Spotify track with detailed information
+     */
+    public static class SpotifyTrack {
+        public String id;
+        public String name;
+        public String uri;
+        public List<String> artistNames;
+        public String albumName;
+        public LocalDate releaseDate;
+        public Duration duration;
+        public int popularity;
+        public boolean explicit;
+        public String previewUrl;
+        
+        public SpotifyTrack();
+    }
+
+    /**
+     * Represents a Spotify artist with detailed information
+     */
+    public static class SpotifyArtist {
+        public String id;
+        public String name;
+        public String uri;
+        public List<String> genres;
+        public int popularity;
+        public int followers;
+        public String imageUrl;
+        
+        public SpotifyArtist();
+    }
+
+    /**
+     * Represents a Spotify album with detailed information
+     */
+    public static class SpotifyAlbum {
+        public String id;
+        public String name;
+        public String uri;
+        public List<String> artistNames;
+        public LocalDate releaseDate;
+        public int totalTracks;
+        public String albumType;
+        public String imageUrl;
+        
+        public SpotifyAlbum();
+    }
+
+    /**
+     * Represents a Spotify playlist with detailed information
+     */
+    public static class SpotifyPlaylist {
+        public String id;
+        public String name;
+        public String uri;
+        public String description;
+        public String ownerName;
+        public int totalTracks;
+        public boolean isPublic;
+        public boolean collaborative;
+        public String imageUrl;
+        
+        public SpotifyPlaylist();
+    }
+
+    /**
+     * Represents the complete search results from Spotify API
+     */
+    public static class SpotifySearchResult {
+        public List<SpotifyTrack> tracks;
+        public List<SpotifyArtist> artists;
+        public List<SpotifyAlbum> albums;
+        public List<SpotifyPlaylist> playlists;
+        public String errorMessage;
+        
+        public SpotifySearchResult();
+    }
+    
+    /**
+     * Default constructor - automatically requests access token using client credentials
+     */
+    public Spotify();
+    
+    /**
+     * Constructor with explicit token (for testing or when you already have a token)
+     * @param token Spotify access token
+     */
+    public Spotify(String token);
+    
+    /**
+     * Search for Spotify catalog items (albums, artists, playlists, tracks, shows, episodes, audiobooks)
+     * @param query Search query string - the search terms to look for
+     * @param type Comma-separated list of item types to search across (album, artist, playlist, track, show, episode, audiobook)
+     * @param market ISO 3166-1 alpha-2 country code for regional content filtering (optional)
+     * @param limit Maximum number of results to return in each item type (0-50, default: 20)
+     * @param offset Index of first result to return for pagination (0-1000, default: 0)
+     * @param includeExternal Whether to include externally hosted audio content like podcasts (optional)
+     * @return SpotifySearchResult containing parsed search results with tracks, artists, albums, and playlists
+     */    
+    public SpotifySearchResult searchItems(String query, String type, String market, Integer limit, 
+                                          Integer offset, String includeExternal);
+}

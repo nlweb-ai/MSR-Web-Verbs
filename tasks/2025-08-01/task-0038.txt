@@ -1,0 +1,2 @@
+Task Description:
+I want to create a daily news and weather briefing for Chicago on August 2, 2025. First, I will use News to search for the top news headlines in Chicago from the past day. Then, I will use OpenWeather to get the current weather and forecast for Chicago. Next, I will use Wikimedia to find a historical event that happened in Chicago on August 2. Finally, I will use Spotify to find a playlist featuring Chicago artists to recommend for the day. I will summarize the news, weather, history, and music in a single briefing.

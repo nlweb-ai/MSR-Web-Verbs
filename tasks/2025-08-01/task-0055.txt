@@ -1,0 +1,3 @@
+I'm planning a weekend hiking trip to Boulder, Colorado on August 16-17, 2025, and want to check the weather, find the best hiking trails, locate nearby outdoor gear stores, and read recent news about trail conditions.
+
+First, I'll use OpenWeather to get the weather forecast for Boulder for August 16-17, 2025, to prepare for the trip. Next, I'll use Google Maps to find the 5 nearest hiking trails to my hotel. Then, I'll use Google Maps to find the 3 closest outdoor gear stores to the trailhead. Finally, I'll use News to search for recent articles about Boulder hiking trail conditions to check for closures or hazards.

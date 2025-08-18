@@ -1,0 +1,1 @@
+I want to get the weather forecast for Los Angeles, CA on August 13, 2025. If the UV index is high, I want to search for sunscreen at Costco and select the one with the lowest price. Then, I want to find the top 3 Spotify tracks about summer and for each, search for books about skin care in OpenLibrary, picking the book with the shortest title for each track.

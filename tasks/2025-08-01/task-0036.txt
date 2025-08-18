@@ -1,0 +1,2 @@
+Task Description:
+I want to plan a healthy grocery shopping trip for my family in Los Angeles on August 6, 2025. First, I will use costco_com to search for organic produce and healthy snacks. Then, I will use amazon_com to add a water filter pitcher to my cart. Next, I will use OpenWeather to check the weather forecast for Los Angeles on August 6, 2025, to decide the best time to shop. Finally, I will use maps_google_com to find the nearest Costco warehouse. I will compare prices, check my cart, and plan the trip route based on weather and location.

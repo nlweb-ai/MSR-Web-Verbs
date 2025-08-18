@@ -1,0 +1,1 @@
+I want to get the weather forecast for Chicago, IL on August 18, 2025. If the wind speed is above 20 mph, I want to search for windbreakers at Costco and select the one with the highest price. Then, I want to find the top 3 Spotify tracks about wind and for each, search for books about weather in OpenLibrary, picking the book with the earliest publication year for each track.

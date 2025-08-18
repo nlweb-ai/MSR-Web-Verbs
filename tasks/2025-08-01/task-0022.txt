@@ -1,0 +1,2 @@
+Task Description:
+I am organizing a family reunion in Chicago on August 17, 2025. I will use Redfin to find a large house for rent with at least 4 bedrooms. Then, I will use Costco to search for catering options for 20 people. Next, I will use Google Maps to find nearby parks for outdoor activities. Finally, I will use Alaska Airlines to check flight options for relatives traveling from New York to Chicago. I will calculate the best combination of house rental and catering cost, and choose the park closest to the rental property.

@@ -1,0 +1,2 @@
+Task Description:
+I want to plan a weekend getaway to Miami from August 23 to August 25, 2025. First, I will use alaskaair_com to search for flights from Atlanta to Miami for those dates. Then, I will use redfin_com to find short-term apartment rentals in Miami within my budget. Next, I will use costco_com to search for beach gear and sunscreen. Finally, I will use maps_google_com to find the top 5 tourist attractions near my rental. I will compare flight prices, rental options, and gear costs, and create a sightseeing plan based on location.

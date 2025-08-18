@@ -1,0 +1,3 @@
+I'm hosting a book club meeting in Boston, Massachusetts on August 22, 2025, and want to select a book, check the weather for our outdoor gathering, find a nearby coffee shop for after the meeting, and prepare a list of recent news articles about the book's author.
+
+First, I'll use OpenLibrary to search for highly-rated fiction books published in the last 5 years and pick one for our club. Next, I'll use OpenWeather to get the weather forecast for Boston on August 22, 2025, to decide if we can meet outdoors. Then, I'll use Google Maps to find the closest coffee shop to our meeting location. Finally, I'll use News to search for recent articles about the chosen author to share with the group.

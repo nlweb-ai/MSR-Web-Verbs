@@ -1,0 +1,3 @@
+I'm organizing a local food festival in Sacramento, California on August 30, 2025, and want to find local farms for fresh produce, check the weather for the event, locate nearby kitchen supply stores, and research recent news about California agriculture.
+
+First, I'll use Google Maps to find 5 local farms or farmers markets near Sacramento. Next, I'll use OpenWeather to get the weather forecast for Sacramento on August 30, 2025, to plan for tents or shade. Then, I'll use Google Maps to find the 3 closest kitchen supply stores to the festival venue. Finally, I'll use News to search for recent articles about California agriculture to share with festival attendees.

@@ -1,5 +1,14 @@
 .vscode
 
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+
 # Python
 __pycache__/
 *.py[cod]

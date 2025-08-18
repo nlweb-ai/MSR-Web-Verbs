@@ -1,0 +1,9 @@
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.Page;
+
+public class com_base {
+    protected BrowserContext context;
+    protected Page page;
+    java.util.Scanner scanner;
+    public com_base(BrowserContext _context);
+}

@@ -1,0 +1,1 @@
+I want to find the current weather in Boston, MA for August 9, 2025. If the temperature is below 60°F, I want to search for heaters at Costco and select the cheapest one. Then, I want to find the top 2 Spotify tracks about winter and for each, search for books about snow in OpenLibrary, picking the book with the shortest title for each track.

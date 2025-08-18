@@ -1,0 +1,3 @@
+I'm organizing a tech networking event in New York City on August 21, 2025, and want to find a venue, check the weather, create a tech-themed playlist, and gather recent news about AI startups for discussion topics.
+
+First, I'll use Google Maps to find 5 coworking spaces or event venues near Midtown Manhattan. Next, I'll use OpenWeather to get the weather forecast for New York City on August 21, 2025, to plan for any outdoor networking. Then, I'll use Spotify to search for 15 technology-themed songs to play during the event. Finally, I'll use News to search for recent articles about AI startups to prepare discussion topics for attendees.

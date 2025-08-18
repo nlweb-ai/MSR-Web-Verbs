@@ -1,0 +1,1 @@
+I want to find the top 5 most popular tracks by Taylor Swift on Spotify, then search for books about Taylor Swift using OpenLibrary. For each book, I want to check if the release year of the book matches the release year of any of the top 5 tracks. For any match, I want to get the weather forecast for Nashville, TN, on the book's release date (if within the next 30 days).

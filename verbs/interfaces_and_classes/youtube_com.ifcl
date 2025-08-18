@@ -1,0 +1,30 @@
+import java.time.Duration;
+import java.util.List;
+
+import com.microsoft.playwright.BrowserContext;
+
+public class youtube_com extends com_base {
+    /**
+     * Represents information about a YouTube video result.
+     */
+    public class YouTubeVideoInfo {
+        /** The title of the video. */
+        public String title;
+        /** The duration/length of the video. */
+        public Duration length;
+        /** The URL of the video. */
+        public String url;
+
+        public YouTubeVideoInfo(String title, String lengthStr, String url);
+    }
+    
+    public youtube_com(BrowserContext _context);
+
+    /**
+     * Searches YouTube for a query and returns the top 5 video results as a list of YouTubeVideoInfo objects.
+     *
+     * @param query The search query (e.g., "quantum physics").
+     * @return List of YouTubeVideoInfo objects containing title, length, and url for each video.
+     */
+    public List<YouTubeVideoInfo> searchVideos(String query);
+}

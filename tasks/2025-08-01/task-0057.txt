@@ -1,0 +1,3 @@
+I'm planning a science-themed summer camp for kids in Chicago, Illinois from August 12-16, 2025, and want to find educational books, check the weather for outdoor experiments, locate science museums, and gather recent science news for daily discussions.
+
+First, I'll use OpenLibrary to search for children's science books and select 5 for our camp library. Next, I'll use OpenWeather to get the weather forecast for Chicago for August 12-16, 2025, to plan outdoor activities. Then, I'll use Google Maps to find the 3 nearest science museums to our camp location. Finally, I'll use News to search for recent science news articles to share with campers each day.

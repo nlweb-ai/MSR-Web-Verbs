@@ -1,0 +1,1 @@
+I want to search for the top 3 most popular kitchen gadgets at Costco, then find books about kitchen gadgets in OpenLibrary. For each book, I want to check if there are any apartments for rent in Chicago, IL, under $1800, within 2 miles of a Costco warehouse. For each matching apartment, I want to get the weather forecast for Chicago, IL, for August 12, 2025.

@@ -1,0 +1,95 @@
+import java.util.List;
+
+/**
+ * Open Library API wrapper for searching books
+ * Extends BaseApiClient for HTTP functionality
+ */
+public class OpenLibrary extends BaseApiClient {
+
+    /**
+     * Represents a book result from OpenLibrary search.
+     */
+    public static class BookInfo {
+        /** Title of the book. */
+        public final String title;
+        public BookInfo(String title);
+    }
+
+    /**
+     * Represents an author result from OpenLibrary search.
+     */
+    public static class AuthorInfo {
+        /** Name of the author. */
+        public final String name;
+        public AuthorInfo(String name);
+    }
+
+    /**
+     * Represents a subject result from OpenLibrary subject API.
+     */
+    public static class SubjectInfo {
+        /** Info string for the subject (could be name, key, work, etc.). */
+        public final String info;
+        public SubjectInfo(String info);
+    }
+
+    public OpenLibrary();
+    
+    /**
+     * Get the current user agent string for debugging/verification
+     * @return The user agent string being used
+     */
+    public static String getUserAgent();
+      
+    /**
+     * Search for books using the OpenLibrary Search API.
+     * @param q The search query
+     * @param fields The fields to get back from solr
+     * @param sort Sort results by facets like new, old, random, or key
+     * @param lang User's language as a two-letter (ISO 639-1) code
+     * @param limit Number of results to return
+     * @param page Page number for pagination
+     * @return List of BookInfo objects
+     */
+    public List<BookInfo> search(String q, String fields, String sort, String lang, int limit, int page);
+      
+    /**
+     * Search for authors using OpenLibrary Authors API.
+     * @param q The search query (author name)
+     * @return List of AuthorInfo objects
+     */
+    public List<AuthorInfo> searchAuthors(String q);
+    
+    /**
+     * Search for authors using OpenLibrary Authors API with custom limit.
+     * @param q The search query (author name)
+     * @param limit Number of results to return
+     * @return List of AuthorInfo objects
+     */
+    public List<AuthorInfo> searchAuthors(String q, int limit);
+    
+    /**
+     * Get works and information for a subject using OpenLibrary Subjects API.
+     * @param subject The subject name (e.g., "love", "science", "history")
+     * @return List of SubjectInfo objects
+     */
+    public List<SubjectInfo> getSubject(String subject);
+    
+    /**
+     * Get works and information for a subject with details.
+     * @param subject The subject name (e.g., "love", "science", "history")
+     * @param details Whether to include detailed information (authors, publishers, etc.)
+     * @return List of SubjectInfo objects
+     */
+    public List<SubjectInfo> getSubject(String subject, boolean details);
+    
+    /**
+     * Get works and information for a subject with full customization.
+     * @param subject The subject name (e.g., "love", "science", "history")
+     * @param details Whether to include detailed information (authors, publishers, etc.)
+     * @param limit Number of works to include in the response
+     * @param offset Starting offset for pagination
+     * @return List of SubjectInfo objects
+     */
+    public List<SubjectInfo> getSubject(String subject, boolean details, int limit, int offset);
+}

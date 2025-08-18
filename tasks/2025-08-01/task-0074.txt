@@ -1,0 +1,1 @@
+I want to get the weather forecast for Denver, CO on August 20, 2025. If the forecast includes thunderstorms, I want to search for surge protectors at Costco and select the cheapest one. Then, I want to find the top 2 Spotify tracks about storms and for each, search for books about electricity in OpenLibrary, picking the book with the longest title for each track.

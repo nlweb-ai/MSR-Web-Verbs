@@ -1,0 +1,1 @@
+I want to check the current weather in San Francisco, CA for August 8, 2025. If the humidity is above 80%, I want to search for dehumidifiers at Costco and select the one with the lowest price. Then, I want to find the top 2 Spotify tracks about fog and for each, search for books about climate in OpenLibrary, picking the book with the most words in the title for each track.

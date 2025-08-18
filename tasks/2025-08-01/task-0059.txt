@@ -1,0 +1,3 @@
+I'm planning a family vacation to Orlando, Florida from August 14-18, 2025, and want to find a hotel, check the weather, locate nearby theme parks, and watch YouTube videos about travel tips for families.
+
+First, I'll use booking_com to search for hotels in Orlando for August 14-18, 2025, and select the best option based on price and amenities. Next, I'll use OpenWeather to get the weather forecast for Orlando for those dates to help plan our daily activities. Then, I'll use Google Maps to find the 3 nearest theme parks to our hotel. Finally, I'll use YouTube to search for "Orlando family travel tips" and select 3 helpful videos to watch with my family before the trip.

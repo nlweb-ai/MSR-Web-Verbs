@@ -1,0 +1,48 @@
+import java.time.LocalDate;
+import java.util.List;
+
+import com.microsoft.playwright.BrowserContext;
+
+//Functions of Alaska Airlines
+public class alaskaair_com extends com_base{
+    //write a constructor that takes BrowserContext context as an argument
+    public alaskaair_com(BrowserContext _context);
+    
+    /**
+     * Extracts flight information from the current page.
+     * @return FlightInfoResult containing a list of flights and the price.
+     */
+    FlightInfoResult getFlightInfo();
+    
+    /**
+     * Searches for flights between the given origin and destination on specified dates.
+     * @param origin Origin AIRPORT CODE
+     * @param destination Destination AIRPORT CODE
+     * @param outboundDate Outbound flight date
+     * @param returnDate Return flight date
+     * @return SearchFlightsResult containing flight info or a message if no flights found
+     */
+    public SearchFlightsResult searchFlights(String origin, String destination, LocalDate outboundDate, LocalDate returnDate);
+    
+    /**
+     * Result class for flight information extraction.
+     */
+    public static class FlightInfoResult {
+        /** List of flight card texts. */
+        public final List<String> flights;
+        /** Price as a CurrencyAmount, or null if not found. */
+        public final CurrencyAmount price;
+        public FlightInfoResult(List<String> flights, CurrencyAmount price);
+    }
+
+    /**
+     * Result class for searching flights.
+     */
+    public static class SearchFlightsResult {
+        /** Message if no flights found, otherwise null. */
+        public final String message;
+        /** Flight info if flights found, otherwise null. */
+        public final FlightInfoResult flightInfo;
+        public SearchFlightsResult(String message, FlightInfoResult flightInfo);
+    }
+}
