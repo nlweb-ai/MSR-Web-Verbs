@@ -31,7 +31,9 @@ Also, send a Microsoft Teams message to john@foo.com that contains the printed i
 </a>
 
 ## The vision
-We want to inspire developers to wrap the whole web as a gigantic set of web verbs. A similar industry-wide effort happened before -- the web used to be accessed by browsers only, but in the mobile computing revolution, the web was purposefully "wrapped" for mobile apps. Today, we wish the web to be operable by agents. Let's purposefully wrap it as web verbs.  
+We want to inspire developers to wrap the whole web as a gigantic set of web verbs. A similar industry-wide effort happened before -- the web used to be accessed by browsers only, but in the mobile computing revolution, the web was purposefully "wrapped" for mobile apps. Today, we wish the web to be operable by agents. Let's purposefully wrap it as web verbs.
+
+The abstraction layer of web verbs utilizes the unique strength of programming language, e.g., precise function signatures and data types. Our examples show evidence that task compositions can be done effectively at this abstraction layer. Combining the strengths of programming language and vector database, web-scale composability becomes promising.    
 
 ## About this repository
 Currently we have three early prototypes:
