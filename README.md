@@ -1,8 +1,8 @@
 ## Web verbs for NLWeb 
 
-This repository contains prototypes to show a potential path for developers to build an agent-operable World Wide Web.
+This repository contains **proof-of-concept demonstrations** to show a potential path for developers to build an agent-operable World Wide Web.  
 
-Today, a user performs an operation on the web by making a web-API call or interacting with a sequence of HTML elements using a browser. Imagine that developers can wrap these web APIs and browser interactions into functions (which we call "web verbs") and ingest these functions in NLWeb's vector database. This will pave a promising path toward a realistic agentic web because every user task becomes a coding task, which LLMs are very good at.
+Today, a user performs an operation on the web by making a web-API call or interacting with a sequence of HTML elements using a browser. Imagine that developers wrap these web APIs and browser interactions into functions (which we call "web verbs") and ingest these functions in NLWeb's vector database. This will pave a promising path toward a realistic agentic web because every user task becomes a coding task, which LLMs are very good at.
 
 ## A video demo
 To show this vision, we have implemented 50 web verbs across various websites as Java functions. Using the agent mode in VS Code, we let the agent generate a solution according to the following description. The video shows the execution result.
@@ -37,7 +37,7 @@ We want to inspire developers to wrap the whole web as a gigantic set of web ver
 Currently we have three early prototypes:
 
 1. Our extension to NLWeb's db_load functionality. It ingests web verbs into the vector database. Please see [this instruction](verb_ingress/README.md). 
-2. A set of 50 implemented verbs and a set of 100 tasks, each similar to the one shown above in the video. The agent successfully composes the verbs to fulfill all the tasks. The solutions are also contained in this repo. (To be added to this repo soon.)
+2. A set of 50 implemented verbs and a set of 100 tasks, each similar to the one shown above in the video. The agent successfully composes the verbs to fulfill all the tasks. Please see [this instruction](verbs/README.md)
 3. A tool for developers to wrap a browser-interaction sequence into a verb. (To be added to this repo later.)  
 
 

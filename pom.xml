@@ -49,7 +49,7 @@
     </dependencies>
     
     <build>
-        <testSourceDirectory>verbs/test</testSourceDirectory>
+        <testSourceDirectory>verbs/tests</testSourceDirectory>
         
         <plugins>
             <!-- Build Helper Maven Plugin to add additional source directories -->
@@ -93,7 +93,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
-                    <testSourceDirectory>src/main/test</testSourceDirectory>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>

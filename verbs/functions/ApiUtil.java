@@ -29,13 +29,13 @@ public class ApiUtil {
     }
     
     /**
-     * Load a specific environment variable value from the .env file
+     * Load a specific environment variable value from the .env_api_keys file
      * @param key The environment variable key to load
      * @return The value, or null if not found
      */
     public static String loadEnvValue(String key) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(".env"));
+            List<String> lines = Files.readAllLines(Paths.get(".env_api_keys"));
             for (String line : lines) {
                 line = line.trim();
                 // Handle both "KEY=value" and "KEY = value" formats
@@ -51,7 +51,7 @@ public class ApiUtil {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Warning: Could not read .env file: " + e.getMessage());
+            System.err.println("Warning: Could not read .env_api_keys file: " + e.getMessage());
         }
         return null;
     }

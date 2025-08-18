@@ -1,0 +1,22 @@
+{
+    // Maven integration
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.import.maven.enabled": true,
+    "java.maven.downloadSources": true,
+    
+    // Project structure
+    "java.project.sourcePaths": [
+        "verbs/functions",
+        "generated_solutions",
+        "generated_solutions/2025-08-01",
+        "generated_solutions/2025-06-01"
+    ],
+    "java.project.outputPath": "target/classes",
+    "java.project.referencedLibraries": [
+        "target/dependency/*.jar"
+    ],
+    
+    // Reduce false errors
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.errors.incompleteClasspath.severity": "ignore"
+}

@@ -1,4 +1,5 @@
 .vscode
+.env_api_keys
 
 # Java
 target/
