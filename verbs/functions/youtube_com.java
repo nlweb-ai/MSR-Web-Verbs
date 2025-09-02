@@ -79,6 +79,10 @@ public class youtube_com extends com_base {
                 // Find the badge/length element for the i-th video
                 String badgeSelector = String.format("#contents > .style-scope:nth-child(%d) > #dismissible .badge-shape-wiz__text", i);
                 Locator badge = page.locator(badgeSelector);
+                if (badge.count() == 0) {
+                    badgeSelector = String.format("#contents > .style-scope:nth-child(%d) > #dismissible .yt-badge-shape__text", i);
+                    badge = page.locator(badgeSelector);
+                }
                 if (badge.count() > 0) {
                     // Go up to the video container
                     Locator videoContainer = badge.first().locator("..").locator("..")

@@ -95,4 +95,204 @@ public class OpenWeather extends BaseApiClient {
     }
     
     public OpenWeather();
+
+    /**
+     * Gets current weather data for a specific location.
+     * Provides comprehensive weather information including temperature, conditions, wind, and atmospheric data.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @param units Units of measurement - "standard" (Kelvin), "metric" (Celsius), or "imperial" (Fahrenheit)
+     * @param lang Language code for weather descriptions (e.g., "en", "es", "fr")
+     * @return CurrentWeatherData object containing all weather information for the location
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public CurrentWeatherData getCurrentWeather(double lat, double lon, String units, String lang) throws IOException, InterruptedException;
+    
+    /**
+     * Gets current weather data for a location with default units (metric) and language (English).
+     * This is a convenience method that uses metric units (Celsius) and English descriptions.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @return CurrentWeatherData object containing all weather information for the location
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public CurrentWeatherData getCurrentWeather(double lat, double lon) throws IOException, InterruptedException;
+    
+    /**
+     * Gets 5-day weather forecast data for a specific location.
+     * Returns detailed forecast information with data points every 3 hours for the next 5 days.
+     * Each forecast entry includes temperature, weather conditions, wind, and humidity information.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @param units Units of measurement - "standard" (Kelvin), "metric" (Celsius), or "imperial" (Fahrenheit)
+     * @param lang Language code for weather descriptions (e.g., "en", "es", "fr")
+     * @param cnt Number of forecast data points to return (max 40 for 5 days at 3-hour intervals)
+     * @return WeatherForecastData object containing location info and list of forecast entries
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public WeatherForecastData getForecast5Day(double lat, double lon, String units, String lang, Integer cnt) throws IOException, InterruptedException;
+    
+    /**
+     * Gets 5-day weather forecast data for a location with default units (metric) and language (English).
+     * This is a convenience method that uses metric units (Celsius) and English descriptions.
+     * Returns all available forecast data points (up to 40 entries covering 5 days).
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @return WeatherForecastData object containing location info and list of forecast entries
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public WeatherForecastData getForecast5Day(double lat, double lon) throws IOException, InterruptedException;
+    
+    /**
+     * Gets 5-day weather forecast data for a location with specified number of data points.
+     * Uses default units (metric) and language (English) but allows limiting the number of forecast entries.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @param cnt Number of forecast data points to return (max 40)
+     * @return WeatherForecastData object containing location info and list of forecast entries
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public WeatherForecastData getForecast5Day(double lat, double lon, int cnt) throws IOException, InterruptedException;
+    
+    /**
+     * Gets current air pollution data for a specific location.
+     * Provides Air Quality Index (AQI) and concentrations of various pollutants including
+     * CO, NO, NO2, O3, SO2, PM2.5, PM10, and NH3.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @return AirPollutionData object containing location and pollution measurements
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public AirPollutionData getCurrentAirPollution(double lat, double lon) throws IOException, InterruptedException;
+    
+    /**
+     * Gets air pollution forecast data for a specific location.
+     * Provides forecasted Air Quality Index (AQI) and pollutant concentrations for the upcoming period.
+     * The forecast typically covers 5 days with data points every few hours.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @return AirPollutionData object containing location and forecasted pollution measurements
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public AirPollutionData getAirPollutionForecast(double lat, double lon) throws IOException, InterruptedException;
+    
+    /**
+     * Gets historical air pollution data for a specific location within a time range.
+     * Retrieves past Air Quality Index (AQI) and pollutant concentration data for analysis.
+     * Useful for tracking pollution trends and conducting historical air quality studies.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @param start Start date as Unix timestamp (seconds since epoch)
+     * @param end End date as Unix timestamp (seconds since epoch)
+     * @return AirPollutionData object containing location and historical pollution measurements
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public AirPollutionData getHistoricalAirPollution(double lat, double lon, long start, long end) throws IOException, InterruptedException;
+    
+    /**
+     * Gets location data by searching for place names using direct geocoding.
+     * Searches for locations by city name, state, and country codes. Supports various formats
+     * like "London", "New York,NY,US", or "Paris,FR". Returns detailed geographic information
+     * including coordinates, administrative divisions, and country data.
+     * 
+     * @param query Location name to search for (city name, optionally with state and country codes separated by commas)
+     * @param limit Maximum number of locations to return (between 1 and 5)
+     * @return List of LocationData objects containing matching locations with their geographic information
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public List<LocationData> getLocationsByName(String query, Integer limit) throws IOException, InterruptedException;
+    
+    /**
+     * Gets location data by searching for place names using direct geocoding with default limit.
+     * This is a convenience method that searches for up to 5 matching locations.
+     * 
+     * @param query Location name to search for
+     * @return List of LocationData objects containing matching locations (up to 5 results)
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public List<LocationData> getLocationsByName(String query) throws IOException, InterruptedException;
+    
+    /**
+     * Gets location data by zip/postal code using zip code geocoding.
+     * Supports various formats including "10001", "E14,GB", or separate zip code and country parameters.
+     * Returns detailed geographic information for the specified postal area.
+     * 
+     * @param zipCode Zip/postal code, optionally with country code (e.g., "E14,GB" or "10001")
+     * @param countryCode ISO 3166 country code (optional if included in zipCode parameter)
+     * @return List containing a single LocationData object for the specified zip code area
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public List<LocationData> getLocationByZipCode(String zipCode, String countryCode) throws IOException, InterruptedException;
+    
+    /**
+     * Gets location data by zip/postal code using zip code geocoding without separate country code.
+     * This is a convenience method for zip codes that already include country information
+     * or for cases where the country code is not needed.
+     * 
+     * @param zipCode Zip/postal code (should include country code if needed, e.g., "E14,GB")
+     * @return List containing a single LocationData object for the specified zip code area
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public List<LocationData> getLocationByZipCode(String zipCode) throws IOException, InterruptedException;
+    
+    /**
+     * Gets location data by coordinates using reverse geocoding.
+     * Converts latitude and longitude coordinates into human-readable location information
+     * including city names, administrative divisions, and country data. Useful for determining
+     * location names from GPS coordinates or map selections.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @param limit Maximum number of location results to return (between 1 and 5)
+     * @return List of LocationData objects containing locations near the specified coordinates
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public List<LocationData> getLocationsByCoordinates(double lat, double lon, Integer limit) throws IOException, InterruptedException;
+    
+    /**
+     * Gets location data by coordinates using reverse geocoding with default limit.
+     * This is a convenience method that returns up to 5 location results for the specified coordinates.
+     * 
+     * @param lat Latitude coordinate of the location (between -90 and 90)
+     * @param lon Longitude coordinate of the location (between -180 and 180)
+     * @return List of LocationData objects containing locations near the specified coordinates (up to 5 results)
+     * @throws IOException if network request fails
+     * @throws InterruptedException if the request is interrupted
+     * @throws IllegalStateException if OPENWEATHER_API_KEY is not found in .env file
+     */
+    public List<LocationData> getLocationsByCoordinates(double lat, double lon) throws IOException, InterruptedException;
 }

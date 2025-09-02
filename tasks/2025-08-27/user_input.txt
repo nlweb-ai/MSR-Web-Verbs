@@ -1,0 +1,44 @@
+
+
+================
+Follow the instruction given in #file:prompt_refine_code.txt.
+================
+Run code
+================
+Follow the instruction given in #file:prompt_refine_description.txt.
+================
+copy task-0002.txt task-0003.txt
+================
+Add the following to task-0003.txt:
+[We need to find a hotel for all nights.] Since the museums are already selected, I want to select the hotel which has the smallest total distance to all the museums.
+
+
+================
+Follow the instruction given in #file:prompt_refine_code.txt.
+================
+Run code
+================
+Follow the instruction given in #file:prompt_refine_description.txt.
+================
+copy task-0004.txt task-0005.txt
+================
+Add the following to task-0005.txt (the last paragraph of Task Overview):
+One more thing: we want to see kids winter jackets in the Anchorage costco. Please get a list of the jackets.
+
+
+================
+Follow the instruction given in #file:prompt_refine_code.txt.
+================
+Run code
+================
+Follow the instruction given in #file:prompt_refine_description.txt.
+================
+copy task-0006.txt task-0007.txt
+================
+Add the following to task-0005.txt (the last paragraph of Task Overview):
+Finally, please create a google maps list named "Anchorage 2025" (if there is an existing list with the same name, please delete it first). Please add the anchorage airport, the selected hotel and the museums into this list. When it is done, compose a nicely-formatted itinerary and send it to johndoe@contoso.com using Microsoft Teams. 
+
+================
+Follow the instruction given in #file:prompt_refine_code.txt.
+================
+Run code

@@ -51,6 +51,10 @@ public class maps_google_com extends com_base {
         //use id="section-directions-trip-0" to locate the first trip
         Locator directions = page.locator("#section-directions-trip-0");
         page.waitForTimeout(2000);
+        if (directions.count() == 0) {
+            directions = page.locator("#section-directions-trip-0");
+            page.waitForTimeout(2000);
+        }
         //extract the travel time and distance
         if (directions.count() > 0) {
             travelTime = directions.locator(".Fk3sm").innerText();
@@ -187,4 +191,140 @@ public class maps_google_com extends com_base {
         }
     }
 
+    /**
+     * Creates a new list on Google Maps and adds the specified places to it.
+     * 
+     * @param listName The name of the list to create (e.g., "Anchorage 2025").
+     * @param places A list of place names to add to the list (e.g., ["Anchorage Museum at Rasmuson Center", "Alaska Native Heritage Center"]).
+     * @return true if the list was created successfully and all places were added, false otherwise.
+     */
+    public boolean createList(String listName, java.util.List<String> places) {
+        try {
+            // Navigate to Google Maps
+            page.navigate("https://www.google.com/maps/");
+            page.waitForLoadState();
+            
+            // Click on the "Saved" button
+            Locator savedButton = page.locator("text=Saved");
+            if (savedButton.count() == 0) {
+                System.out.println("Saved button not found");
+                return false;
+            }
+            savedButton.click();
+            page.waitForTimeout(2000);
+            
+            // Click on "New list"
+            Locator newListButton = page.locator("text=\"New list\"");
+            if (newListButton.count() == 0) {
+                System.out.println("New list button not found");
+                return false;
+            }
+            newListButton.click();
+            page.waitForTimeout(2000);
+            
+            // Fill in the list name
+            Locator listNameInput = page.locator(".fontTitleLarge");
+            if (listNameInput.count() == 0) {
+                System.out.println("List name input not found");
+                return false;
+            }
+            listNameInput.fill(listName);
+            page.waitForTimeout(2000);
+            
+            // Add each place to the list
+            for (String place : places) {
+                // Fill in the search box for adding a place
+                Locator searchInput = page.locator("[aria-label=\"Search for a place to add\"]");
+                if (searchInput.count() == 0) {
+                    System.out.println("Search input for place not found");
+                    return false;
+                }
+                searchInput.fill(place);
+                page.waitForTimeout(2000);
+                
+                // Click on the first search result
+                Locator firstResult = page.locator("#cell-1x0").first();
+                if (firstResult.count() == 0) {
+                    System.out.println("First search result not found for place: " + place);
+                    return false;
+                }
+                firstResult.click();
+                page.waitForTimeout(2000);
+            }
+            
+            System.out.println("Successfully created list '" + listName + "' with " + places.size() + " places");
+            return true;
+            
+        } catch (Exception e) {
+            System.out.println("Error creating list: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Deletes saved lists from Google Maps.
+     * 
+     * @param listName All lists whose names contain listName will be deleted.
+     * @return true if no matching list was not or all such lists were deleted successfully, false if there was an exception.
+     */
+    public boolean deleteList(String listName) {
+        try {
+            // Navigate to Google Maps
+            page.navigate("https://www.google.com/maps/");
+            page.waitForLoadState();
+            
+            // Click on the "Saved" button
+            Locator savedButton = page.locator("text=Saved");
+            if (savedButton.count() == 0) {
+                System.out.println("Saved button not found");
+                return false;
+            }
+            savedButton.click();
+            page.waitForTimeout(2000);
+
+            Locator panel = page.locator("role=tabpanel").first();
+            if (panel.count() == 0) {
+                System.out.println("Panel not found");
+                return false;
+            }
+
+            while (true) {
+                // Loop through all direct children of panel
+                Locator children = panel.locator("> *");
+                int childCount = children.count();
+                int i;
+                for (i = 0; i < childCount; i++) {
+                    Locator child = children.nth(i);
+                    if (child.innerText().contains(listName)) {
+                        Locator MoreOptionsButton = child.locator("button[aria-label='More options']").first();
+                        MoreOptionsButton.click();
+                        page.waitForTimeout(1000);
+                        Locator deleteButton = page.locator(".fxNQSd:nth-child(5)").first();
+                        if (deleteButton.count() == 0) {
+                            System.out.println("Delete button not found");
+                            return false;
+                        }
+                        deleteButton.click();
+                        page.waitForTimeout(1000);
+                        Locator confirmButton = page.locator(".peSXAf .DVeyrd").first();
+                        if (confirmButton.count() == 0) {
+                            System.out.println("Confirm button not found");
+                            return false;
+                        }
+                        confirmButton.click();
+                        page.waitForTimeout(1000);
+                        System.out.println("Successfully deleted list: " + listName);
+                        break;
+                    }
+                }
+                if (i==childCount) {
+                    break;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error deleting list: " + e.getMessage());
+            return false;
+        }
+    }
 }

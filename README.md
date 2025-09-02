@@ -5,29 +5,22 @@ This repository contains **proof-of-concept demonstrations** to show a potential
 Today, a user performs an operation on the web by making a web-API call or interacting with a sequence of HTML elements using a browser. Imagine that developers wrap these web APIs and browser interactions into functions (which we call "web verbs") and ingest these functions in NLWeb's vector database. This will pave a promising path toward a realistic agentic web because every user task becomes a coding task, which LLMs are very good at.
 
 ## A video demo
-To show this vision, we have implemented 50 web verbs across various websites as Java functions. Using the agent mode in VS Code, we let the agent generate a solution according to the following description. The video shows the execution result.
+In the [demo](tasks/2025-08-27) below, we show a possible path to build and utilize NLWeb. The scenario is about planning a travel to Anchorage. You will see how the following vague task is concretized by the agent using real data on the web. The web verbs utilize NLWeb's natural language queries, browser automations, and web APIs.
 
 <small>
 
 ```
-Search for hotels in Paris on booking.com for the dates 2025-09-10 to 2025-09-15.  
-Find a list of top-rated hotels.
+My wife and I plan to fly to Anchorage on Tuesday of the next week, and come back to Seattle on Friday. In each full day there, we want to visit two museums. Please help us concretize this travel plan by finding a round trip flight and recommending good museums.
 
-Select the third cheapest hotel from the list, output its price and its hotel information. 
+We need to find a hotel for all nights. Please suggest a list of options.
 
-Find the distance to the Eiffel Tower: calculate the distance from the hotel's address to the Eiffel Tower.
-
-Then, go to amazon.com and search for a travel adapter suitable for the country of the hotel’s address.  
-Add the top-rated travel adapter to the Amazon shopping cart.  
-
-Print the hotel name, distance to the Eiffel Tower, and the price of the travel adapter.
-
-Also, send a Microsoft Teams message to john@foo.com that contains the printed information.
+We would like to know the weather in Anchorage in the coming days, so that we can be better prepared. Also, please find a Youtube video for each of the museums.
 ```
+
 </small>
 
-<a href="https://www.youtube.com/watch?v=ofbcKK8sMaA">
-<img src="resources/img/videoThumbnail.jpg" alt="Demo of an NL task" width="400">
+<a href="https://www.youtube.com/watch?v=Y4TX5g5ulM4">
+<img src="resources/img/videoThumbnail-2.jpg" width="400">
 </a>
 
 ## The vision
@@ -39,7 +32,7 @@ The abstraction layer of web verbs utilizes the unique strength of programming l
 Currently we have three early prototypes:
 
 1. Our extension to NLWeb's db_load functionality. It ingests web verbs into the vector database. Please see [this instruction](verb_ingress/README.md). 
-2. A set of 50 implemented verbs and a set of 100 tasks, each similar to the one shown above in the video. The agent successfully composes the verbs to fulfill all the tasks. Please see [this instruction](verbs/README.md).
+2. A set of 50 implemented verbs and a set of 100 tasks, each similar to the one shown above in [this short video](https://www.youtube.com/watch?v=ofbcKK8sMaA). The agent successfully composes the verbs to fulfill all the tasks. Please see [this instruction](verbs/README.md).
 3. A tool for developers to wrap a browser-interaction sequence into a verb. (To be added to this repo later.)  
 
 

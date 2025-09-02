@@ -1,9 +1,7 @@
 import java.nio.file.Paths;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
@@ -18,7 +16,17 @@ public class Task0000 {
         try (Playwright playwright = Playwright.create()) {
             String userDataDir = System.getProperty("user.home") +"\\AppData\\Local\\Google\\Chrome\\User Data\\Default";
 
-            BrowserType.LaunchPersistentContextOptions options = new BrowserType.LaunchPersistentContextOptions().setChannel("chrome").setHeadless(false).setArgs(java.util.Arrays.asList("--start-maximized"));
+            BrowserType.LaunchPersistentContextOptions options = new BrowserType.LaunchPersistentContextOptions()
+                .setChannel("chrome")
+                .setHeadless(false)
+                .setArgs(java.util.Arrays.asList(
+                    "--disable-blink-features=AutomationControlled",
+                    //"--no-sandbox",
+                    //"--disable-web-security",
+                    "--disable-infobars",
+                    "--disable-extensions",
+                    "--start-maximized"
+                ));
 
             //please add the following option to the options:
             //new Browser.NewContextOptions().setViewportSize(null)
@@ -49,25 +57,47 @@ public class Task0000 {
        The current function body is just an example specifically about youtube.
     */
     static JsonObject automate(BrowserContext context) {
-        youtube_com yt = new youtube_com(context);
-        String query = "washington";
-        List<youtube_com.YouTubeVideoInfo> results = yt.searchVideos(query);
-        JsonArray arr = new JsonArray();
-        for (youtube_com.YouTubeVideoInfo info : results) {
-            JsonObject obj = new JsonObject();
-            obj.addProperty("title", info.title);
-            // Format Duration as hh:mm:ss or mm:ss
-            long s = info.length.getSeconds();
-            long h = s / 3600;
-            long m = (s % 3600) / 60;
-            long sec = s % 60;
-            String lenStr = h > 0 ? String.format("%d:%02d:%02d", h, m, sec) : String.format("%d:%02d", m, sec);
-            obj.addProperty("length", lenStr);
-            obj.addProperty("url", info.url);
-            arr.add(obj);
+        // Test the createList method for Google Maps
+        maps_google_com mapsInstance = new maps_google_com(context);
+        
+        // Create a list of places to add to the Google Maps list
+        java.util.List<String> places = java.util.Arrays.asList(
+            "Anchorage Museum at Rasmuson Center", 
+            "Alaska Native Heritage Center"
+        );
+        /*/
+        // Test creating the list
+        boolean success = mapsInstance.createList("Anchorage 2025", places);
+        
+        // Create JSON response
+        JsonObject result = new JsonObject();
+        result.addProperty("listName", "Anchorage 2025");
+        result.addProperty("success", success);
+        result.addProperty("placesCount", places.size());
+        
+        JsonArray placesArray = new JsonArray();
+        for (String place : places) {
+            placesArray.add(place);
         }
-        JsonObject out = new JsonObject();
-        out.add("results", arr);
-        return out;
+        result.add("places", placesArray);
+        
+        if (success) {
+            result.addProperty("message", "Successfully created Google Maps list with " + places.size() + " places");
+        } else {
+            result.addProperty("message", "Failed to create Google Maps list");
+        }
+        */
+        
+        /* 
+        boolean success = mapsInstance.deleteList("Untitled list");
+        JsonObject result = new JsonObject();
+        */
+
+        teams_microsoft_com teamsInstance = new teams_microsoft_com(context);
+        teams_microsoft_com.MessageStatus messageStatus = teamsInstance.sendMessage(
+            "johndoe@contoso.com", 
+            "hello"
+        );
+        return null;
     }
 }
