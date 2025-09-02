@@ -1,0 +1,13 @@
+public interface NLWeb {
+    
+    /**
+     * Sends a natural language query to the NLWeb API and retrieves recommendations.
+     *
+     * @param queryString The natural language query to send to the API.
+     *                   Example: "I am traveling to Anchorage, Alaska. Can you recommend 5 museums?"
+     * @return A JSON string containing the recommended items in the format:
+     *         {"item_0":"Museum Name 1","item_1":"Museum Name 2",...}
+     *         Returns null if all retry attempts fail or no valid ensemble_result is found.
+     */
+    public String AskNLWeb(String queryString);
+}

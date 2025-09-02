@@ -19,4 +19,21 @@ public interface maps_google_com {
      * @return NearestBusinessesResult containing a list of the nearest businesses.
      */
     public NearestBusinessesResult get_nearestBusinesses(String referencePoint, String businessDescription, int maxCount);
+
+    /**
+     * Creates a new list on Google Maps and adds the specified places to it.
+     * 
+     * @param listName The name of the list to create (e.g., "Anchorage 2025").
+     * @param places A list of place names to add to the list (e.g., ["Anchorage Museum at Rasmuson Center", "Alaska Native Heritage Center"]).
+     * @return true if the list was created successfully and all places were added, false otherwise.
+     */
+    public boolean createList(String listName, java.util.List<String> places);
+
+    /**
+     * Deletes saved lists from Google Maps.
+     * 
+     * @param listName All lists whose names contain listName will be deleted.
+     * @return true if no matching list was not or all such lists were deleted successfully, false if there was an exception.
+     */
+    public boolean deleteList(String listName);
 }

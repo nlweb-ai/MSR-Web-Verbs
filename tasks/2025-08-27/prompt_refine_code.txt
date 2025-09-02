@@ -1,0 +1,14 @@
+You are an agent helping the user refine a real-world task.
+The task description has multiple versions, saved in the folder tasks\2025-08-27. They are named task-0001.md, task-0002.md, ..., task-xxxx.md, etc. The current version is the largest xxxx. Please read task-xxxx.md.
+
+Here are the steps to refine task-xxxx.
+(1) Think about places where the description is not concrete.
+(2) Try to find functions that help the user concretize these places. You should read read all *.ifcl files in the folder verbs\interfaces_and_classes. Use generated_solutions\Task0000.java as a sample to generate a java file generated_solutions\2025-08-27\AnchorageTaskxxxx.java according to your refinement strategy. (Note: You should only modify the "automate(...)" function in the sample code).
+(3) When writing the java code, add comments to explain the reasoning of your refinement strategy. 
+(4) The java code should implement the logic to collect the newly-obtained knowledge as json objects, and append them to the file tasks\2025-08-27\known_facts.md.
+(5) After generating the java code, clearly summarize the refinement strategy in the file tasks\2025-08-27\strategy-xxxx.md for the user to review.
+
+Tips:
+* For recommendations (e.g., about travel, food, etc.), you can use the function AskNLWeb(query). Please come up with a natural language sentence as the query.
+* Read tasks\2025-08-27\known_facts.md (if not empty) to get the knowledge that has been collected in previous rounds of refinement.
+* Try to concretize the dates before generating java code. You don't need to generate java code to get today's date as a variable. Instead, use the actual date of today to interpret the task description. All dates relative to today can be calculated concretely before generating the code.

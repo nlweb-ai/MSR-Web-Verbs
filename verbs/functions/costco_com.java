@@ -89,12 +89,12 @@ public class costco_com extends com_base {
         String error = null;
         try {
             page.navigate("https://www.costco.com/");
-            Locator warehouseBtn = page.locator("[data-testid='WarehouseSelectorUI'] [data-testid='Button_locationselector--submit']");
+            Locator warehouseBtn = page.locator("[data-testid='WarehouseSelectorUI'] [data-testid='Button_locationselector_WarehouseSelector--submit']");
             if (warehouseBtn.count() > 0) {
                 warehouseBtn.first().click();
                 page.waitForTimeout(1000);
             }
-            Locator input = page.locator("input[name='City, State or Zip']");
+            Locator input = page.locator("input[name='City, State, or Zip']");
             if (input.count() > 0) {
                 input.first().click();
                 input.first().fill(location);

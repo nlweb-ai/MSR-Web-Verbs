@@ -4,11 +4,12 @@
     "java.import.maven.enabled": true,
     "java.maven.downloadSources": true,
     
-    // Project structure
+    // Project structure - reordered for better recognition
     "java.project.sourcePaths": [
         "verbs/functions",
         "generated_solutions",
-        "generated_solutions/2025-08-01",
+        "generated_solutions/2025-08-27",
+        "generated_solutions/2025-08-01", 
         "generated_solutions/2025-06-01"
     ],
     "java.project.outputPath": "target/classes",
@@ -16,7 +17,20 @@
         "target/dependency/*.jar"
     ],
     
-    // Reduce false errors
+    // Reduce false errors and allow running with warnings
     "java.compile.nullAnalysis.mode": "disabled",
-    "java.errors.incompleteClasspath.severity": "ignore"
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.completion.enabled": true,
+    "java.codeGeneration.insertionLocation": "afterCursor",
+    
+    // Disable build-on-save and reduce warning sensitivity for RUN button
+    "java.autobuild.enabled": false,
+    "java.saveActions.organizeImports": false,
+    "java.compile.nullAnalysis.nonnull": [],
+    "java.compile.nullAnalysis.nullable": [],
+    
+    // Allow running with warnings - key setting for RUN button
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.test.defaultConfig": "",
+    "java.inlayHints.parameterNames.enabled": "none"
 }

@@ -31,4 +31,14 @@ public class CurrencyAmount {
         this.currency = currency;
         this.amount = Math.round(amount * 100.0) / 100.0;
     }
+
+    /**
+     * Returns a string representation of the currency amount in the format "amount currency".
+     * For example: "1234.00 USD" or "99.99 EUR"
+     * @return String representation of the currency amount
+     */
+    @Override
+    public String toString() {
+        return String.format("%.2f %s", amount, currency);
+    }
 }
