@@ -1,5 +1,8 @@
+Run the NLWeb server in a shell window:
+cd \repos\NLWeb\code\python
+python .\app-file.py
 
-
+Then, do the following inside VS Code
 ================
 Follow the instruction given in #file:prompt_refine_code.txt.
 ================

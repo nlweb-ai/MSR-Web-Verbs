@@ -32,7 +32,7 @@ The abstraction layer of web verbs utilizes the unique strength of programming l
 Currently we have three early prototypes:
 
 1. Our extension to NLWeb's db_load functionality. It ingests web verbs into the vector database. Please see [this instruction](verb_ingress/README.md). 
-2. A set of 50 implemented verbs and a set of 100 tasks, each similar to the one shown above in [this short video](https://www.youtube.com/watch?v=ofbcKK8sMaA). The agent successfully composes the verbs to fulfill all the tasks. Please see [this instruction](verbs/README.md).
+2. A set of 50 implemented verbs and a set of 100 tasks, each similar to the one shown in [this short video](https://www.youtube.com/watch?v=ofbcKK8sMaA). The agent successfully composes the verbs to fulfill all the tasks. Please see [this instruction](verbs/README.md).
 3. A tool for developers to wrap a browser-interaction sequence into a verb. (To be added to this repo later.)  
 
 

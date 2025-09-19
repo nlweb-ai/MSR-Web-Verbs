@@ -70,6 +70,7 @@
                                 <source>generated_solutions</source>
                                 <source>generated_solutions/2025-06-01</source>
                                 <source>generated_solutions/2025-08-01</source>
+                                <source>generated_solutions/2025-08-27</source>
                             </sources>
                         </configuration>
                     </execution>
