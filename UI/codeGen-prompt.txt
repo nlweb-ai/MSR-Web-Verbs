@@ -1,0 +1,11 @@
+I want to write a python app that has the following UI features.
+* The window is divided into 60% (left pane) and 40% (right pane).
+* The left pane is divided into upper-left pane (50%) and lower-left pane(50%).
+* The right pane is a chat window. It has an input box at the bottom and a submit button. Once the submit button is pressed, the input text is displayed (i.e., appended) in the current text in the right pane.
+
+=== The above is Done. Let's continue the project.=========
+Please make the upper-left pane is text editor with multi-tabs. Each tab loads a file in tasks\2025-08-27.
+=== The above is Done. Let's continue the project.=========
+I want the upper-left pane to indicate the word "Tasks" somewhere, and the lower-left pane to indicate the word "Strategies" similarly. Then, the upper-left pane loads only files named "task-*.md" and the upper-left pane loads only files named "strategy-*.md".
+
+The name of each tab for "task-*.md" should be "V*", such as "V0001". Do the same for each tab for "strategy-*.md".
