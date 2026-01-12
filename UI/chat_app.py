@@ -1,6 +1,11 @@
 import tkinter as tk
 from tkinter import scrolledtext, ttk
 import os
+import sys
+
+# Add the UI directory to the path to import copilot module
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from copilot import copilot_stream
 
 class ChatApp:
     def __init__(self, root):
@@ -84,6 +89,11 @@ class ChatApp:
         )
         self.chat_display.pack(fill=tk.BOTH, expand=True)
         
+        # Configure text tags for colored output
+        self.chat_display.tag_config("user", foreground="green")
+        self.chat_display.tag_config("copilot", foreground="blue")
+        self.chat_display.tag_config("error", foreground="red")
+        
         # Input area at the bottom of right pane
         input_frame = tk.Frame(right_pane)
         input_frame.pack(fill=tk.X, padx=5, pady=5)
@@ -112,16 +122,49 @@ class ChatApp:
         window_width = self.root.winfo_width()
         main_container.sash_place(0, int(window_width * 0.6), 0)
         
+        # Pre-populate the input box with the prompt
+        self.input_box.insert(0, "Please summarize file tasks\\2025-08-27\\task-0004.md using less than 200 words")
+        
     def submit_message(self):
         """Handle message submission"""
         message = self.input_box.get().strip()
         
         if message:
-            # Enable chat display to insert text
+            # Enable chat display to insert user's prompt
             self.chat_display.config(state=tk.NORMAL)
             
-            # Append the message to chat display
-            self.chat_display.insert(tk.END, message + "\n")
+            # Append user's prompt to chat display
+            self.chat_display.insert(tk.END, f"User: {message}\n", "user")
+            
+            # Auto-scroll to the bottom
+            self.chat_display.see(tk.END)
+            
+            # Disable chat display temporarily
+            self.chat_display.config(state=tk.DISABLED)
+            
+            # Update the UI to show the message
+            self.root.update_idletasks()
+            
+            # Enable chat display to insert response
+            self.chat_display.config(state=tk.NORMAL)
+            
+            # Insert copilot label
+            self.chat_display.insert(tk.END, "Copilot: ", "copilot")
+            
+            # Stream copilot responses as they arrive
+            response_received = False
+            for chunk in copilot_stream(message):
+                if chunk:
+                    response_received = True
+                    self.chat_display.insert(tk.END, "\n" + chunk, "copilot")
+                    self.chat_display.see(tk.END)
+                    self.root.update_idletasks()  # Force UI update for each chunk
+            
+            if not response_received:
+                self.chat_display.insert(tk.END, "No response or error occurred.", "error")
+            
+            # Add spacing after response
+            self.chat_display.insert(tk.END, "\n\n")
             
             # Auto-scroll to the bottom
             self.chat_display.see(tk.END)
