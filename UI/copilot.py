@@ -2,8 +2,13 @@
 import subprocess
 import json
 
-def copilot_stream(prompt, *extra):
+def copilot_stream(prompt, cwd=None, *extra):
     """Stream copilot responses as they arrive using SSE format.
+    
+    Args:
+        prompt: The prompt to send to copilot
+        cwd: Working directory for the copilot command (optional)
+        *extra: Additional arguments
     
     Yields chunks of text as they become available.
     """
@@ -11,7 +16,7 @@ def copilot_stream(prompt, *extra):
     try:
         process = subprocess.Popen(
             cmd,
-            cwd="D:\\repos\\MSR-Web-Verbs",
+            cwd=cwd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -39,11 +44,17 @@ def copilot_stream(prompt, *extra):
         print(f"Unexpected error: {e}")
         yield f"Error: {e}"
 
-def copilot(prompt, *extra):
-    """Non-streaming version for backward compatibility."""
+def copilot(prompt, cwd=None, *extra):
+    """Non-streaming version for backward compatibility.
+    
+    Args:
+        prompt: The prompt to send to copilot
+        cwd: Working directory for the copilot command (optional)
+        *extra: Additional arguments
+    """
     cmd = ["copilot", "--prompt", prompt, *extra]
     try:
-        result = subprocess.run(cmd, cwd="D:\\repos\\MSR-Web-Verbs",capture_output=True, text=True, check=False, shell=True)
+        result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False, shell=True)
         if result.returncode != 0:
             print(f"Error: Command returned non-zero exit code {result.returncode}")
             print(f"STDERR: {result.stderr}")
