@@ -11,12 +11,12 @@ from copilot import copilot_stream
 class ChatApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Chat Application")
+        self.root.title("Browser Agent Based On Web Verbs")
         self.root.geometry("2000x1200")
         
         # Set workspace path for copilot commands
         self.workspace_path = "D:\\repos\\MSR-Web-Verbs"
-        self.task_name = "2025-08-27"
+        self.task_name = "2026-01-12"
         self.case_dir = os.path.join(self.workspace_path, "tasks", self.task_name)
         
         # Configure notebook tab styles to make active tab more prominent
@@ -384,8 +384,96 @@ class ChatApp:
     
     def generate_strategy(self):
         """Handle Generate Strategy button click"""
-        # TODO: Implement strategy generation logic
-        print("Generate Strategy clicked for highest task version")
+        # Get the current task tab
+        current_tab = self.tasks_notebook.select()
+        if not current_tab:
+            return
+        
+        # Get the tab text (e.g., "V0004")
+        tab_text = self.tasks_notebook.tab(current_tab, "text")
+        
+        # Extract the task number
+        match = re.search(r'V(\d+)', tab_text)
+        if match:
+            task_number = match.group(1)
+            
+            # Get the task content from the current tab
+            current_tab_index = self.tasks_notebook.index(current_tab)
+            tab_frame = self.tasks_notebook.nametowidget(current_tab)
+            text_widget = None
+            
+            # ScrolledText is actually a Frame containing a Text widget
+            # Search recursively for the Text widget
+            def find_text_widget(widget):
+                for child in widget.winfo_children():
+                    if isinstance(child, tk.Text):
+                        return child
+                    # Recursively search in child widgets
+                    found = find_text_widget(child)
+                    if found:
+                        return found
+                return None
+            
+            text_widget = find_text_widget(tab_frame)
+            
+            if not text_widget:
+                print("Error: Could not find text widget in tab")
+                return
+            
+            task_content = text_widget.get("1.0", tk.END).strip()
+            
+            # Construct the output file path
+            task_name_clean = self.task_name.replace("-", "_")
+            java_class_name = f"Code_{task_name_clean}_{task_number}"
+            output_file = os.path.join(self.workspace_path, "generated_solutions", self.task_name, f"{java_class_name}.java")
+            
+            # Display message in chat window
+            self.chat_display.config(state=tk.NORMAL)
+            self.chat_display.insert(tk.END, f"I will create the file {output_file}\n\n", "copilot")
+            self.chat_display.insert(tk.END, "Generating Java code...\n", "copilot")
+            self.chat_display.see(tk.END)
+            self.chat_display.config(state=tk.DISABLED)
+            self.root.update_idletasks()
+            
+            # Create prompt for copilot
+            #prompt = f"Generate a complete Java program to solve the following task. Only output the Java code without any explanations:\n\n{task_content}"
+            prompt = f"Generate a hello-world-like Java program. The class name should be: {java_class_name}. Only output the Java code without any explanations. \n\n"
+            
+            # Stream copilot response and collect the generated code
+            generated_code = []
+            self.chat_display.config(state=tk.NORMAL)
+            for chunk in copilot_stream(prompt, self.case_dir):
+                if chunk:
+                    generated_code.append(chunk)
+                    self.chat_display.insert(tk.END, chunk, "copilot")
+                    self.chat_display.see(tk.END)
+                    self.root.update_idletasks()
+            
+            # Create directory if it doesn't exist
+            output_dir = os.path.dirname(output_file)
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Write the generated code to file
+            full_code = "".join(generated_code)
+            
+            # Remove markdown code fences if present
+            full_code = full_code.strip()
+            if full_code.startswith("```java"):
+                full_code = full_code[7:]  # Remove ```java
+            elif full_code.startswith("```"):
+                full_code = full_code[3:]  # Remove ```
+            
+            if full_code.endswith("```"):
+                full_code = full_code[:-3]  # Remove trailing ```
+            
+            full_code = full_code.strip()
+            
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(full_code)
+            
+            self.chat_display.insert(tk.END, f"\n\nCode successfully written to {output_file}\n\n", "copilot")
+            self.chat_display.see(tk.END)
+            self.chat_display.config(state=tk.DISABLED)
     
     def delete_task(self):
         """Handle Delete button click"""
