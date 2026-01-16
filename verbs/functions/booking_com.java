@@ -23,7 +23,7 @@ public class booking_com extends com_base {
         page.navigate("https://www.booking.com/");
         //System.out.print("press any key:"); scanner.nextLine();
         
-        Locator b=page.locator("input[id=':rh:']");
+        Locator b=page.locator("input[aria-label='Where are you going?']");
         b.fill(destination);
         //b.focus();
         // Press Enter to submit the input

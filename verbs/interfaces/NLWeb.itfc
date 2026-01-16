@@ -9,5 +9,5 @@ public interface NLWeb {
      *         {"item_0":"Museum Name 1","item_1":"Museum Name 2",...}
      *         Returns null if all retry attempts fail or no valid ensemble_result is found.
      */
-    public String AskNLWeb(String queryString);
+    public String AskNLWeb(String queryString) throws IOException, InterruptedException;
 }

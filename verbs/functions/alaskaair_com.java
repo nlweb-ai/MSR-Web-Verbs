@@ -18,13 +18,13 @@ public class alaskaair_com extends com_base{
      */
     FlightInfoResult getFlightInfo() {
         List<String> flights = new ArrayList<>();
-        Locator flightCards = page.locator(".flight-card-extended");
+        Locator flightCards = page.locator(".card-container");
         int flightCardCount = flightCards.count();
         for (int i = 0; i < flightCardCount; i++) {
             String flightCardText = flightCards.nth(i).innerText();
             flights.add(flightCardText);
         }
-        Locator priceLocator = page.locator(".svelte-2v9ttl");
+        Locator priceLocator = page.locator(".total-price-container");
         CurrencyAmount price = null;
         if (priceLocator.count() > 0) {
             String priceText = priceLocator.first().innerText();

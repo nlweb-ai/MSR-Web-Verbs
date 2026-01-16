@@ -1,6 +1,8 @@
 
 import subprocess
 import json
+import tempfile
+import os
 
 def copilot_stream(prompt, cwd=None, *extra):
     """Stream copilot responses as they arrive using SSE format.
@@ -12,20 +14,30 @@ def copilot_stream(prompt, cwd=None, *extra):
     
     Yields chunks of text as they become available.
     """
-    cmd = ["copilot", "--prompt", prompt, *extra]
+    # Write prompt to a temporary file to avoid newline/escaping issues
+    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt', encoding='utf-8') as tmp:
+        tmp.write(prompt)
+        tmp_path = tmp.name
+    
     try:
+        # Read prompt from file instead of passing on command line
+        cmd = f'copilot --prompt "@{tmp_path}"'
+        if extra:
+            cmd += " " + " ".join(extra)
+        
         process = subprocess.Popen(
             cmd,
             cwd=cwd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            encoding='utf-8',
             shell=True
         )
         
         # Read output line by line as it becomes available
         for line in process.stdout:
-            line = line.strip()
+            line = line.rstrip()  # Remove only trailing whitespace, preserve indentation
             if line:
                 yield line
         
@@ -43,6 +55,13 @@ def copilot_stream(prompt, cwd=None, *extra):
     except Exception as e:
         print(f"Unexpected error: {e}")
         yield f"Error: {e}"
+    finally:
+        # Clean up temporary file
+        try:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+        except:
+            pass
 
 def copilot(prompt, cwd=None, *extra):
     """Non-streaming version for backward compatibility.

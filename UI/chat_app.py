@@ -1,59 +1,118 @@
+"""Main chat application for Browser Agent Based On Web Verbs"""
 import tkinter as tk
-from tkinter import scrolledtext, ttk
+from tkinter import ttk, scrolledtext
 import os
 import sys
-import re
 
-# Add the UI directory to the path to import copilot module
+# Add the UI directory to the path to import modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from copilot import copilot_stream
+
+from file_loader import load_files_as_tabs
+from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
+from action_handlers import submit_message, open_task, generate_strategy, execute_strategy
+
 
 class ChatApp:
+    """Main application class for the chat interface"""
+    
     def __init__(self, root):
+        """Initialize the chat application
+        
+        Args:
+            root: The root tkinter window
+        """
         self.root = root
         self.root.title("Browser Agent Based On Web Verbs")
         self.root.geometry("2000x1200")
         
         # Set workspace path for copilot commands
         self.workspace_path = "D:\\repos\\MSR-Web-Verbs"
-        self.task_name = "2026-01-12"
+        
+        # Read task_name from cache.txt or use default
+        cache_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache.txt")
+        try:
+            with open(cache_file, 'r') as f:
+                self.task_name = f.read().strip()
+                if not self.task_name:  # If cache is empty, use default
+                    self.task_name = "2026-01-12"
+        except FileNotFoundError:
+            self.task_name = "2026-01-12"
+        
         self.case_dir = os.path.join(self.workspace_path, "tasks", self.task_name)
         
-        # Configure notebook tab styles to make active tab more prominent
+        # Configure notebook tab styles
+        self._configure_styles()
+        
+        # Create UI components
+        self._create_ui()
+        
+        # Load initial data
+        self._load_initial_data()
+        
+        # Set the 60/40 split after window updates
+        self.root.update_idletasks()
+        window_width = self.root.winfo_width()
+        self.main_container.sash_place(0, int(window_width * 0.6), 0)
+        
+        # Pre-populate the input box with a sample prompt
+        self.input_box.insert(0, "")
+    
+    def _configure_styles(self):
+        """Configure TTK styles for the application"""
         style = ttk.Style()
         style.theme_use('default')
         
-        # Style for selected (active) tab
+        # Style for notebook tabs
         style.configure('TNotebook.Tab', 
                        padding=[10, 5], 
-                       font=('Arial', 10))
+                       font=('Arial', 12))
         style.map('TNotebook.Tab',
                  background=[('selected', '#4CAF50'), ('!selected', '#E0E0E0')],
                  foreground=[('selected', 'white'), ('!selected', 'black')],
-                 font=[('selected', ('Arial', 10, 'bold')), ('!selected', ('Arial', 10))])
-        
+                 font=[('selected', ('Arial', 12, 'bold')), ('!selected', ('Arial', 12))])
+    
+    def _create_ui(self):
+        """Create all UI components"""
         # Create main container with PanedWindow for 60/40 split
-        main_container = tk.PanedWindow(root, orient=tk.HORIZONTAL, sashwidth=5)
-        main_container.pack(fill=tk.BOTH, expand=True)
+        self.main_container = tk.PanedWindow(self.root, orient=tk.HORIZONTAL, sashwidth=5)
+        self.main_container.pack(fill=tk.BOTH, expand=True)
         
-        # Left pane (60% of window)
-        left_pane = tk.Frame(main_container, bg="lightgray")
+        # Create left pane with tasks and strategies
+        self._create_left_pane()
         
-        # Configure grid weights for left pane
+        # Create right pane with chat
+        self._create_right_pane()
+    
+    def _create_left_pane(self):
+        """Create left pane with tasks and strategies notebooks"""
+        # Left pane container
+        left_pane = tk.Frame(self.main_container, bg="lightgray")
+        
+        # Configure grid weights for 50/50 split
         left_pane.grid_rowconfigure(0, weight=1)
         left_pane.grid_rowconfigure(1, weight=1)
         left_pane.grid_columnconfigure(0, weight=1)
         
-        # Upper-left pane (50% of left pane) - Tasks editor
-        upper_left = tk.Frame(left_pane, bg="white", relief=tk.RIDGE, borderwidth=2)
+        # Create tasks pane (upper left)
+        self._create_tasks_pane(left_pane)
+        
+        # Create strategies pane (lower left)
+        self._create_strategies_pane(left_pane)
+        
+        self.main_container.add(left_pane, width=600)
+    
+    def _create_tasks_pane(self, parent):
+        """Create tasks pane with notebook and buttons"""
+        # Upper-left pane - Tasks editor
+        upper_left = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
         upper_left.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         
         # Header frame for label and buttons
         tasks_header_frame = tk.Frame(upper_left, bg="white")
         tasks_header_frame.pack(fill=tk.X, pady=5)
         
-        # Add "Tasks" label
-        tasks_label = tk.Label(tasks_header_frame, text="Tasks", bg="white", font=("Arial", 12, "bold"))
+        # Tasks label
+        tasks_label = tk.Label(tasks_header_frame, text="Tasks", bg="white", font=("Arial", 14, "bold"))
         tasks_label.pack(side=tk.LEFT, padx=5)
         
         # Button frame for right-aligned buttons
@@ -64,53 +123,32 @@ class ChatApp:
         self.generate_strategy_button = tk.Button(
             tasks_button_frame,
             text="Generate Strategy",
-            command=self.generate_strategy,
+            command=lambda: generate_strategy(self),
             bg="#FF9800",
             fg="white",
-            font=("Arial", 9, "bold"),
+            font=("Arial", 12, "bold"),
             padx=10
         )
-        self.generate_strategy_button.pack(side=tk.LEFT, padx=(0, 5))
         
-        # Delete button
-        self.delete_task_button = tk.Button(
-            tasks_button_frame,
-            text="Delete",
-            command=self.delete_task,
-            bg="#F44336",
-            fg="white",
-            font=("Arial", 9, "bold"),
-            padx=10
-        )
-        self.delete_task_button.pack(side=tk.LEFT)
-        
-        # Initially hide the buttons
-        self.generate_strategy_button.pack_forget()
-        self.delete_task_button.pack_forget()
-        
-        # Create notebook (tabbed interface) for task files
+        # Create notebook for tasks
         self.tasks_notebook = ttk.Notebook(upper_left)
         self.tasks_notebook.pack(fill=tk.BOTH, expand=True)
         
-        # Bind tab change event to update button visibility
-        self.tasks_notebook.bind("<<NotebookTabChanged>>", self.on_task_tab_changed)
-        
-        # Load task files from tasks/2025-08-27 directory
-        self.load_files_as_tabs(self.tasks_notebook, "task-*.md")
-        
-        # Store the highest task version for comparison
-        self.update_highest_task_version()
-        
-        # Lower-left pane (50% of left pane) - Strategies editor
-        lower_left = tk.Frame(left_pane, bg="white", relief=tk.RIDGE, borderwidth=2)
+        # Bind tab change event
+        self.tasks_notebook.bind("<<NotebookTabChanged>>", lambda e: handle_task_tab_changed(self, e))
+    
+    def _create_strategies_pane(self, parent):
+        """Create strategies pane with notebook and Execute button"""
+        # Lower-left pane - Strategies viewer
+        lower_left = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
         lower_left.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
         
         # Header frame for label and button
         strategies_header_frame = tk.Frame(lower_left, bg="white")
         strategies_header_frame.pack(fill=tk.X, pady=5)
         
-        # Add "Strategies" label
-        strategies_label = tk.Label(strategies_header_frame, text="Strategies", bg="white", font=("Arial", 12, "bold"))
+        # Strategies label
+        strategies_label = tk.Label(strategies_header_frame, text="Strategies", bg="white", font=("Arial", 14, "bold"))
         strategies_label.pack(side=tk.LEFT, padx=5)
         
         # Button frame for right-aligned button
@@ -121,46 +159,36 @@ class ChatApp:
         self.execute_button = tk.Button(
             strategies_button_frame,
             text="Execute",
-            command=self.execute_strategy,
+            command=lambda: execute_strategy(self),
             bg="#F44336",
             fg="white",
-            font=("Arial", 9, "bold"),
+            font=("Arial", 12, "bold"),
             padx=10
         )
-        self.execute_button.pack(side=tk.LEFT)
         
-        # Initially hide the button
-        self.execute_button.pack_forget()
-        
-        # Create notebook (tabbed interface) for strategy files
+        # Create notebook for strategies
         self.strategies_notebook = ttk.Notebook(lower_left)
         self.strategies_notebook.pack(fill=tk.BOTH, expand=True)
         
-        # Bind tab change event to update button visibility
-        self.strategies_notebook.bind("<<NotebookTabChanged>>", self.on_strategy_tab_changed)
+        # Bind tab change event
+        self.strategies_notebook.bind("<<NotebookTabChanged>>", lambda e: handle_strategy_tab_changed(self, e))
+    
+    def _create_right_pane(self):
+        """Create right pane with chat interface"""
+        # Right pane - Chat window
+        right_pane = tk.Frame(self.main_container, bg="white", relief=tk.RIDGE, borderwidth=2)
+        self.main_container.add(right_pane, width=400)
         
-        # Load strategy files from tasks/2025-08-27 directory
-        self.load_files_as_tabs(self.strategies_notebook, "strategy-*.md")
-        
-        # Store the highest strategy version for comparison
-        self.update_highest_strategy_version()
-        
-        main_container.add(left_pane, width=600)
-        
-        # Right pane (40% of window) - Chat window
-        right_pane = tk.Frame(main_container, bg="white", relief=tk.RIDGE, borderwidth=2)
-        main_container.add(right_pane, width=400)
-        
-        # Task name control frame at the top of right pane
+        # Task name control frame at the top
         task_control_frame = tk.Frame(right_pane)
         task_control_frame.pack(fill=tk.X, padx=5, pady=5)
         
-        # Label for task name
-        task_label = tk.Label(task_control_frame, text="Task Name:", font=("Arial", 10))
+        # Task name label
+        task_label = tk.Label(task_control_frame, text="Task Name:", font=("Arial", 12))
         task_label.pack(side=tk.LEFT, padx=(0, 5))
         
-        # Input box for task name
-        self.task_name_input = tk.Entry(task_control_frame, font=("Arial", 10))
+        # Task name input
+        self.task_name_input = tk.Entry(task_control_frame, font=("Arial", 12))
         self.task_name_input.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         self.task_name_input.insert(0, self.task_name)
         
@@ -168,15 +196,15 @@ class ChatApp:
         open_task_button = tk.Button(
             task_control_frame,
             text="Open Task",
-            command=self.open_task,
+            command=lambda: open_task(self),
             bg="#2196F3",
             fg="white",
-            font=("Arial", 10, "bold"),
+            font=("Arial", 12, "bold"),
             padx=10
         )
         open_task_button.pack(side=tk.RIGHT)
         
-        # Chat display area (scrollable text widget)
+        # Chat display area
         chat_frame = tk.Frame(right_pane)
         chat_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
@@ -187,7 +215,7 @@ class ChatApp:
             height=20,
             state=tk.DISABLED,
             bg="white",
-            font=("Arial", 10)
+            font=("Arial", 12)
         )
         self.chat_display.pack(fill=tk.BOTH, expand=True)
         
@@ -196,465 +224,72 @@ class ChatApp:
         self.chat_display.tag_config("copilot", foreground="blue")
         self.chat_display.tag_config("error", foreground="red")
         
-        # Input area at the bottom of right pane
+        # Input area at the bottom
         input_frame = tk.Frame(right_pane)
         input_frame.pack(fill=tk.X, padx=5, pady=5)
         
         # Input text box
-        self.input_box = tk.Entry(input_frame, font=("Arial", 10))
-        self.input_box.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+        self.input_box = tk.Entry(input_frame, font=("Arial", 12))
+        self.input_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 5))
         
         # Bind Enter key to submit
-        self.input_box.bind("<Return>", lambda event: self.submit_message())
+        self.input_box.bind("<Return>", lambda event: submit_message(self))
+        
+        # New button
+        new_button = tk.Button(
+            input_frame,
+            text="New",
+            command=lambda: self._clear_chat(),
+            bg="#FF9800",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            padx=15
+        )
+        new_button.pack(side=tk.RIGHT, padx=(0, 5))
         
         # Submit button
         submit_button = tk.Button(
             input_frame,
             text="Submit",
-            command=self.submit_message,
+            command=lambda: submit_message(self),
             bg="#4CAF50",
             fg="white",
-            font=("Arial", 10, "bold"),
+            font=("Arial", 12, "bold"),
             padx=15
         )
         submit_button.pack(side=tk.RIGHT)
-        
-        # Set the 60/40 split after window updates
-        self.root.update_idletasks()
-        window_width = self.root.winfo_width()
-        main_container.sash_place(0, int(window_width * 0.6), 0)
-        
-        # Pre-populate the input box with the prompt
-        self.input_box.insert(0, "Please summarize task 0004 using less than 200 words")
-        
-    def submit_message(self):
-        """Handle message submission"""
-        message = self.input_box.get().strip()
-        
-        if message:
-            # Enable chat display to insert user's prompt
-            self.chat_display.config(state=tk.NORMAL)
-            
-            # Append user's prompt to chat display
-            self.chat_display.insert(tk.END, f"User: {message}\n", "user")
-            
-            # Auto-scroll to the bottom
-            self.chat_display.see(tk.END)
-            
-            # Disable chat display temporarily
-            self.chat_display.config(state=tk.DISABLED)
-            
-            # Update the UI to show the message
-            self.root.update_idletasks()
-            
-            # Enable chat display to insert response
-            self.chat_display.config(state=tk.NORMAL)
-            
-            # Insert copilot label
-            self.chat_display.insert(tk.END, "Copilot: ", "copilot")
-            
-            # Stream copilot responses as they arrive
-            response_received = False
-            for chunk in copilot_stream(message, self.case_dir):
-                if chunk:
-                    response_received = True
-                    self.chat_display.insert(tk.END, "\n" + chunk, "copilot")
-                    self.chat_display.see(tk.END)
-                    self.root.update_idletasks()  # Force UI update for each chunk
-            
-            if not response_received:
-                self.chat_display.insert(tk.END, "No response or error occurred.", "error")
-            
-            # Add spacing after response
-            self.chat_display.insert(tk.END, "\n\n")
-            
-            # Auto-scroll to the bottom
-            self.chat_display.see(tk.END)
-            
-            # Disable chat display to prevent manual editing
-            self.chat_display.config(state=tk.DISABLED)
-            
-            # Clear the input box
-            self.input_box.delete(0, tk.END)
-            
-            # Set focus back to input box
-            self.input_box.focus_set()
     
-    def open_task(self):
-        """Handle opening a new task by reloading tabs with the new task name"""
-        new_task_name = self.task_name_input.get().strip()
+    def _load_initial_data(self):
+        """Load initial task and strategy files"""
+        # Load task files
+        load_files_as_tabs(self, self.tasks_notebook, "task-*.md")
         
-        if new_task_name and new_task_name != self.task_name:
-            # Update task name
-            self.task_name = new_task_name
-            
-            # Clear existing tabs
-            for tab in self.tasks_notebook.tabs():
-                self.tasks_notebook.forget(tab)
-            for tab in self.strategies_notebook.tabs():
-                self.strategies_notebook.forget(tab)
-            
-            # Reload tabs with new task name
-            self.load_files_as_tabs(self.tasks_notebook, "task-*.md")
-            self.load_files_as_tabs(self.strategies_notebook, "strategy-*.md")
-            
-            # Update highest task version and button visibility
-            self.update_highest_task_version()
-            self.update_highest_strategy_version()
-            self.on_task_tab_changed()
-            self.on_strategy_tab_changed()
+        # Store the highest task version
+        self.highest_task_version = update_highest_version(self.tasks_notebook, 'highest_task_version')
+        
+        # Load strategy files
+        load_files_as_tabs(self, self.strategies_notebook, "strategy-*.md")
+        
+        # Store the highest strategy version
+        self.highest_strategy_version = update_highest_version(self.strategies_notebook, 'highest_strategy_version')
+        
+        # Trigger initial button visibility updates
+        handle_task_tab_changed(self)
+        handle_strategy_tab_changed(self)
     
-    def update_highest_task_version(self):
-        """Update the highest task version number"""
-        self.highest_task_version = None
-        tabs = self.tasks_notebook.tabs()
-        
-        if tabs:
-            # Extract version numbers from tab labels
-            import re
-            versions = []
-            for tab in tabs:
-                tab_text = self.tasks_notebook.tab(tab, "text")
-                match = re.search(r'V(\d+)', tab_text)
-                if match:
-                    versions.append(int(match.group(1)))
-            
-            if versions:
-                self.highest_task_version = max(versions)
-    
-    def update_highest_strategy_version(self):
-        """Update the highest strategy version number"""
-        self.highest_strategy_version = None
-        tabs = self.strategies_notebook.tabs()
-        
-        if tabs:
-            # Extract version numbers from tab labels
-            import re
-            versions = []
-            for tab in tabs:
-                tab_text = self.strategies_notebook.tab(tab, "text")
-                match = re.search(r'V(\d+)', tab_text)
-                if match:
-                    versions.append(int(match.group(1)))
-            
-            if versions:
-                self.highest_strategy_version = max(versions)
-    
-    def on_task_tab_changed(self, event=None):
-        """Handle task tab change to show/hide buttons"""
-        if not hasattr(self, 'highest_task_version') or self.highest_task_version is None:
-            return
-        
-        # Get current tab
-        current_tab = self.tasks_notebook.select()
-        if current_tab:
-            tab_text = self.tasks_notebook.tab(current_tab, "text")
-            
-            # Check if this is the highest version
-            import re
-            match = re.search(r'V(\d+)', tab_text)
-            if match and int(match.group(1)) == self.highest_task_version:
-                # Show buttons
-                self.generate_strategy_button.pack(side=tk.LEFT, padx=(0, 5))
-                self.delete_task_button.pack(side=tk.LEFT)
-            else:
-                # Hide buttons
-                self.generate_strategy_button.pack_forget()
-                self.delete_task_button.pack_forget()
-    
-    def on_strategy_tab_changed(self, event=None):
-        """Handle strategy tab change to show/hide Execute button"""
-        if not hasattr(self, 'highest_strategy_version') or self.highest_strategy_version is None:
-            return
-        
-        # Get current tab
-        current_tab = self.strategies_notebook.select()
-        if current_tab:
-            tab_text = self.strategies_notebook.tab(current_tab, "text")
-            
-            # Check if this is the highest version
-            import re
-            match = re.search(r'V(\d+)', tab_text)
-            if match and int(match.group(1)) == self.highest_strategy_version:
-                # Show button
-                self.execute_button.pack(side=tk.LEFT)
-            else:
-                # Hide button
-                self.execute_button.pack_forget()
-    
-    def generate_strategy(self):
-        """Handle Generate Strategy button click"""
-        # Get the current task tab
-        current_tab = self.tasks_notebook.select()
-        if not current_tab:
-            return
-        
-        # Get the tab text (e.g., "V0004")
-        tab_text = self.tasks_notebook.tab(current_tab, "text")
-        
-        # Extract the task number
-        match = re.search(r'V(\d+)', tab_text)
-        if match:
-            task_number = match.group(1)
-            
-            # Get the task content from the current tab
-            current_tab_index = self.tasks_notebook.index(current_tab)
-            tab_frame = self.tasks_notebook.nametowidget(current_tab)
-            text_widget = None
-            
-            # ScrolledText is actually a Frame containing a Text widget
-            # Search recursively for the Text widget
-            def find_text_widget(widget):
-                for child in widget.winfo_children():
-                    if isinstance(child, tk.Text):
-                        return child
-                    # Recursively search in child widgets
-                    found = find_text_widget(child)
-                    if found:
-                        return found
-                return None
-            
-            text_widget = find_text_widget(tab_frame)
-            
-            if not text_widget:
-                print("Error: Could not find text widget in tab")
-                return
-            
-            task_content = text_widget.get("1.0", tk.END).strip()
-            
-            # Construct the output file path
-            task_name_clean = self.task_name.replace("-", "_")
-            java_class_name = f"Code_{task_name_clean}_{task_number}"
-            output_file = os.path.join(self.workspace_path, "generated_solutions", self.task_name, f"{java_class_name}.java")
-            
-            # Display message in chat window
-            self.chat_display.config(state=tk.NORMAL)
-            self.chat_display.insert(tk.END, f"I will create the file {output_file}\n\n", "copilot")
-            self.chat_display.insert(tk.END, "Generating Java code...\n", "copilot")
-            self.chat_display.see(tk.END)
-            self.chat_display.config(state=tk.DISABLED)
-            self.root.update_idletasks()
-            
-            # Create prompt for copilot
-            #prompt = f"Generate a complete Java program to solve the following task. Only output the Java code without any explanations:\n\n{task_content}"
-            prompt = f"Generate a hello-world-like Java program. The class name should be: {java_class_name}. Only output the Java code without any explanations. \n\n"
-            
-            # Stream copilot response and collect the generated code
-            generated_code = []
-            self.chat_display.config(state=tk.NORMAL)
-            for chunk in copilot_stream(prompt, self.case_dir):
-                if chunk:
-                    generated_code.append(chunk)
-                    self.chat_display.insert(tk.END, chunk, "copilot")
-                    self.chat_display.see(tk.END)
-                    self.root.update_idletasks()
-            
-            # Create directory if it doesn't exist
-            output_dir = os.path.dirname(output_file)
-            os.makedirs(output_dir, exist_ok=True)
-            
-            # Write the generated code to file
-            full_code = "".join(generated_code)
-            
-            # Remove markdown code fences if present
-            full_code = full_code.strip()
-            if full_code.startswith("```java"):
-                full_code = full_code[7:]  # Remove ```java
-            elif full_code.startswith("```"):
-                full_code = full_code[3:]  # Remove ```
-            
-            if full_code.endswith("```"):
-                full_code = full_code[:-3]  # Remove trailing ```
-            
-            full_code = full_code.strip()
-            
-            with open(output_file, 'w', encoding='utf-8') as f:
-                f.write(full_code)
-            
-            self.chat_display.insert(tk.END, f"\n\nCode successfully written to {output_file}\n\n", "copilot")
-            self.chat_display.see(tk.END)
-            self.chat_display.config(state=tk.DISABLED)
-    
-    def delete_task(self):
-        """Handle Delete button click"""
-        # TODO: Implement task deletion logic
-        print("Delete clicked for highest task version")
-    
-    def execute_strategy(self):
-        """Handle Execute button click"""
-        # TODO: Implement strategy execution logic
-        print("Execute clicked for highest strategy version")
-    
-    def load_files_as_tabs(self, notebook, file_pattern):
-        """Load filtered files from tasks/2025-08-27 directory as tabs
-        
-        Args:
-            notebook: The notebook widget to add tabs to
-            file_pattern: File pattern to match (e.g., 'task-*.md' or 'strategy-*.md')
-        """
-        import fnmatch
-        
-        # Determine if this is for strategies (read-only renderer) or tasks (editable)
-        is_strategy = file_pattern.startswith("strategy-")
-        
-        # Get the tasks directory path
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        tasks_dir = os.path.join(base_dir, "tasks", self.task_name)
-        
-        if not os.path.exists(tasks_dir):
-            # If directory doesn't exist, show a message
-            empty_frame = tk.Frame(notebook)
-            label = tk.Label(empty_frame, text=f"Directory not found: {tasks_dir}")
-            label.pack(pady=20)
-            notebook.add(empty_frame, text="Error")
-            return
-        
-        # Get all files in the directory that match the pattern
-        all_files = [f for f in os.listdir(tasks_dir) if os.path.isfile(os.path.join(tasks_dir, f))]
-        files = sorted([f for f in all_files if fnmatch.fnmatch(f, file_pattern)])
-        
-        if not files:
-            # If no files, show a message
-            empty_frame = tk.Frame(notebook)
-            label = tk.Label(empty_frame, text=f"No files found matching {file_pattern}")
-            label.pack(pady=20)
-            notebook.add(empty_frame, text="Empty")
-            return
-        
-        # Create a tab for each file
-        for filename in files:
-            file_path = os.path.join(tasks_dir, filename)
-            
-            # Extract number from filename and create tab label (e.g., "task-0001.md" -> "V0001")
-            import re
-            match = re.search(r'-(\d+)', filename)
-            if match:
-                tab_label = f"V{match.group(1)}"
-            else:
-                tab_label = filename  # fallback to filename if no number found
-            
-            # Create a frame for this tab
-            tab_frame = tk.Frame(notebook)
-            
-            if is_strategy:
-                # For strategies: create read-only text widget (renderer)
-                text_widget = scrolledtext.ScrolledText(
-                    tab_frame,
-                    wrap=tk.WORD,
-                    font=("Consolas", 10),
-                    bg="#f5f5f5",
-                    state=tk.DISABLED
-                )
-                text_widget.pack(fill=tk.BOTH, expand=True)
-                
-                # Configure tags for markdown formatting
-                text_widget.tag_configure("h1", font=("Arial", 16, "bold"), spacing3=10)
-                text_widget.tag_configure("h2", font=("Arial", 14, "bold"), spacing3=8)
-                text_widget.tag_configure("h3", font=("Arial", 12, "bold"), spacing3=6)
-                text_widget.tag_configure("bold", font=("Consolas", 10, "bold"))
-                text_widget.tag_configure("italic", font=("Consolas", 10, "italic"))
-                text_widget.tag_configure("code", font=("Courier", 9), background="#e0e0e0")
-                text_widget.tag_configure("code_block", font=("Courier", 9), background="#e0e0e0", lmargin1=20, lmargin2=20)
-            else:
-                # For tasks: create editable text widget
-                text_widget = scrolledtext.ScrolledText(
-                    tab_frame,
-                    wrap=tk.WORD,
-                    font=("Consolas", 10),
-                    bg="white"
-                )
-                text_widget.pack(fill=tk.BOTH, expand=True)
-            
-            # Read and display file content
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    if is_strategy:
-                        # Enable temporarily to insert content with markdown rendering
-                        text_widget.config(state=tk.NORMAL)
-                        self.render_markdown(text_widget, content)
-                        # Disable again to make it read-only
-                        text_widget.config(state=tk.DISABLED)
-                    else:
-                        text_widget.insert(tk.END, content)
-            except Exception as e:
-                if is_strategy:
-                    text_widget.config(state=tk.NORMAL)
-                text_widget.insert(tk.END, f"Error loading file: {e}")
-                if is_strategy:
-                    text_widget.config(state=tk.DISABLED)
-            
-            # Add the tab to the notebook with the V* label
-            notebook.add(tab_frame, text=tab_label)
-        
-        # Select the last tab (highest version) after loading all tabs
-        if notebook.index('end') > 0:
-            notebook.select(notebook.index('end') - 1)
-    
-    def render_markdown(self, text_widget, content):
-        """Render markdown content with basic formatting in a text widget"""
-        lines = content.split('\n')
-        in_code_block = False
-        
-        for line in lines:
-            # Check for code blocks
-            if line.strip().startswith('```'):
-                in_code_block = not in_code_block
-                text_widget.insert(tk.END, '\n')
-                continue
-            
-            if in_code_block:
-                text_widget.insert(tk.END, line + '\n', "code_block")
-                continue
-            
-            # Headers
-            if line.startswith('### '):
-                text_widget.insert(tk.END, line[4:] + '\n', "h3")
-            elif line.startswith('## '):
-                text_widget.insert(tk.END, line[3:] + '\n', "h2")
-            elif line.startswith('# '):
-                text_widget.insert(tk.END, line[2:] + '\n', "h1")
-            else:
-                # Process inline formatting (bold, italic, code)
-                self.render_inline_markdown(text_widget, line)
-                text_widget.insert(tk.END, '\n')
-    
-    def render_inline_markdown(self, text_widget, line):
-        """Render inline markdown formatting (bold, italic, code)"""
-        if not line:
-            return
-        
-        # Pattern to match inline code, bold, and italic
-        # Order matters: check code first, then bold, then italic
-        pattern = r'(`[^`]+`)|(\*\*[^*]+\*\*)|(\*[^*]+\*)'
-        last_end = 0
-        
-        for match in re.finditer(pattern, line):
-            # Insert text before the match
-            if match.start() > last_end:
-                text_widget.insert(tk.END, line[last_end:match.start()])
-            
-            matched_text = match.group(0)
-            if matched_text.startswith('`') and matched_text.endswith('`'):
-                # Inline code
-                text_widget.insert(tk.END, matched_text[1:-1], "code")
-            elif matched_text.startswith('**') and matched_text.endswith('**'):
-                # Bold
-                text_widget.insert(tk.END, matched_text[2:-2], "bold")
-            elif matched_text.startswith('*') and matched_text.endswith('*'):
-                # Italic
-                text_widget.insert(tk.END, matched_text[1:-1], "italic")
-            
-            last_end = match.end()
-        
-        # Insert remaining text
-        if last_end < len(line):
-            text_widget.insert(tk.END, line[last_end:])
+    def _clear_chat(self):
+        """Clear the chat display window"""
+        self.chat_display.config(state=tk.NORMAL)
+        self.chat_display.delete("1.0", tk.END)
+        self.chat_display.config(state=tk.DISABLED)
+
 
 def main():
+    """Main entry point for the application"""
     root = tk.Tk()
     app = ChatApp(root)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

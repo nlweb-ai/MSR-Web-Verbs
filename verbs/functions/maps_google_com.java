@@ -22,17 +22,17 @@ public class maps_google_com extends com_base {
         /*the <input> element is as follows:
          * <input autocomplete="off" class="tactile-searchbox-input" aria-autocomplete="list" aria-controls="sbsg50" dir="ltr" spellcheck="false" style="border: none; padding: 0px; margin: 0px; height: auto; width: 100%; outline: none;" aria-label="Choose starting point, or click on the map..." placeholder="Choose starting point, or click on the map..." tooltip="Choose starting point, or click on the map...">
          */
-        Locator inputboxes = page.locator(".tactile-searchbox-input");
-        Locator sourceInput = inputboxes.nth(0);
+        Locator sourceInput = page.locator("input[placeholder='Choose starting point, or click on the map...']");
         sourceInput.fill(source);
         //press Enter to submit the input
         sourceInput.press("Enter");
         //wait for the page to update
         page.waitForTimeout(1000);
         // Fill in the destination location
-        Locator destinationInput = inputboxes.nth(1);
+        Locator destinationInput = page.locator("input[placeholder='Choose destination, or click on the map...']");
         destinationInput.fill(destination);
         //press Enter to submit the input
+        page.waitForTimeout(1000);
         destinationInput.press("Enter");
         // Wait for the directions to load
         page.waitForLoadState();
@@ -106,7 +106,7 @@ public class maps_google_com extends com_base {
      */
     public NearestBusinessesResult get_nearestBusinesses(String referencePoint, String businessDescription, int maxCount) {
         page.navigate("https://www.google.com/maps/place/");
-        Locator inputboxes = page.locator("#searchboxinput");
+        Locator inputboxes = page.locator("input[aria-controls=\"ucc-0\"]");
         Locator sourceInput = inputboxes.nth(0);
         sourceInput.fill(referencePoint);
         sourceInput.press("Enter");
@@ -121,7 +121,7 @@ public class maps_google_com extends com_base {
         Locator nearbyButton = page.locator("button[aria-label='Nearby']");
         nearbyButton.click();
         page.waitForLoadState();
-        Locator searchbox = page.locator("#searchboxinput");
+        Locator searchbox = page.locator("input[aria-controls=\"ucc-0\"]");
         searchbox.fill(businessDescription);
         searchbox.press("Enter");
         page.waitForTimeout(2000);
