@@ -5,8 +5,9 @@ This repository contains **proof-of-concept demonstrations** to show a potential
 Today, a user performs an operation on the web by making a web-API call or interacting with a sequence of HTML elements using a browser. Imagine that developers wrap these web APIs and browser interactions into functions (which we call "web verbs") and ingest these functions in NLWeb's vector database. This will pave a promising path toward a realistic agentic web because every user task becomes a coding task, which LLMs are very good at.
 
 ## A video demo
-In the [demo](tasks/2025-08-27) below, we show a possible path to build and utilize NLWeb. The scenario is about planning a travel to Anchorage. You will see how the following vague task is concretized by the agent using real data on the web. The web verbs utilize NLWeb's natural language queries, browser automations, and web APIs.
+In the demo below, we show a possible path to build and utilize NLWeb. The scenario is about planning a travel to Anchorage. You will see how the following vague task is concretized by the agent using real data on the web.
 
+An earlier version of the demo won the first place in the "Agentic Web" track in Microsoft Global Hackathon 2025.
 <small>
 
 ```
@@ -19,8 +20,8 @@ We would like to know the weather in Anchorage in the coming days, so that we ca
 
 </small>
 
-<a href="https://www.youtube.com/watch?v=Y4TX5g5ulM4">
-<img src="resources/img/videoThumbnail-2.jpg" width="400">
+<a href="https://www.youtube.com/watch?v=g3GjpY1c6Rw">
+<img src="resources/img/videoThumbnail.jpg" width="400">
 </a>
 
 ## The vision
