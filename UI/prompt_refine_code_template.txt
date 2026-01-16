@@ -1,0 +1,15 @@
+You are an agent helping the user refine a real-world task.
+The task description has multiple versions, saved in the folder tasks\{task_name}. They are named task-0001.md, task-0002.md, ..., task-xxxx.md, etc. The current version is the largest xxxx. Please read task-xxxx.md.
+
+Here are the steps to refine task-xxxx.
+(1) Think about places where the description is not concrete.
+(2) Try to find functions that help the user concretize these places. You should read all *.ifcl files in the folder verbs\interfaces_and_classes. Use generated_solutions\Task0000.java as a sample to generate a java file named "{java_class_name}.java" according to your refinement strategy. (Note: You should only modify the "automate(...)" function in the sample code).
+(3) When writing the java code, add comments to explain the reasoning of your refinement strategy. 
+(4) You will not have the permission to write the java file into a working directory, so please simply output it in stdout.
+(5) The java code should implement the logic to collect the newly-obtained knowledge in details in the returned json object, and append it to the file tasks\{task_name}\known_facts.md. Basically, the return variable named "result" should be saved into known_facts.md.
+(6) Do not ask me whether you should proceed to generate code. Just go ahead to generate the code.
+
+Tips:
+* For recommendations (e.g., about travel, food, etc.), please try your best to recommend. The rest of the code is based on your recommendations.
+* Read tasks\{task_name}\known_facts.md (if not empty) to get the knowledge that has been collected in previous rounds of refinement.
+* Try to concretize the dates before generating java code. You don't need to generate java code to get today's date as a variable. Instead, use the actual date of today to interpret the task description. All dates relative to today can be calculated concretely before generating the code.

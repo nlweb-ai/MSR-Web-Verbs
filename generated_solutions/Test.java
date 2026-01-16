@@ -8,7 +8,7 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
 
 
-public class Task0000 {
+public class Test {
     static BrowserContext context = null;
     static java.util.Scanner scanner= new java.util.Scanner(System.in);
     public static void main(String[] args) {
@@ -45,6 +45,8 @@ public class Task0000 {
                 .create();
             String prettyResult = gson.toJson(result);
             System.out.println("Final output: " + prettyResult);
+            System.out.print("Press Enter to exit...");
+            scanner.nextLine(); 
             
             context.close();
         }
@@ -55,47 +57,45 @@ public class Task0000 {
        The current function body is just an example specifically about youtube.
     */
     static JsonObject automate(BrowserContext context) {
-        // Test the createList method for Google Maps
+        JsonObject result = new JsonObject();
+        
+        // Test maps_google_com functions
         maps_google_com mapsInstance = new maps_google_com(context);
         
-        // Create a list of places to add to the Google Maps list
-        java.util.List<String> places = java.util.Arrays.asList(
-            "Anchorage Museum at Rasmuson Center", 
-            "Alaska Native Heritage Center"
+        // Test 1: Get directions
+        // maps_google_com.DirectionResult directions = mapsInstance.get_direction(
+        //     "Seattle, WA",
+        //     "Anchorage, AK"
+        // );
+        
+        // JsonObject directionsObj = new JsonObject();
+        // directionsObj.addProperty("travelTime", directions.travelTime);
+        // directionsObj.addProperty("distance", directions.distance);
+        // directionsObj.addProperty("route", directions.route);
+        // result.add("directions", directionsObj);
+        
+        // Test 2: Get nearest businesses (museums in Anchorage)
+        maps_google_com.NearestBusinessesResult businesses = mapsInstance.get_nearestBusinesses(
+            "Anchorage, AK",
+            "museum",
+            5
         );
-        /*/
-        // Test creating the list
-        boolean success = mapsInstance.createList("Anchorage 2025", places);
         
-        // Create JSON response
-        JsonObject result = new JsonObject();
-        result.addProperty("listName", "Anchorage 2025");
-        result.addProperty("success", success);
-        result.addProperty("placesCount", places.size());
+        JsonObject businessesObj = new JsonObject();
+        businessesObj.addProperty("referencePoint", businesses.referencePoint);
+        businessesObj.addProperty("businessDescription", businesses.businessDescription);
+        businessesObj.addProperty("count", businesses.businesses.size());
         
-        JsonArray placesArray = new JsonArray();
-        for (String place : places) {
-            placesArray.add(place);
+        com.google.gson.JsonArray businessArray = new com.google.gson.JsonArray();
+        for (maps_google_com.BusinessInfo business : businesses.businesses) {
+            JsonObject bizObj = new JsonObject();
+            bizObj.addProperty("name", business.name);
+            bizObj.addProperty("address", business.address);
+            businessArray.add(bizObj);
         }
-        result.add("places", placesArray);
+        businessesObj.add("businesses", businessArray);
+        result.add("nearestBusinesses", businessesObj);
         
-        if (success) {
-            result.addProperty("message", "Successfully created Google Maps list with " + places.size() + " places");
-        } else {
-            result.addProperty("message", "Failed to create Google Maps list");
-        }
-        */
-        
-        /* 
-        boolean success = mapsInstance.deleteList("Untitled list");
-        JsonObject result = new JsonObject();
-        */
-
-        teams_microsoft_com teamsInstance = new teams_microsoft_com(context);
-        teams_microsoft_com.MessageStatus messageStatus = teamsInstance.sendMessage(
-            "johndoe@contoso.com", 
-            "hello"
-        );
-        return null;
+        return result;
     }
 }

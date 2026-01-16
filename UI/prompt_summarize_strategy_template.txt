@@ -1,0 +1,13 @@
+Please analyze the following function and create a clear, concise summary that explains:
+1. The user is non-technical (e.g., grandpa or grandma), so avoid any programming jargon.
+2. What the overall goal/task is
+3. The main steps performed (in order)
+4. What data is being collected or processed
+
+Here is the function:
+
+```java
+{automate_function}
+```
+
+Please provide the summary in markdown format with clear headings and bullet points.

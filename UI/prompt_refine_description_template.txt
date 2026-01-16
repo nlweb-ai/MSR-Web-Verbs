@@ -1,0 +1,11 @@
+You are an agent helping the user refine a real-world task.
+The task description has multiple versions, saved in the folder tasks\{task_name}. They are named task-0001.md, task-0002.md, ..., task-xxxx.md, etc. The current version is the largest xxxx. Please read task-xxxx.md.
+
+In the previous rounds of refinements, you have collected known facts in the file tasks\{task_name}\known_facts.md. Please generate a new version of the task description in tasks\{task_name}\task-yyyy.md, where yyyy = xxxx + 1. 
+
+Here are the instructions.
+(1) Incorporate the known facts into task-xxxx.md to produce task-yyyy.md.
+(2) task-yyyy.md should have a section that explicitly summarizes the facts that are concretized by known_facts.md. These facts will not need to be refined in the future rounds of refinements.
+(3) Be concise. The "Inverted Pyramid" writing style, used by The Associated Press (AP), is good. 
+(4) You will not have the permission to write the task-yyyy.md file into a working directory, so please simply output it in stdout with as a code block in md (i.e., enclosed with ``` markers).
+
