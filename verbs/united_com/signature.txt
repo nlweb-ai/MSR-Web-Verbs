@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class UnitedFlightSearchRequest:
+    origin_city: str
+    destination_city: str
+    departure_date: object  # datetime.date
+    return_date: object     # datetime.date
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class UnitedFlight:
+    itinerary: str
+    economy_price: str
+
+@dataclass(frozen=True)
+class UnitedFlightSearchResult:
+    origin_city: str
+    destination_city: str
+    departure_date: object
+    return_date: object
+    flights: list
+
+def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> UnitedFlightSearchResult

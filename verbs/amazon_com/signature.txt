@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class AmazonSearchRequest:
+    query: str = "travel adapter worldwide"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class AmazonProduct:
+    name: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class AmazonSearchResult:
+    query: str
+    products: list
+
+def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSearchResult

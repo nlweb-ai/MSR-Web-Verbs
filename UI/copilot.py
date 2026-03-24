@@ -4,12 +4,36 @@ import json
 import tempfile
 import os
 
-def copilot_stream(prompt, cwd=None, *extra):
+# Available models for the --model parameter:
+#   GPT-5.4
+#   GPT-5.3-Codex
+#   GPT-5.2-Codex
+#   GPT-5.2
+#   GPT-5.1-Codex-Max
+#   GPT-5.1-Codex
+#   GPT-5.1
+#   GPT-5.4 mini
+#   GPT-5.1-Codex-Mini (Preview)
+#   GPT-5 mini
+#   GPT-4.1
+#   Claude Sonnet 4.6
+#   Claude Sonnet 4.5
+#   Claude Haiku 4.5
+#   Claude Opus 4.6 (default)
+#   Claude Opus 4.6 (1M context)(Internal only)
+#   Claude Opus 4.5
+#   Claude Sonnet 4
+#   Gemini 3 Pro (Preview)
+
+DEFAULT_MODEL = "claude-sonnet-4.6"
+
+def copilot_stream(prompt, cwd=None, model=DEFAULT_MODEL, *extra):
     """Stream copilot responses as they arrive using SSE format.
     
     Args:
         prompt: The prompt to send to copilot
         cwd: Working directory for the copilot command (optional)
+        model: The LLM model to use (optional, e.g. 'gpt-4o', 'claude-sonnet-4-5')
         *extra: Additional arguments
     
     Yields chunks of text as they become available.
@@ -22,6 +46,8 @@ def copilot_stream(prompt, cwd=None, *extra):
     try:
         # Read prompt from file instead of passing on command line
         cmd = f'copilot --prompt "@{tmp_path}"'
+        if model:
+            cmd += f' --model "{model}"'
         if extra:
             cmd += " " + " ".join(extra)
         
@@ -63,15 +89,19 @@ def copilot_stream(prompt, cwd=None, *extra):
         except:
             pass
 
-def copilot(prompt, cwd=None, *extra):
+def copilot(prompt, cwd=None, model=DEFAULT_MODEL, *extra):
     """Non-streaming version for backward compatibility.
     
     Args:
         prompt: The prompt to send to copilot
         cwd: Working directory for the copilot command (optional)
+        model: The LLM model to use (optional, e.g. 'gpt-4o', 'claude-sonnet-4-5')
         *extra: Additional arguments
     """
-    cmd = ["copilot", "--prompt", prompt, *extra]
+    cmd = ["copilot", "--prompt", prompt]
+    if model:
+        cmd += ["--model", model]
+    cmd += list(extra)
     try:
         result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False, shell=True)
         if result.returncode != 0:

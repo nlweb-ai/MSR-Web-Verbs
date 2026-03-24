@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class WalmartSearchRequest:
+    search_query: str = "wireless earbuds"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class WalmartProduct:
+    name: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class WalmartSearchResult:
+    search_query: str
+    products: list
+
+def search_walmart_products(page: Page, request: WalmartSearchRequest) -> WalmartSearchResult

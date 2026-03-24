@@ -32,5 +32,23 @@
     // Allow running with warnings - key setting for RUN button
     "java.debug.settings.onBuildFailureProceed": true,
     "java.test.defaultConfig": "",
-    "java.inlayHints.parameterNames.enabled": "none"
+    "java.inlayHints.parameterNames.enabled": "none",
+
+    // Performance: exclude generated/binary dirs from file watching, Explorer, and search
+    "files.watcherExclude": {
+        "**/target/**": true,
+        "**/__pycache__/**": true,
+        "**/*.pyc": true,
+        "**/logs/**": true
+    },
+    "files.exclude": {
+        "**/target/**": true,
+        "**/__pycache__/**": true,
+        "**/*.pyc": true
+    },
+    "search.exclude": {
+        "**/target/**": true,
+        "**/__pycache__/**": true,
+        "**/logs/**": true
+    }
 }

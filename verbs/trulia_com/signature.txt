@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class TruliaSearchRequest:
+    location: str
+    min_beds: int = 0
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class TruliaListing:
+    address: str
+    rent: str
+    beds: str
+    baths: str
+
+@dataclass(frozen=True)
+class TruliaSearchResult:
+    location: str
+    listings: list
+
+def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearchResult

@@ -1,0 +1,13 @@
+@dataclass(frozen=True)
+class UspsTrackingRequest:
+    tracking_number: str
+
+@dataclass(frozen=True)
+class UspsTrackingResult:
+    tracking_number: str
+    status: str
+    last_update: str
+    expected_delivery: str
+    location: str
+
+def lookup_usps_tracking(page: Page, request: UspsTrackingRequest) -> UspsTrackingResult

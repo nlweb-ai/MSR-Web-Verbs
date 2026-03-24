@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class SouthwestFlightSearchRequest:
+    origin: str
+    destination: str
+    departure_date: object  # datetime.date
+    return_date: object     # datetime.date
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class SouthwestFlight:
+    flight_number: str
+    itinerary: str
+    wanna_get_away_price: str
+
+@dataclass(frozen=True)
+class SouthwestFlightSearchResult:
+    origin: str
+    destination: str
+    departure_date: object
+    return_date: object
+    flights: list
+
+def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) -> SouthwestFlightSearchResult

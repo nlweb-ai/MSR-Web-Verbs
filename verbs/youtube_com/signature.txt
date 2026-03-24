@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class YouTubeSearchRequest:
+    search_query: str = "anchorage museums"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class YouTubeVideo:
+    url: str
+    title: str
+    duration: str
+
+@dataclass(frozen=True)
+class YouTubeSearchResult:
+    search_query: str
+    videos: list
+
+def search_youtube_videos(page: Page, request: YouTubeSearchRequest) -> YouTubeSearchResult

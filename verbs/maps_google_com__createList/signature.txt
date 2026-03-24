@@ -1,0 +1,18 @@
+# Create a new saved list on Google Maps and add the specified places to it.
+# Navigates to maps.google.com, clicks Saved → New list, renames the list,
+# then searches for each place using the built-in "Add a place" input and
+# selects the first suggestion from the dropdown.
+# Requires the user to be logged into Google in the Chrome profile.
+
+@dataclass(frozen=True)
+class CreateListRequest:
+    list_name: str      # name for the new saved list
+    places: List[str]   # place names to add to the list
+
+@dataclass(frozen=True)
+class CreateListResult:
+    list_name: str          # name of the created list
+    places_added: List[str] # places that were successfully added
+    success: bool           # True if all places were added
+
+def create_saved_list(page: Page, request: CreateListRequest) -> CreateListResult

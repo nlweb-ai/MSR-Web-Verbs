@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class TargetSearchRequest:
+    search_query: str = "coffee maker"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class TargetProduct:
+    name: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class TargetSearchResult:
+    search_query: str
+    products: list
+
+def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSearchResult

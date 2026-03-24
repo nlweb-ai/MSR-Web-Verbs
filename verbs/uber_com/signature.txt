@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class UberRideSearchRequest:
+    pickup: str = "Seattle-Tacoma International Airport"
+    dropoff: str = "Downtown Seattle"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class UberRideEstimate:
+    ride_type: str
+    price_range: str
+
+@dataclass(frozen=True)
+class UberRideSearchResult:
+    pickup: str
+    dropoff: str
+    estimates: list
+
+def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSearchResult

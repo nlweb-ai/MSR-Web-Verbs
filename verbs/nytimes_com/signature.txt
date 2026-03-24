@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class NYTimesSearchRequest:
+    query: str = "artificial intelligence"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class NYTimesArticle:
+    headline: str
+    author: str
+    date: str
+
+@dataclass(frozen=True)
+class NYTimesSearchResult:
+    query: str
+    articles: list
+
+def search_nytimes_articles(page: Page, request: NYTimesSearchRequest) -> NYTimesSearchResult

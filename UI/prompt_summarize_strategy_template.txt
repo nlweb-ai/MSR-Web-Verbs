@@ -6,7 +6,7 @@ Please analyze the following function and create a clear, concise summary that e
 
 Here is the function:
 
-```java
+```python
 {automate_function}
 ```
 

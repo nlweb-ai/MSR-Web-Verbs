@@ -1,11 +1,22 @@
 """Main chat application for Browser Agent Based On Web Verbs"""
 import tkinter as tk
 from tkinter import ttk, scrolledtext
+import json
 import os
+import queue
 import sys
+import ctypes
+import ctypes.wintypes
+import threading
+import time
+import subprocess
+import shutil
 
 # Add the UI directory to the path to import modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add verbs directory for cdp_utils
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "verbs"))
+from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws
 
 from file_loader import load_files_as_tabs
 from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
@@ -23,7 +34,6 @@ class ChatApp:
         """
         self.root = root
         self.root.title("Browser Agent Based On Web Verbs")
-        self.root.geometry("2000x1200")
         
         # Set workspace path for copilot commands
         self.workspace_path = "D:\\repos\\MSR-Web-Verbs"
@@ -39,7 +49,21 @@ class ChatApp:
             self.task_name = "2026-01-12"
         
         self.case_dir = os.path.join(self.workspace_path, "tasks", self.task_name)
-        
+
+        # Shared Chrome browser state
+        self.chrome_ws_url = None
+        self.chrome_proc = None
+        self.chrome_profile_dir = None
+        self._chrome_hwnd = None
+        self._chrome_debug_port = None
+        # Playwright worker thread state.
+        # All page calls MUST run on the same thread that called sync_playwright().start().
+        # We keep one persistent worker thread alive and submit tasks via _pw_task_queue.
+        self._pw_task_queue = queue.SimpleQueue()   # items: (callable(page) -> result, result_queue) | None
+        self._pw_worker_thread = None
+        self.page = None         # set by worker thread once Chrome is ready
+        self._work = (0, 0, 0, 0)
+
         # Configure notebook tab styles
         self._configure_styles()
         
@@ -49,13 +73,38 @@ class ChatApp:
         # Load initial data
         self._load_initial_data()
         
-        # Set the 60/40 split after window updates
+        # Get usable working area (excluding taskbar)
+        SPI_GETWORKAREA = 48
+        work_rect = ctypes.wintypes.RECT()
+        ctypes.windll.user32.SystemParametersInfoW(SPI_GETWORKAREA, 0, ctypes.byref(work_rect), 0)
+        work_x = work_rect.left
+        work_y = work_rect.top
+        work_w = work_rect.right - work_rect.left
+        work_h = work_rect.bottom - work_rect.top
+
+        self._work = (work_x, work_y, work_w, work_h)
+
+        # Position Tkinter window on the left half of the working area.
+        # First pass: place the window so we can measure the title bar height.
+        self.root.geometry(f"{work_w // 2}x{work_h}+{work_x}+{work_y}")
         self.root.update_idletasks()
-        window_width = self.root.winfo_width()
-        self.main_container.sash_place(0, int(window_width * 0.6), 0)
-        
+        # Tkinter geometry height = content area only (title bar is extra).
+        # Shrink by the title bar height so the outer frame fits exactly in work_h.
+        title_bar_h = self.root.winfo_rooty() - work_y
+        tkinter_h = work_h - title_bar_h
+        self.root.geometry(f"{work_w // 2}x{tkinter_h}+{work_x}+{work_y}")
+        self.root.update_idletasks()
+
+        # Set three equal vertical panes based on actual content height
+        self.left_pane.sash_place(0, 0, tkinter_h // 3)
+        self.left_pane.sash_place(1, 0, (tkinter_h * 2) // 3)
+
         # Pre-populate the input box with a sample prompt
         self.input_box.insert(0, "")
+
+        # Launch shared Chrome on the right half and register close handler
+        self._launch_shared_chrome(work_x, work_y, work_w, work_h, title_bar_h)
+        self.root.protocol("WM_DELETE_WINDOW", self._on_close)
     
     def _configure_styles(self):
         """Configure TTK styles for the application"""
@@ -73,39 +122,78 @@ class ChatApp:
     
     def _create_ui(self):
         """Create all UI components"""
-        # Create main container with PanedWindow for 60/40 split
-        self.main_container = tk.PanedWindow(self.root, orient=tk.HORIZONTAL, sashwidth=5)
-        self.main_container.pack(fill=tk.BOTH, expand=True)
-        
-        # Create left pane with tasks and strategies
-        self._create_left_pane()
-        
-        # Create right pane with chat
-        self._create_right_pane()
+        # Control panel pinned at the very top
+        self._create_control_panel()
+
+        # Single vertical PanedWindow fills the rest of the Tkinter window (left half of screen)
+        self.left_pane = tk.PanedWindow(self.root, orient=tk.VERTICAL, sashwidth=5)
+        self.left_pane.pack(fill=tk.BOTH, expand=True)
+
+        # Three vertically stacked panes: Tasks (upper), Strategies (middle), Chat (lower)
+        self._create_tasks_pane(self.left_pane)
+        self._create_strategies_pane(self.left_pane)
+        self._create_chat_pane(self.left_pane)
     
-    def _create_left_pane(self):
-        """Create left pane with tasks and strategies notebooks"""
-        # Left pane container
-        left_pane = tk.Frame(self.main_container, bg="lightgray")
-        
-        # Configure grid weights for 50/50 split
-        left_pane.grid_rowconfigure(0, weight=1)
-        left_pane.grid_rowconfigure(1, weight=1)
-        left_pane.grid_columnconfigure(0, weight=1)
-        
-        # Create tasks pane (upper left)
-        self._create_tasks_pane(left_pane)
-        
-        # Create strategies pane (lower left)
-        self._create_strategies_pane(left_pane)
-        
-        self.main_container.add(left_pane, width=600)
-    
+    def _create_control_panel(self):
+        """Create the control panel bar at the top of the application."""
+        panel = tk.Frame(self.root, bg="#ECECEC", relief=tk.GROOVE, borderwidth=1)
+        panel.pack(fill=tk.X, side=tk.TOP)
+
+        # --- Debug group (left) ---
+        debug_frame = tk.Frame(panel, bg="#ECECEC")
+        debug_frame.pack(side=tk.LEFT, padx=8, pady=4)
+
+        run_btn = tk.Button(
+            debug_frame, text="\u25b6  Run",
+            command=lambda: self.debug_run(),
+            bg="#4CAF50", fg="white", font=("Arial", 11, "bold"),
+            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
+        )
+        run_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        step_over_btn = tk.Button(
+            debug_frame, text="\u21b7  Step Over",
+            command=lambda: self.debug_step_over(),
+            bg="#2196F3", fg="white", font=("Arial", 11, "bold"),
+            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
+        )
+        step_over_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        step_into_btn = tk.Button(
+            debug_frame, text="\u21b3  Step Into",
+            command=lambda: self.debug_step_into(),
+            bg="#2196F3", fg="white", font=("Arial", 11, "bold"),
+            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
+        )
+        step_into_btn.pack(side=tk.LEFT)
+
+        # --- Utility group (right) ---
+        right_frame = tk.Frame(panel, bg="#ECECEC")
+        right_frame.pack(side=tk.RIGHT, padx=8, pady=4)
+
+        reposition_btn = tk.Button(
+            right_frame, text="Reposition UI",
+            command=lambda: self.reposition_ui(),
+            bg="#9C27B0", fg="white", font=("Arial", 11, "bold"),
+            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
+        )
+        reposition_btn.pack(side=tk.RIGHT, padx=(4, 0))
+
+        # Chrome connection status — click when failed to reconnect
+        self._chrome_status_label = tk.Label(
+            right_frame,
+            text="Chrome: \u23f3 Connecting...",
+            bg="#ECECEC", fg="#888", font=("Arial", 10),
+            cursor="hand2"
+        )
+        self._chrome_status_label.pack(side=tk.RIGHT, padx=(0, 12))
+        self._chrome_status_label.bind("<Button-1>", lambda _e: self._reconnect_chrome())
+
     def _create_tasks_pane(self, parent):
         """Create tasks pane with notebook and buttons"""
         # Upper-left pane - Tasks editor
         upper_left = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
-        upper_left.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+        parent.add(upper_left)
         
         # Header frame for label and buttons
         tasks_header_frame = tk.Frame(upper_left, bg="white")
@@ -141,7 +229,7 @@ class ChatApp:
         """Create strategies pane with notebook and Execute button"""
         # Lower-left pane - Strategies viewer
         lower_left = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
-        lower_left.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+        parent.add(lower_left)
         
         # Header frame for label and button
         strategies_header_frame = tk.Frame(lower_left, bg="white")
@@ -173,25 +261,25 @@ class ChatApp:
         # Bind tab change event
         self.strategies_notebook.bind("<<NotebookTabChanged>>", lambda e: handle_strategy_tab_changed(self, e))
     
-    def _create_right_pane(self):
-        """Create right pane with chat interface"""
-        # Right pane - Chat window
-        right_pane = tk.Frame(self.main_container, bg="white", relief=tk.RIDGE, borderwidth=2)
-        self.main_container.add(right_pane, width=400)
-        
+    def _create_chat_pane(self, parent):
+        """Create chat pane (lower pane) with chat interface"""
+        # Chat pane frame
+        chat_pane = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
+        parent.add(chat_pane)
+
         # Task name control frame at the top
-        task_control_frame = tk.Frame(right_pane)
+        task_control_frame = tk.Frame(chat_pane)
         task_control_frame.pack(fill=tk.X, padx=5, pady=5)
-        
+
         # Task name label
         task_label = tk.Label(task_control_frame, text="Task Name:", font=("Arial", 12))
         task_label.pack(side=tk.LEFT, padx=(0, 5))
-        
+
         # Task name input
         self.task_name_input = tk.Entry(task_control_frame, font=("Arial", 12))
         self.task_name_input.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         self.task_name_input.insert(0, self.task_name)
-        
+
         # Open Task button
         open_task_button = tk.Button(
             task_control_frame,
@@ -203,11 +291,11 @@ class ChatApp:
             padx=10
         )
         open_task_button.pack(side=tk.RIGHT)
-        
+
         # Chat display area
-        chat_frame = tk.Frame(right_pane)
+        chat_frame = tk.Frame(chat_pane)
         chat_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
+
         self.chat_display = scrolledtext.ScrolledText(
             chat_frame,
             wrap=tk.WORD,
@@ -218,14 +306,14 @@ class ChatApp:
             font=("Arial", 12)
         )
         self.chat_display.pack(fill=tk.BOTH, expand=True)
-        
+
         # Configure text tags for colored output
         self.chat_display.tag_config("user", foreground="green")
         self.chat_display.tag_config("copilot", foreground="blue")
         self.chat_display.tag_config("error", foreground="red")
-        
+
         # Input area at the bottom
-        input_frame = tk.Frame(right_pane)
+        input_frame = tk.Frame(chat_pane)
         input_frame.pack(fill=tk.X, padx=5, pady=5)
         
         # Input text box
@@ -282,6 +370,306 @@ class ChatApp:
         self.chat_display.config(state=tk.NORMAL)
         self.chat_display.delete("1.0", tk.END)
         self.chat_display.config(state=tk.DISABLED)
+
+    # ------------------------------------------------------------------
+    # Debug control stubs — wire these up to execution logic as needed
+    # ------------------------------------------------------------------
+    def debug_run(self):
+        """Run: execute the full strategy."""
+        execute_strategy(self)
+
+    def debug_step_over(self):
+        """Step Over: placeholder for step-over execution."""
+        pass
+
+    def debug_step_into(self):
+        """Step Into: placeholder for step-into execution."""
+        pass
+
+    def _kill_all_chrome(self):
+        """Kill all running Chrome processes and wait until they are fully gone."""
+        try:
+            subprocess.run(
+                ["taskkill", "/F", "/IM", "chrome.exe"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+        except Exception:
+            pass
+        # Poll until tasklist confirms no chrome.exe remains (up to 8 seconds)
+        deadline = time.time() + 8.0
+        while time.time() < deadline:
+            try:
+                result = subprocess.run(
+                    ["tasklist", "/FI", "IMAGENAME eq chrome.exe", "/NH"],
+                    capture_output=True, text=True
+                )
+                if "chrome.exe" not in result.stdout:
+                    break
+            except Exception:
+                break
+            time.sleep(0.5)
+        # Extra buffer to allow profile lock files to be released
+        time.sleep(1.5)
+
+    def _reset_chrome_crash_flag(self, user_data_dir: str):
+        """Clear Chrome's crash-recovery flags and stale lock files so it starts
+        cleanly without the 'restore pages?' dialog or singleton-lock conflicts."""
+        # Remove stale lock files left by taskkill /F
+        for lock_rel in [
+            "lockfile",                              # User Data\lockfile
+            os.path.join("Default", "lockfile"),     # User Data\Default\lockfile (some builds)
+            os.path.join("Default", "SingletonLock"),# prevents Chrome from launching
+        ]:
+            lock_path = os.path.join(user_data_dir, lock_rel)
+            try:
+                if os.path.exists(lock_path):
+                    os.remove(lock_path)
+            except Exception:
+                pass
+
+        # Patch JSON preference files to suppress the crash-recovery dialog
+        for rel_path, key in [
+            (os.path.join("Default", "Preferences"), "profile"),
+            (os.path.join("Local State"), None),
+        ]:
+            path = os.path.join(user_data_dir, rel_path)
+            try:
+                if not os.path.isfile(path):
+                    continue
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if key:
+                    data.setdefault(key, {})["exit_type"] = "Normal"
+                    data.setdefault(key, {})["exited_cleanly"] = True
+                else:
+                    data.setdefault("stability", {})["exited_cleanly"] = True
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump(data, f)
+            except Exception:
+                pass
+
+    def _launch_shared_chrome(self, work_x: int, work_y: int, work_w: int, work_h: int, title_bar_h: int = 0):
+        """Launch Chrome via a persistent Playwright worker thread.
+
+        Playwright's sync API is NOT thread-safe: all page calls must run on the
+        same thread that called sync_playwright().start().  We keep one long-lived
+        worker thread that (a) owns Chrome and (b) processes every automate() call
+        submitted via self._pw_task_queue.
+        """
+        chrome_x = work_x + work_w // 2
+        chrome_w = work_w - work_w // 2
+
+        # Stop the previous worker thread before starting a new one
+        if self._pw_worker_thread is not None and self._pw_worker_thread.is_alive():
+            self._pw_task_queue.put(None)   # sentinel → worker exits
+            self._pw_worker_thread.join(timeout=10)
+        self._pw_task_queue = queue.SimpleQueue()
+        self.page = None
+
+        scale = 0.85
+        chrome_x_dip = int(chrome_x / scale)
+        chrome_y_dip = int(work_y / scale)
+        chrome_w_dip = int(chrome_w / scale)
+        chrome_h_dip = int(work_h / scale)
+
+        # Dedicated Playwright profile — separate from Chrome's real default profile
+        # (which Chrome forbids from CDP use).
+        # On first run we copy the real profile's login files here so the user
+        # doesn't have to log in again.  After that, this profile maintains its
+        # own state (logins made inside the Playwright browser persist normally).
+        local_app_data = os.environ.get("LOCALAPPDATA", "")
+        real_default   = os.path.join(local_app_data, "Google", "Chrome", "User Data", "Default")
+        pw_profile      = os.path.join(local_app_data, "Google", "Chrome", "Playwright User Data")
+        pw_default      = os.path.join(pw_profile, "Default")
+
+        self.root.after(0, lambda: self._chrome_status_label.config(
+            text="Chrome: \u23f3 Launching...", fg="#888"))
+
+        def _pw_worker():
+            """Owns the Playwright instance for its full lifetime."""
+            self._kill_all_chrome()
+
+            # First-time setup: copy login data from the real profile so the user
+            # doesn't have to log in again.  We copy AFTER killing Chrome so SQLite
+            # files are not open.  Existing pw_default is left untouched (preserves
+            # logins the user did in a previous Playwright session).
+            if not os.path.isdir(pw_default):
+                os.makedirs(pw_default, exist_ok=True)
+                real_user_data = os.path.dirname(real_default)  # …\Google\Chrome\User Data
+
+                # MUST copy Local State — it contains os_crypt.encrypted_key which is
+                # the DPAPI-wrapped AES key used to decrypt all cookies and passwords.
+                # Without it the copied Cookies file is unreadable and Chrome logs out.
+                for fname in ["Local State"]:
+                    src = os.path.join(real_user_data, fname)
+                    dst = os.path.join(pw_profile, fname)
+                    try:
+                        if os.path.exists(src):
+                            shutil.copy2(src, dst)
+                    except Exception:
+                        pass
+
+                # Per-profile data files
+                for fname in [
+                    "Cookies", "Cookies-journal",
+                    "Login Data", "Login Data For Account",
+                    "Web Data",
+                ]:
+                    src = os.path.join(real_default, fname)
+                    dst = os.path.join(pw_default, fname)
+                    try:
+                        if os.path.exists(src):
+                            shutil.copy2(src, dst)
+                    except Exception:
+                        pass
+
+            self._reset_chrome_crash_flag(pw_profile)
+
+            try:
+                from playwright.sync_api import sync_playwright
+                pw = sync_playwright().start()
+                context = pw.chromium.launch_persistent_context(
+                    pw_profile,
+                    channel="chrome",
+                    headless=False,
+                    no_viewport=True,
+                    args=[
+                        f"--force-device-scale-factor={scale}",
+                        f"--window-position={chrome_x_dip},{chrome_y_dip}",
+                        f"--window-size={chrome_w_dip},{chrome_h_dip}",
+                        "--no-first-run",
+                        "--no-default-browser-check",
+                        "--disable-blink-features=AutomationControlled",
+                        "--disable-infobars",
+                    ]
+                )
+                # Always create a new page — it becomes the foreground tab in Chrome.
+                # Any session-restored tabs remain in the background (harmless).
+                self.page = context.new_page()
+                self.root.after(0, lambda: self._chrome_status_label.config(
+                    text="Chrome: \u2705 Connected", fg="#060"))
+            except Exception as exc:
+                err_msg = str(exc)
+                def _show_err():
+                    self._chrome_status_label.config(
+                        text="Chrome: \u274c Failed (click to retry)", fg="#c00")
+                    self.chat_display.config(state=tk.NORMAL)
+                    self.chat_display.insert(
+                        tk.END, f"\u26a0\ufe0f Chrome launch failed: {err_msg}\n\n", "copilot")
+                    self.chat_display.see(tk.END)
+                    self.chat_display.config(state=tk.DISABLED)
+                self.root.after(0, _show_err)
+                return
+
+            # Snap Chrome window into position
+            user32 = ctypes.windll.user32
+            SWP_NOZORDER = 0x0004
+            deadline = time.time() + 20
+            while time.time() < deadline:
+                hwnds = self._get_chrome_hwnds()
+                if hwnds:
+                    self._chrome_hwnd = next(iter(hwnds))
+                    user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
+                    break
+                time.sleep(0.3)
+            if self._chrome_hwnd:
+                time.sleep(2.0)
+                user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
+
+            # Task loop: process automate() calls submitted by execute_strategy
+            while True:
+                item = self._pw_task_queue.get()   # blocks until work arrives
+                if item is None:                   # sentinel: shut down
+                    break
+                fn, result_q = item
+                try:
+                    result_q.put(("ok", fn(self.page)))
+                except Exception as exc:
+                    result_q.put(("err", exc))
+
+            try:
+                context.close()
+                pw.stop()
+            except Exception:
+                pass
+
+        self._pw_worker_thread = threading.Thread(target=_pw_worker, daemon=True)
+        self._pw_worker_thread.start()
+
+    def _reconnect_chrome(self):
+        """Re-launch Chrome (called when the user clicks the Failed status label)."""
+        work_x, work_y, work_w, work_h = self._work
+        self._launch_shared_chrome(work_x, work_y, work_w, work_h)
+
+    def reposition_ui(self):
+        """Reposition the Tkinter window and Chrome to their initial layout.
+        If Chrome was closed, re-launch it."""
+        work_x, work_y, work_w, work_h = self._work
+        tkinter_h = self.root.winfo_height()  # already corrected for title bar
+
+        # Reposition Tkinter window to left half
+        self.root.geometry(f"{work_w // 2}x{tkinter_h}+{work_x}+{work_y}")
+        self.root.update_idletasks()
+        self.left_pane.sash_place(0, 0, tkinter_h // 3)
+        self.left_pane.sash_place(1, 0, (tkinter_h * 2) // 3)
+
+        # Check if Chrome is still alive:
+        # 1. The Playwright worker thread must be running
+        # 2. The Chrome hwnd (if known) must still be a valid window
+        user32 = ctypes.windll.user32
+        SWP_NOZORDER = 0x0004
+        worker_alive = (self._pw_worker_thread is not None
+                        and self._pw_worker_thread.is_alive())
+        hwnd_alive = (self._chrome_hwnd is not None
+                      and user32.IsWindow(self._chrome_hwnd))
+        chrome_alive = worker_alive and hwnd_alive
+
+        if chrome_alive:
+            # Just reposition it
+            user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
+        else:
+            # Chrome was closed — re-launch with the persistent profile
+            self._chrome_hwnd = None
+            self._launch_shared_chrome(work_x, work_y, work_w, work_h)
+
+    def _get_chrome_hwnds(self) -> set:
+        """Return handles of visible top-level windows owned by chrome.exe (not VS Code)."""
+        user32   = ctypes.windll.user32
+        kernel32 = ctypes.windll.kernel32
+        psapi    = ctypes.windll.psapi
+        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.wintypes.HWND, ctypes.wintypes.LPARAM)
+        found = []
+
+        def _cb(hwnd, _):
+            if not user32.IsWindowVisible(hwnd):
+                return True
+            cls = ctypes.create_unicode_buffer(256)
+            user32.GetClassNameW(hwnd, cls, 256)
+            if cls.value != "Chrome_WidgetWin_1":
+                return True
+            # Get owning PID and verify the executable is chrome.exe (not code.exe etc.)
+            pid = ctypes.wintypes.DWORD(0)
+            user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+            PROCESS_QUERY_INFORMATION = 0x0400
+            hproc = kernel32.OpenProcess(PROCESS_QUERY_INFORMATION, False, pid.value)
+            if hproc:
+                exe = ctypes.create_unicode_buffer(520)
+                psapi.GetModuleFileNameExW(hproc, None, exe, 520)
+                kernel32.CloseHandle(hproc)
+                if exe.value.lower().endswith("chrome.exe"):
+                    found.append(hwnd)
+            return True
+
+        cb = WNDENUMPROC(_cb)
+        user32.EnumWindows(cb, 0)
+        return set(found)
+
+    def _on_close(self):
+        """Clean up shared Chrome and close the application."""
+        os.environ.pop("CDP_WS_URL", None)
+        # Send sentinel to stop the Playwright worker thread (it will close context/pw)
+        self._pw_task_queue.put(None)
+        self.root.destroy()
 
 
 def main():

@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class WeatherForecastRequest:
+    location: str
+
+@dataclass(frozen=True)
+class WeatherDay:
+    day: str
+    high: str
+    low: str
+    conditions: str
+
+@dataclass(frozen=True)
+class WeatherForecastResult:
+    location: str
+    current_temp: str
+    current_conditions: str
+    forecast: list
+
+def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> WeatherForecastResult

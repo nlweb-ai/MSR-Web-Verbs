@@ -1,0 +1,371 @@
+"""
+Southwest – Round trip Denver to Los Angeles
+Pure Playwright – no AI.
+
+Mirrors the working JS approach:
+  - Type 3-letter airport code → click [role="option"] in dropdown
+  - Type dates char-by-char into masked MM/DD input
+  - Submit via #flightBookingSubmit
+  - Scrape flight cards from results page
+"""
+import re, os, sys, time, traceback, shutil, tempfile
+from datetime import date, timedelta
+from playwright.sync_api import Page, sync_playwright
+
+import sys as _sys
+import os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+
+from dataclasses import dataclass
+from dateutil.relativedelta import relativedelta
+import subprocess
+import json
+from urllib.request import urlopen
+
+
+@dataclass(frozen=True)
+class SouthwestFlightSearchRequest:
+    origin: str
+    destination: str
+    departure_date: object  # datetime.date
+    return_date: object     # datetime.date
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class SouthwestFlight:
+    flight_number: str
+    itinerary: str
+    wanna_get_away_price: str
+
+
+@dataclass(frozen=True)
+class SouthwestFlightSearchResult:
+    origin: str
+    destination: str
+    departure_date: object
+    return_date: object
+    flights: list
+
+
+def select_airport(page, input_selector: str, code: str) -> str:
+    """Type airport code into combobox and select from autocomplete dropdown."""
+    inp = page.locator(input_selector).first
+    inp.evaluate("el => el.click()")
+    page.wait_for_timeout(300)
+
+    # Clear existing value and type the 3-letter code char-by-char
+    inp.fill("")
+    page.wait_for_timeout(200)
+    for ch in code:
+        inp.type(ch, delay=80)
+    page.wait_for_timeout(2500)  # wait for autocomplete dropdown
+
+    # Click the matching [role="option"] that contains the code
+    # Skip "Area Airports" header options — we want the specific city
+    options = page.locator(f'[role="option"]:has-text("{code}")').all()
+    for option in options:
+        try:
+            text = option.inner_text(timeout=1000)
+            if "area airports" in text.lower():
+                continue  # skip area grouping header
+            if option.is_visible(timeout=1500):
+                option.evaluate("el => el.click()")
+                page.wait_for_timeout(500)
+                val = inp.input_value()
+                print(f"    ✅ Selected '{text.strip()}' (value: {val})")
+                return val
+        except Exception:
+            continue
+
+    # Fallback: click first visible [role="option"] that isn't area header
+    try:
+        first_opt = page.locator(f'[role="option"]:has-text("{code}")').first
+        if first_opt.is_visible(timeout=1500):
+            first_opt.evaluate("el => el.click()")
+            page.wait_for_timeout(500)
+            val = inp.input_value()
+            print(f"    ✅ Selected {code} via first option (value: {val})")
+            return val
+    except Exception:
+        pass
+
+    # Last fallback: Arrow down + Enter
+    page.keyboard.press("ArrowDown")
+    page.wait_for_timeout(200)
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(500)
+    val = inp.input_value()
+    print(f"    ✅ ArrowDown+Enter for {code} (value: {val})")
+    return val
+
+
+def fill_date_field(page, input_selector: str, mm_dd: str):
+    """Fill a masked date field (placeholder __/__) by typing digits only."""
+    inp = page.locator(input_selector).first
+    inp.evaluate("el => el.click()")
+    page.wait_for_timeout(300)
+
+    # Select all existing text so we overwrite it
+    page.keyboard.press("Control+a")
+    page.wait_for_timeout(200)
+
+    # Type ONLY the digits — the mask inserts the slash automatically
+    digits = mm_dd.replace("/", "")
+    for ch in digits:
+        inp.type(ch, delay=80)
+    page.wait_for_timeout(300)
+
+    # Blur to commit
+    page.keyboard.press("Tab")
+    page.wait_for_timeout(300)
+
+    val = inp.input_value()
+    print(f"    Date {input_selector}: typed '{mm_dd}' (digits '{digits}') → value='{val}'")
+    return val
+
+
+def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) -> SouthwestFlightSearchResult:
+    flights: list[dict] = []
+
+    try:
+        depart = request.departure_date
+        ret = request.return_date
+        dep_mmdd = depart.strftime("%m/%d")  # e.g. "04/28"
+        ret_mmdd = ret.strftime("%m/%d")     # e.g. "05/03"
+
+        # ── STEP 1: Navigate ─────────────────────────────────────────
+        print("STEP 1: Navigate to Southwest booking page...")
+        page.goto(
+            "https://www.southwest.com/air/booking/",
+            wait_until="domcontentloaded", timeout=30000,
+        )
+        page.wait_for_timeout(4000)
+
+        # Dismiss popups / cookie banners
+        for sel in [
+            "button:has-text('Accept')",
+            "#onetrust-accept-btn-handler",
+            "button:has-text('No thanks')",
+        ]:
+            try:
+                loc = page.locator(sel).first
+                if loc.is_visible(timeout=800):
+                    loc.evaluate("el => el.click()")
+            except Exception:
+                pass
+
+        # ── STEP 2: Fill form ─────────────────────────────────────────
+        print("STEP 2: Fill flight search form...")
+
+        # Origin airport
+        print(f"  Setting origin: {request.origin}")
+        select_airport(page, "#originationAirportCode", request.origin)
+        page.wait_for_timeout(1000)
+
+        # Destination airport
+        print(f"  Setting destination: {request.destination}")
+        select_airport(page, "#destinationAirportCode", request.destination)
+        page.wait_for_timeout(1000)
+
+        # Departure date (MM/DD)
+        print(f"  Setting departure: {dep_mmdd}")
+        fill_date_field(page, "#departureDate", dep_mmdd)
+        page.wait_for_timeout(1000)
+
+        # Return date (MM/DD)
+        print(f"  Setting return: {ret_mmdd}")
+        fill_date_field(page, "#returnDate", ret_mmdd)
+        page.wait_for_timeout(1000)
+
+        # Log form state
+        form_state = page.evaluate("""() => {
+            const g = s => document.querySelector(s)?.value || 'N/A';
+            return {
+                origin: g('#originationAirportCode'),
+                dest:   g('#destinationAirportCode'),
+                depart: g('#departureDate'),
+                ret:    g('#returnDate'),
+            };
+        }""")
+        print(f"  Form state: {form_state}")
+
+        # ── STEP 3: Submit ────────────────────────────────────────────
+        print("STEP 3: Click Search...")
+        page.locator("#flightBookingSubmit").first.evaluate("el => el.click()")
+
+        # Wait for results page (URL contains select-depart or select-)
+        try:
+            page.wait_for_url(re.compile(r"/air/booking/select[-.]"), timeout=30000)
+            print(f"  ✅ Results page loaded: {page.url[:120]}")
+        except Exception:
+            print(f"  ⚠ URL didn't match pattern. Current: {page.url[:120]}")
+            # Try JS click as fallback
+            page.evaluate("document.querySelector('#flightBookingSubmit')?.click()")
+            page.wait_for_timeout(15000)
+            print(f"  Current URL after retry: {page.url[:120]}")
+
+        page.wait_for_timeout(3000)
+
+        # ── STEP 4: Extract flights ──────────────────────────────────
+        print("STEP 4: Extract flight data...")
+
+        # Scroll to load lazy content
+        for _ in range(5):
+            page.evaluate("window.scrollBy(0, 500)")
+            page.wait_for_timeout(600)
+        page.evaluate("window.scrollTo(0, 0)")
+        page.wait_for_timeout(1000)
+
+        # Strategy 1: Look for flight card elements
+        flight_cards = page.locator('[class*="air-booking-select-detail"]').all()
+        if not flight_cards:
+            flight_cards = page.locator('[data-qa*="flight"], [class*="flight-stops"]').all()
+
+        if flight_cards:
+            print(f"  Found {len(flight_cards)} flight card elements")
+            for card in flight_cards[:5]:
+                try:
+                    text = card.inner_text(timeout=3000)
+                    # Extract flight number (e.g. "# 2133")
+                    fnum_match = re.search(r"#\s*(\d{2,5})", text)
+                    flight_num = f"WN {fnum_match.group(1)}" if fnum_match else "N/A"
+
+                    # Extract departure/arrival times
+                    times = re.findall(r"\d{1,2}:\d{2}\s*(?:AM|PM)", text, re.IGNORECASE)
+                    itinerary = " → ".join(times[:2]) if times else "N/A"
+                    stops = "Nonstop" if "nonstop" in text.lower() else "1+ stop"
+                    if times:
+                        itinerary = f"{flight_num} {itinerary} ({stops})"
+
+                    # Extract Wanna Get Away price (first dollar amount = Basic/WGA)
+                    wga_match = re.search(r"(?:wanna\s*get\s*away)[^\$]*\$\s*([\d,]+)", text, re.IGNORECASE)
+                    if not wga_match:
+                        prices = re.findall(r"\$([\d,]+)", text)
+                        wga_price = "$" + prices[0] if prices else "N/A"
+                    else:
+                        wga_price = "$" + wga_match.group(1)
+
+                    flights.append({
+                        "flight_number": flight_num,
+                        "itinerary": itinerary,
+                        "wanna_get_away_price": wga_price,
+                    })
+                except Exception:
+                    pass
+
+        # Strategy 2: Fallback — parse visible body text
+        if not flights:
+            print("  Falling back to text parsing...")
+            body = page.locator("body").inner_text(timeout=10000)
+            lines = [l.strip() for l in body.split("\n") if l.strip()]
+
+            i = 0
+            while i < len(lines) and len(flights) < request.max_results:
+                line = lines[i]
+                # Look for flight number pattern "# NNNN"
+                fnum_match = re.search(r"#\s*(\d{2,5})", line)
+                if fnum_match:
+                    flight_num = f"WN {fnum_match.group(1)}"
+                    # Look ahead for times and prices
+                    itinerary = "N/A"
+                    wga_price = "N/A"
+                    for j in range(i, min(i + 15, len(lines))):
+                        times = re.findall(r"\d{1,2}:\d{2}\s*(?:AM|PM)", lines[j], re.IGNORECASE)
+                        if times and itinerary == "N/A":
+                            stops = "Nonstop" if any("nonstop" in lines[k].lower() for k in range(i, min(i + 10, len(lines)))) else "1+ stop"
+                            itinerary = f"{flight_num} {' → '.join(times[:2])} ({stops})"
+                        pm = re.search(r"\$([\d,]+)", lines[j])
+                        if pm and wga_price == "N/A" and j > i:
+                            wga_price = "$" + pm.group(1)
+                            break
+
+                    if wga_price != "N/A":
+                        flights.append({
+                            "flight_number": flight_num,
+                            "itinerary": itinerary,
+                            "wanna_get_away_price": wga_price,
+                        })
+                i += 1
+
+        # ── Results ───────────────────────────────────────────────────
+        print(f"\nDONE – {len(flights)} Southwest Flights ({request.origin} → {request.destination}):")
+        for i, f in enumerate(flights, 1):
+            print(f"  {i}. {f['itinerary']} | Wanna Get Away: {f['wanna_get_away_price']}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        traceback.print_exc()
+    return SouthwestFlightSearchResult(
+        origin=request.origin,
+        destination=request.destination,
+        departure_date=request.departure_date,
+        return_date=request.return_date,
+        flights=[SouthwestFlight(
+            flight_number=f.get('flight_number','N/A'),
+            itinerary=f.get('itinerary','N/A'),
+            wanna_get_away_price=f.get('wanna_get_away_price','N/A'),
+        ) for f in flights],
+    )
+
+
+def test_southwest_flights():
+    from playwright.sync_api import sync_playwright
+    from dateutil.relativedelta import relativedelta
+    today = date.today()
+    departure = today + relativedelta(months=2)
+    request = SouthwestFlightSearchRequest(
+        origin="DEN",
+        destination="LAX",
+        departure_date=departure,
+        return_date=departure + timedelta(days=5),
+        max_results=5,
+    )
+    port = get_free_port()
+    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
+    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
+    chrome_proc = subprocess.Popen(
+        [
+            chrome,
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={profile_dir}",
+            "--remote-allow-origins=*",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1280,987",
+            "about:blank",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    ws_url = None
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        try:
+            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
+            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
+            if ws_url:
+                break
+        except Exception:
+            pass
+        time.sleep(0.4)
+    if not ws_url:
+        raise TimeoutError("Chrome CDP not ready")
+    with sync_playwright() as pl:
+        browser = pl.chromium.connect_over_cdp(ws_url)
+        context = browser.contexts[0]
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = search_southwest_flights(page, request)
+        finally:
+            chrome_proc.terminate()
+            shutil.rmtree(profile_dir, ignore_errors=True)
+    print(f"\nTotal flights: {len(result.flights)}")
+    for i, f in enumerate(result.flights, 1):
+        print(f"  {i}. {f.itinerary}  {f.wanna_get_away_price}")
+
+
+if __name__ == "__main__":
+    test_southwest_flights()

@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class ZillowSearchRequest:
+    location: str = "Bellevue, WA"
+    min_price: int = 500000
+    max_price: int = 1000000
+    min_beds: int = 3
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ZillowListing:
+    address: str
+    price: str
+    beds: str
+    baths: str
+    sqft: str
+
+@dataclass(frozen=True)
+class ZillowSearchResult:
+    location: str
+    listings: list
+
+def search_zillow_homes(page: Page, request: ZillowSearchRequest) -> ZillowSearchResult

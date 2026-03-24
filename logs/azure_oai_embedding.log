@@ -1,0 +1,3 @@
+2026-03-21 21:16:23,761 - azure_oai_embedding - ERROR - exception:167 - Error generating Azure OpenAI batch embeddings
+NoneType: None
+2026-03-21 21:16:23,761 - azure_oai_embedding - ERROR - log_with_context:181 - Azure OpenAI batch embedding generation failed | Context: model=text-embedding-3-small - batch_size=1 - error_type=AuthenticationError - error_message=Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}

@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class HomedepotSearchRequest:
+    search_query: str
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class HomedepotProduct:
+    name: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class HomedepotSearchResult:
+    search_query: str
+    products: list
+
+def search_homedepot_products(page: Page, request: HomedepotSearchRequest) -> HomedepotSearchResult

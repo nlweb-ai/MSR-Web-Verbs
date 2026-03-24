@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class TicketmasterSearchRequest:
+    location: str = "Los Angeles"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class TicketmasterEvent:
+    name: str
+    venue: str
+    datetime: str
+    price: str
+
+@dataclass(frozen=True)
+class TicketmasterSearchResult:
+    location: str
+    events: list
+
+def search_ticketmaster_events(page: Page, request: TicketmasterSearchRequest) -> TicketmasterSearchResult

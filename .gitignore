@@ -71,3 +71,4 @@ venv.bak/
 # OS
 .DS_Store
 Thumbs.db
+.cdp_ws_url

@@ -1,0 +1,16 @@
+@dataclass(frozen=True)
+class WebMDSearchRequest:
+    symptom: str = "headache"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class WebMDCondition:
+    condition: str
+    url: str
+
+@dataclass(frozen=True)
+class WebMDSearchResult:
+    symptom: str
+    conditions: list
+
+def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSearchResult

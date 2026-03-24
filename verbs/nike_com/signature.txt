@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class NikeSearchRequest:
+    query: str = "running shoes men"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class NikeProduct:
+    name: str
+    price: str
+    colors: str
+
+@dataclass(frozen=True)
+class NikeSearchResult:
+    query: str
+    products: list
+
+def search_nike_products(page: Page, request: NikeSearchRequest) -> NikeSearchResult

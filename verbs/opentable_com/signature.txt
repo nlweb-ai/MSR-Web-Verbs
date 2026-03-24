@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class OpentableSearchRequest:
+    location: str = "Seattle"
+    covers: int = 2
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class OpentableRestaurant:
+    name: str
+    cuisine: str
+    rating: str
+    available_times: str
+
+@dataclass(frozen=True)
+class OpentableSearchResult:
+    location: str
+    restaurants: list
+
+def search_opentable_restaurants(page: Page, request: OpentableSearchRequest) -> OpentableSearchResult

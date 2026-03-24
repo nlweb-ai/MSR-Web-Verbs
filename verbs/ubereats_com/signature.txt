@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class UberEatsSearchRequest:
+    address: str = "Seattle, WA 98101"
+    query: str = "sushi"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class UberEatsRestaurant:
+    name: str
+    rating: str
+    delivery_fee: str
+    est_time: str
+
+@dataclass(frozen=True)
+class UberEatsSearchResult:
+    address: str
+    query: str
+    restaurants: list
+
+def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> UberEatsSearchResult
