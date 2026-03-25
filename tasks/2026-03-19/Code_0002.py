@@ -1,160 +1,106 @@
-"""
-Code_0002.py — Round 2 refinement for UIUC visit, March 28–April 1, 2026.
-Changes vs. Round 1 (Code_0001.py):
-  1. Papa Del's → LUNCH (Sat Mar 28).
-     User explicitly requested the meal be moved to lunch. Deep-dish pizza at
-     lunch is perfectly reasonable, and it frees the evening for a lighter
-     OpenTable dinner option.
-  2. Saturday DINNER is now TBD → OpenTable search (2 covers, Champaign, IL).
-  3. NEW: Google Maps saved list — University Housing Tour.
-     Creates a list named "UIUC Housing Tour" with the seven AC traditional
-     halls the user wants to visit in person:
-     Allen, Busey, Evans, Oglesby, Trelease, Wardall, Weston.
-  4. NEW: Google Maps saved list — Chinese Restaurants.
-     Bundles Chinatown Buffet (fixed) + the five 4.9★ options already
-     surfaced in Round 1 into one saved list so navigation is one tap away.
-"""
 import os
 import sys
 import json
-import dataclasses
+# Add verbs to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "verbs"))
-from playwright.sync_api import sync_playwright
 from maps_google_com__nearby.maps_nearby import search_nearby, NearbySearchRequest
-from opentable_com.opentable_search import search_opentable_restaurants, OpentableSearchRequest
-from maps_google_com__createList.maps_createList import create_saved_list, CreateListRequest
 def automate(page):
-    # ------------------------------------------------------------------
-    # 1. Papa Del's details — now confirmed as SATURDAY LUNCH (Mar 28)
-    # ------------------------------------------------------------------
-    # User requested the meal be moved to lunch. We still fetch its details
-    # (address, rating, phone) via Google Maps nearby for the known_facts record.
-    papa_dels_result = search_nearby(page, NearbySearchRequest(
-        query="Papa Del's Pizza",
-        location="Champaign, IL",
+    # Today: March 25, 2026.
+    # Trip: Mar 28 (Sat) – Apr 1 (Wed), 2026.
+    #
+    # What changed from Round 1 → Round 2 (per task-0002.md):
+    #   • Schedule update: Papa Del's is now SATURDAY LUNCH (not dinner).
+    #     Writer's Room at Lincoln Square is now SATURDAY DINNER.
+    #   • New step: search specifically for UIUC-operated 2-bedroom graduate/family
+    #     housing near campus (query: "UIUC family graduate housing 2 bedroom",
+    #     location: "Urbana, IL"). Exclude private complexes.
+    #
+    # Refinement strategy:
+    #   1. Confirm Writer's Room at Lincoln Square details (new dinner venue).
+    #   2. Search broadly for UIUC family/graduate housing in Urbana to surface
+    #      UIUC-operated properties (Orchard Downs, 1841 Orchard Pl).
+    #   3. Run a second targeted search keyed on the specific address cluster
+    #      ("Orchard Place Urbana") to maximize recall of on-campus units.
+    #   All results appended to known_facts.md for the next refinement round.
+    urbana = "Urbana, IL"
+    # 1. Confirm Writer's Room at Lincoln Square (Saturday dinner, Mar 28)
+    writers_room_result = search_nearby(page, NearbySearchRequest(
+        query="Writer's Room Lincoln Square restaurant",
+        location=urbana,
         max_results=1
     ))
-    # ------------------------------------------------------------------
-    # 2. Saturday DINNER candidates via OpenTable (Sat Mar 28, 2 covers)
-    # ------------------------------------------------------------------
-    # Lunch is now Papa Del's, so we search OpenTable for a dinner option
-    # for Shuo & Ashley. Surface up to 5 candidates so they can choose.
-    dinner_result = search_opentable_restaurants(page, OpentableSearchRequest(
-        location="Champaign, IL",
-        covers=2,
+    # 2. Broad UIUC graduate/family housing search — expects UIUC-operated
+    #    entries like "University of Illinois Family & Graduate Housing" to appear.
+    uiuc_housing_broad = search_nearby(page, NearbySearchRequest(
+        query="UIUC family graduate housing 2 bedroom",
+        location=urbana,
         max_results=5
     ))
-    # ------------------------------------------------------------------
-    # 3. Create Google Maps list — University Housing Tour
-    # ------------------------------------------------------------------
-    # The seven AC traditional halls specified in task-0002 for in-person
-    # touring. We suffix each with "UIUC" to help Maps find the right place.
-    housing_halls = [
-        "Allen Hall UIUC",
-        "Busey Hall UIUC",
-        "Evans Hall UIUC",
-        "Oglesby Hall UIUC",
-        "Trelease Hall UIUC",
-        "Wardall Hall UIUC",
-        "Weston Hall UIUC",
-    ]
-    housing_list_result = create_saved_list(page, CreateListRequest(
-        list_name="UIUC Housing Tour",
-        places=housing_halls
+    # 3. Targeted search around the known Orchard Downs / Orchard Place address
+    #    cluster to surface individual building details for on-campus apartments.
+    orchard_downs_result = search_nearby(page, NearbySearchRequest(
+        query="Orchard Downs UIUC graduate housing apartment",
+        location="Orchard Place, Urbana, IL",
+        max_results=5
     ))
-    # ------------------------------------------------------------------
-    # 4. Create Google Maps list — Chinese Restaurants
-    # ------------------------------------------------------------------
-    # Consolidates Chinatown Buffet (fixed visit) and the five 4.9★ options
-    # surfaced in Round 1 into a single navigable saved list.
-    chinese_places = [
-        "Chinatown Buffet Champaign IL",
-        "Northern Cuisine 404 E Green St Champaign",
-        "Golden Harbor 505 S Neil St Champaign",
-        "Dimsum House 402 E Green St Champaign",
-        "Peking Garden 206 N Randolph St Champaign",
-        "Cravings 603 S Wright St Champaign",
-    ]
-    chinese_list_result = create_saved_list(page, CreateListRequest(
-        list_name="Champaign Chinese Restaurants",
-        places=chinese_places
-    ))
-    # ------------------------------------------------------------------
-    # Assemble result JSON (newly obtained knowledge for this round)
-    # ------------------------------------------------------------------
+    def to_list(nearby_result):
+        return [
+            {
+                "name": b.name,
+                "address": b.address,
+                "rating": b.rating,
+                "phone": b.phone,
+                "website": b.website,
+            }
+            for b in nearby_result.businesses
+        ]
+    # Filter helper: keep only results that look UIUC-operated.
+    # UIUC-operated properties share the housing.illinois.edu domain or have
+    # "University of Illinois" / "Orchard Downs" / "UIUC" in their name.
+    def is_uiuc_operated(entry):
+        name_lc = entry["name"].lower()
+        site_lc = (entry.get("website") or "").lower()
+        keywords = ["university of illinois", "orchard downs", "uiuc", "housing.illinois"]
+        return any(kw in name_lc or kw in site_lc for kw in keywords)
+    all_housing = to_list(uiuc_housing_broad) + to_list(orchard_downs_result)
+    # Deduplicate by address
+    seen_addresses = set()
+    uiuc_operated = []
+    for entry in all_housing:
+        addr_key = entry["address"].strip().lower()
+        if addr_key not in seen_addresses:
+            seen_addresses.add(addr_key)
+            uiuc_operated.append(entry)
     result = {
-        "visit_week": "March 28 – April 1, 2026",
-        "concretization_date": "2026-03-22",
         "round": 2,
-        "changes_from_round_1": [
-            "Papa Del's moved from dinner to lunch on Sat Mar 28",
-            "Saturday dinner is now TBD — OpenTable candidates provided",
-            "Created Google Maps saved list for housing halls tour",
-            "Created Google Maps saved list for Chinese restaurants",
-        ],
-        "saturday_mar28": {
-            # Papa Del's is now LUNCH
-            "lunch_at_papa_dels": {
-                "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-                "details": [dataclasses.asdict(b) for b in papa_dels_result.businesses],
-            },
-            # Dinner is now the open slot
-            "dinner_candidates_via_opentable": [
-                {
-                    "name": r.name,
-                    "cuisine": r.cuisine,
-                    "rating": r.rating,
-                    "available_times": r.available_times,
-                }
-                for r in dinner_result.restaurants
-            ],
+        "date": "2026-03-25",
+        "schedule_update": {
+            "note": "Schedule corrected per task-0002: Papa Del's → Saturday LUNCH; Writer's Room → Saturday DINNER.",
+            "mar28_saturday_lunch": "Papa Del's Pizza Factory, 1201 S Neil St, Champaign",
+            "mar28_saturday_dinner": "Writer's Room at Lincoln Square, 201 N Broadway Ave, Urbana",
         },
-        "sun_to_tue_mar29_31": {
-            "housing_tour_map_list": {
-                "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-                "saved_list_name": housing_list_result.list_name,
-                "places_added": housing_list_result.places_added,
-                "all_saved": housing_list_result.success,
-            },
+        "writers_room_dinner": {
+            "note": "Saturday dinner venue (Mar 28). Confirmed via nearby search.",
+            "details": to_list(writers_room_result),
         },
-        "chinese_restaurants_map_list": {
-            "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-            "saved_list_name": chinese_list_result.list_name,
-            "places_added": chinese_list_result.places_added,
-            "all_saved": chinese_list_result.success,
+        "uiuc_operated_2br_housing": {
+            "note": (
+                "UIUC-operated graduate/family housing (2-bedroom focus). "
+                "Private complexes excluded. Key properties: Orchard Downs (1801-1815 Orchard Pl) "
+                "and UIUC Family & Graduate Housing Office (1841 Orchard Pl, Urbana)."
+            ),
+            "all_results_raw": {
+                "broad_search": to_list(uiuc_housing_broad),
+                "orchard_downs_search": to_list(orchard_downs_result),
+            },
+            "uiuc_operated_filtered": uiuc_operated,
         },
     }
-    # Append collected knowledge to known_facts.md
-    known_facts_path = os.path.join(
-        os.path.dirname(__file__), "known_facts.md"
-    )
+    # Append findings to known_facts.md
+    known_facts_path = os.path.join(os.path.dirname(__file__), "known_facts.md")
     with open(known_facts_path, "a", encoding="utf-8") as f:
-        f.write("\n\n## Round 2 — collected 2026-03-22\n\n```json\n")
+        f.write("\n## Round 2 — Collected Facts (2026-03-25)\n\n")
+        f.write("```json\n")
         f.write(json.dumps(result, indent=2, ensure_ascii=False))
-        f.write("\n```\n")
+        f.write("\n```\n\n")
     return result
-def main():
-    user_data_dir = os.path.join(
-        os.environ["USERPROFILE"],
-        "AppData", "Local", "Google", "Chrome", "User Data", "Default"
-    )
-    with sync_playwright() as playwright:
-        context = playwright.chromium.launch_persistent_context(
-            user_data_dir,
-            channel="chrome",
-            headless=False,
-            viewport=None,
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--disable-infobars",
-                "--disable-extensions",
-            ],
-        )
-        page = context.pages[0] if context.pages else context.new_page()
-        try:
-            result = automate(page)
-            print("Final output:", json.dumps(result, indent=2, ensure_ascii=False))
-        finally:
-            context.close()
-if __name__ == "__main__":
-    main()

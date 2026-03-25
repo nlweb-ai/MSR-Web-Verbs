@@ -1,2352 +1,453 @@
-
-
-## Round 1 — collected 2026-03-22
+## Round 1 — Collected Facts (2026-03-24)
 
 ```json
 {
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "saturday_mar28": {
-    "dinner_at_papa_dels": {
-      "note": "Papa Del's chosen for dinner (deep-dish pizza is an evening meal).",
-      "details": []
+  "schedule_summary": {
+    "mar28_saturday": "Arrive Champaign morning. Lunch together (see saturday_lunch_options). Dinner at Papa Del's (Ashley's choice).",
+    "mar29_31_sun_tue": "Ashley at UIUC department events. Shuo visits car dealerships, university housing, campus landmarks, and Chinese restaurants (Chinatown Buffet for one meal)."
+  },
+  "saturday_dinner_papas_del": {
+    "note": "Papa Del's assigned to Saturday DINNER. Ashley's preferred meal.",
+    "details": [
+      {
+        "name": "Papa Del's Pizza Factory",
+        "address": "\n1201 S Neil St, Champaign, IL 61820",
+        "rating": "4.1",
+        "phone": "(217) 359-7700",
+        "website": "https://www.papadels.com/"
+      }
+    ]
+  },
+  "saturday_lunch_options": [
+    {
+      "name": "The Bread Company",
+      "address": "706 S Goodwin Ave, Urbana, IL 61801",
+      "rating": "4.6",
+      "phone": "(217) 383-1007",
+      "website": "http://www.thebread.co/"
     },
-    "lunch_candidates_via_opentable": [
-      {
-        "name": "Momiji Capitol Hill",
-        "cuisine": "Japanese • Capitol Hill / First Hill",
-        "rating": "Exceptional (1908)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Umi Sake House",
-        "cuisine": "Japanese • Downtown",
-        "rating": "Exceptional (2747)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "The Pink Door",
-        "cuisine": "Italian • Belltown / Pike Place Market",
-        "rating": "Exceptional (9849)",
-        "available_times": "8:45 PM, 9:00 PM"
-      },
-      {
-        "name": "Spinasse",
-        "cuisine": "Italian • Capitol Hill / First Hill",
-        "rating": "Exceptional (4034)",
-        "available_times": "5:15 PM, 5:30 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Carmine's 5th Ave",
-        "cuisine": "Italian • Downtown",
-        "rating": "Exceptional (180)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      }
-    ],
-    "campus_photo_walk": {
-      "note": "Walkable ~2-mile circuit of eight iconic UIUC landmarks.",
-      "saved_list_name": "UIUC Photo Walk Mar 28",
-      "places_added": [
-        "Alma Mater Statue UIUC",
-        "Foellinger Auditorium UIUC",
-        "Main Quad UIUC",
-        "Illini Union Champaign",
-        "Memorial Stadium Champaign",
-        "Natural History Building UIUC",
-        "Beckman Institute UIUC",
-        "Krannert Art Museum UIUC"
-      ],
-      "all_saved": true
+    {
+      "name": "Seven Saints",
+      "address": "32 E Chester St, Champaign, IL 61820",
+      "rating": "4.6",
+      "phone": "(217) 351-7775",
+      "website": "http://www.sevensaintsbar.com/"
+    },
+    {
+      "name": "Shawarma Joint",
+      "address": "627 E Green St, Champaign, IL 61820",
+      "rating": "4.6",
+      "phone": "(217) 697-4790",
+      "website": "https://www.shawarmajointil.com/"
+    },
+    {
+      "name": "Sakanaya",
+      "address": "403 E Green St, Champaign, IL 61820",
+      "rating": "4.6",
+      "phone": "(217) 344-1400",
+      "website": "http://www.sakanayarestaurant.com/"
+    },
+    {
+      "name": "Maple & Yolk",
+      "address": "810 W Killarney St, Urbana, IL 61801",
+      "rating": "4.6",
+      "phone": "(217) 262-6597",
+      "website": "https://www.maplenyolk.com/"
     }
-  },
-  "sun_to_tue_mar29_31": {
-    "car_dealerships": [
-      {
-        "name": "Sam Leman Chevrolet of Champaign",
-        "address": "440 Anthony Dr, Champaign, IL 61822",
-        "rating": "4.6",
-        "phone": "(217) 600-3179",
-        "website": "https://www.champaignchevrolet.com/?utm_source=google&utm_medium=organic&utm_campaign=googlemybusiness"
-      },
-      {
-        "name": "Sam Leman Chrysler Dodge Jeep Ram of Champaign",
-        "address": "1906 Moreland Blvd, Champaign, IL 61822",
-        "rating": "4.6",
-        "phone": "(217) 352-4273",
-        "website": "https://www.samlemanchampaign.com/"
-      },
-      {
-        "name": "Champaign Chrysler Dodge Jeep Ram",
-        "address": "1906 Moreland Blvd, Champaign, IL 61822",
-        "rating": "4.6",
-        "phone": "(217) 352-4273",
-        "website": "http://www.champaignchryslerdodgejeep.com/"
-      },
-      {
-        "name": "Autotown",
-        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
-        "rating": "4.6",
-        "phone": "(217) 359-7900",
-        "website": "https://autotownonline.com/"
-      },
-      {
-        "name": "Napleton's Auto Park of Urbana",
-        "address": "1111 Napleton Way, Urbana, IL 61802",
-        "rating": "4.6",
-        "phone": "(217) 367-1222",
-        "website": "https://www.napletonsautopark.com/"
-      }
-    ],
-    "university_housing_options": {
-      "room_type": "Double",
-      "meal_plan": "Room & 12 Classic Meals + 15 Dining Dollars",
-      "halls": [
-        {
-          "hall_name": "Traditional Hall (with air conditioning): Allen*, Babcock*, Barton, Blaisdell*, Busey, Carr*, Evans, Hopkins, Lundgren, Oglesby*, Saunders*, Scott, Snyder, Townsend*, Trelease*, Wardall* and Weston* Halls",
-          "annual_price_usd": 14558
-        },
-        {
-          "hall_name": "Traditional Hall (without air conditioning) Leonard, Shelden, Taft and Van Doren Halls",
-          "annual_price_usd": 14116
-        },
-        {
-          "hall_name": "Nugent Hall (with air conditioning)",
-          "annual_price_usd": 15042
-        }
-      ]
-    }
-  },
+  ],
   "chinese_restaurants": {
-    "fixed_visit": {
-      "name": "Chinatown Buffet",
-      "location": "Champaign, IL",
-      "note": "Explicitly requested by user for one meal."
-    },
-    "additional_options": [
+    "note": "Chinatown Buffet is the confirmed one-meal stop; others are backups.",
+    "options": [
       {
-        "name": "Northern Cuisine",
-        "address": "404 E Green St, Champaign, IL 61820",
-        "rating": "4.9",
-        "phone": "(217) 607-1299",
-        "website": "http://northerncuisineuiuc.com/"
+        "name": "Chinatown Buffet",
+        "address": "713 W Marketview Dr, Champaign, IL 61822",
+        "rating": "4.0",
+        "phone": "(217) 398-9888",
+        "website": "N/A"
       },
       {
         "name": "Golden Harbor Authentic Chinese Cuisine",
         "address": "505 S Neil St, Champaign, IL 61820",
-        "rating": "4.9",
+        "rating": "4.0",
         "phone": "(217) 398-8988",
         "website": "http://www.goldenharboronline.com/?utm_source=google&utm_medium=website"
       },
       {
-        "name": "Dimsum house",
-        "address": "402 E Green St, Champaign, IL 61820",
-        "rating": "4.9",
-        "phone": "(217) 607-1926",
-        "website": "https://www.dimsumhouseuiuc.com/"
+        "name": "Rainbow Garden",
+        "address": "1402 S Neil St, Champaign, IL 61820",
+        "rating": "4.0",
+        "phone": "(217) 398-2670",
+        "website": "http://www.rainbow-garden.com/"
+      },
+      {
+        "name": "Sunny China Buffet",
+        "address": "1703 Philo Rd, Urbana, IL 61802",
+        "rating": "4.0",
+        "phone": "(217) 367-8883",
+        "website": "https://luerr.com/sunny-china-buffet"
       },
       {
         "name": "Peking Garden Restaurant",
         "address": "206 N Randolph St, Champaign, IL 61820",
-        "rating": "4.9",
+        "rating": "4.0",
         "phone": "(217) 355-8888",
         "website": "http://www.pekinggardenil.com/"
-      },
-      {
-        "name": "Cravings",
-        "address": "603 S Wright St, Champaign, IL 61820",
-        "rating": "4.9",
-        "phone": "(217) 328-2538",
-        "website": "http://www.cravingsil.com/?utm_source=google&utm_medium=search"
-      }
-    ]
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Momiji Capitol Hill",
-        "cuisine": "Japanese • Capitol Hill / First Hill",
-        "rating": "Exceptional (1908)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Umi Sake House",
-        "cuisine": "Japanese • Downtown",
-        "rating": "Exceptional (2747)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "The Pink Door",
-        "cuisine": "Italian • Belltown / Pike Place Market",
-        "rating": "Exceptional (9849)",
-        "available_times": "8:45 PM, 9:00 PM"
-      },
-      {
-        "name": "Spinasse",
-        "cuisine": "Italian • Capitol Hill / First Hill",
-        "rating": "Exceptional (4034)",
-        "available_times": "5:15 PM, 5:30 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Carmine's 5th Ave",
-        "cuisine": "Italian • Downtown",
-        "rating": "Exceptional (180)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
       }
     ]
   },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
+  "car_dealerships_to_visit": [
+    {
+      "name": "Sam Leman Chevrolet of Champaign",
+      "address": "440 Anthony Dr, Champaign, IL 61822",
+      "rating": "4.6",
+      "phone": "(217) 600-3179",
+      "website": "https://www.champaignchevrolet.com/?utm_source=google&utm_medium=organic&utm_campaign=googlemybusiness"
+    },
+    {
+      "name": "Sam Leman Chrysler Dodge Jeep Ram of Champaign",
+      "address": "1906 Moreland Blvd, Champaign, IL 61822",
+      "rating": "4.6",
+      "phone": "(217) 352-4273",
+      "website": "https://www.samlemanchampaign.com/"
+    },
+    {
+      "name": "Autotown",
+      "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+      "rating": "4.6",
+      "phone": "(217) 359-7900",
+      "website": "https://autotownonline.com/"
+    },
+    {
+      "name": "Champaign Chrysler Dodge Jeep Ram",
+      "address": "1906 Moreland Blvd, Champaign, IL 61822",
+      "rating": "4.6",
+      "phone": "(217) 352-4273",
+      "website": "http://www.champaignchryslerdodgejeep.com/"
+    },
+    {
+      "name": "Euro Motors Auto Dealers Inc",
+      "address": "50 E Springfield Ave, Champaign, IL 61820",
+      "rating": "4.6",
+      "phone": "(217) 352-9300",
+      "website": "https://www.myeuromotors.com/"
     }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
   ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
+  "university_housing_to_tour": [
+    {
+      "name": "Hub on Campus Champaign - Daniel",
+      "address": "812 S 6th St, Champaign, IL 61820",
+      "rating": "4.4",
+      "phone": "(217) 318-5770",
+      "website": "https://huboncampus.com/champaign/?utm_source=GoogleMyBusiness&utm_medium=organic&utm_campaign=GMB&switch_cls[id]=66734"
     },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
+    {
+      "name": "University of Illinois at Urbana-Champaign Family & Graduate Housing Office",
+      "address": "Orchard Downs, 1841 Orchard Pl, Urbana, IL 61801",
+      "rating": "4.4",
+      "phone": "(217) 333-5656",
+      "website": "http://www.housing.illinois.edu/"
+    },
+    {
+      "name": "Campus Circle Urbana",
+      "address": "1010 W University Ave, Urbana, IL 61801",
+      "rating": "4.4",
+      "phone": "(217) 866-0892",
+      "website": "https://www.campuscircleapartments.com/?switch_cls[id]=25368&utm_source=google%20-%20entratammb&utm_medium=organic&utm_campaign=gmb&utm_content=website%20click"
+    },
+    {
+      "name": "Orchard Downs",
+      "address": "1801-1815 Orchard Pl, Urbana, IL 61801",
+      "rating": "4.4",
+      "phone": "(217) 333-5656",
+      "website": "https://housing.illinois.edu/orchard-downs"
+    },
+    {
+      "name": "Latitude Apartments",
+      "address": "608 E University Ave, Champaign, IL 61820",
+      "rating": "4.4",
+      "phone": "(217) 305-7098",
+      "website": "https://www.livelatitude.com/"
     }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
+  ],
+  "campus_landmark_photo_spots": [
+    {
+      "name": "University of Illinois Lar",
+      "address": "1005 S Lincoln Ave, Urbana, IL 61801",
+      "rating": "4.5",
+      "phone": "(217) 333-0200",
+      "website": "https://housing.illinois.edu/living-communities/halls/lar"
+    },
+    {
+      "name": "University of Illinois System",
+      "address": "506 S Wright St, Urbana, IL 61801",
+      "rating": "4.5",
+      "phone": "(217) 333-1000",
+      "website": "http://uillinois.edu/"
+    },
+    {
+      "name": "Illini Union",
+      "address": "1401 W Green St, Urbana, IL 61801",
+      "rating": "4.5",
+      "phone": "(217) 333-0691",
+      "website": "http://union.illinois.edu/"
+    },
+    {
+      "name": "Main Quad",
+      "address": "607 S Mathews Ave, Urbana, IL 61801",
+      "rating": "4.5",
+      "phone": "(217) 384-2342",
+      "website": "http://illinois.edu/"
+    },
+    {
+      "name": "University of Illinois Round Barns",
+      "address": "1201-1393 St Marys Rd, Urbana, IL 61802",
+      "rating": "4.5",
+      "phone": "N/A",
+      "website": "https://uihistories.library.illinois.edu/virtualtour/landmarks/roundbarns/"
+    }
+  ]
 }
 ```
 
 
-## Round 2 — collected 2026-03-22
+## Round 2 — Collected Facts (2026-03-25)
 
 ```json
 {
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
   "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": [
+  "date": "2026-03-25",
+  "schedule_update": {
+    "note": "Schedule corrected per task-0002: Papa Del's → Saturday LUNCH; Writer's Room → Saturday DINNER.",
+    "mar28_saturday_lunch": "Papa Del's Pizza Factory, 1201 S Neil St, Champaign",
+    "mar28_saturday_dinner": "Writer's Room at Lincoln Square, 201 N Broadway Ave, Urbana"
+  },
+  "writers_room_dinner": {
+    "note": "Saturday dinner venue (Mar 28). Confirmed via nearby search.",
+    "details": [
       {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:00 PM, 6:30 PM, 7:00 PM, 7:30 PM, 8:00 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
+        "name": "Writer's Room",
+        "address": "\n210 S Race St, Urbana, IL 61801",
+        "rating": "4.1",
+        "phone": "(217) 600-5129",
+        "website": "https://www.hilton.com/en/hotels/chiulup-hotel-royer-urbana-champaign/dining/?SEO_id=GMB--R-CHIULUP-1&y_source=1_MjAyOTcyNTM2MC03MTUtbG9jYXRpb24ud2Vic2l0ZQ%3D%3D"
       }
     ]
   },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
+  "uiuc_operated_2br_housing": {
+    "note": "UIUC-operated graduate/family housing (2-bedroom focus). Private complexes excluded. Key properties: Orchard Downs (1801-1815 Orchard Pl) and UIUC Family & Graduate Housing Office (1841 Orchard Pl, Urbana).",
+    "all_results_raw": {
+      "broad_search": [
+        {
+          "name": "University of Illinois at Urbana-Champaign Family & Graduate Housing Office",
+          "address": "Orchard Downs, 1841 Orchard Pl, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(217) 333-5656",
+          "website": "http://www.housing.illinois.edu/"
+        },
+        {
+          "name": "Orchard Downs",
+          "address": "1801-1815 Orchard Pl, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(217) 333-5656",
+          "website": "https://housing.illinois.edu/orchard-downs"
+        },
+        {
+          "name": "Campus Circle Urbana",
+          "address": "1010 W University Ave, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(217) 866-0892",
+          "website": "https://www.campuscircleapartments.com/?switch_cls[id]=25368&utm_source=google%20-%20entratammb&utm_medium=organic&utm_campaign=gmb&utm_content=website%20click"
+        },
+        {
+          "name": "University Group",
+          "address": "212 E Springfield Ave, Champaign, IL 61820",
+          "rating": "3.8",
+          "phone": "(217) 352-3182",
+          "website": "http://ugroupcu.com/"
+        },
+        {
+          "name": "Hub on Campus Champaign - Daniel",
+          "address": "812 S 6th St, Champaign, IL 61820",
+          "rating": "3.8",
+          "phone": "(217) 318-5770",
+          "website": "https://huboncampus.com/champaign/?utm_source=GoogleMyBusiness&utm_medium=organic&utm_campaign=GMB&switch_cls[id]=66734"
+        }
       ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
+      "orchard_downs_search": [
+        {
+          "name": "Orchard Downs",
+          "address": "1801-1815 Orchard Pl, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(217) 333-5656",
+          "website": "https://housing.illinois.edu/orchard-downs"
+        },
+        {
+          "name": "University of Illinois at Urbana-Champaign Family & Graduate Housing Office",
+          "address": "Orchard Downs, 1841 Orchard Pl, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(217) 333-5656",
+          "website": "http://www.housing.illinois.edu/"
+        },
+        {
+          "name": "Orchard Down 1977 Apartment",
+          "address": "Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "N/A",
+          "website": "N/A"
+        },
+        {
+          "name": "Campus Oaks Apartments",
+          "address": "502 W Green St, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(224) 723-0861",
+          "website": "http://www.campusoaks.net/"
+        },
+        {
+          "name": "Campus Circle Urbana",
+          "address": "1010 W University Ave, Urbana, IL 61801",
+          "rating": "3.8",
+          "phone": "(217) 866-0892",
+          "website": "https://www.campuscircleapartments.com/?switch_cls[id]=25368&utm_source=google%20-%20entratammb&utm_medium=organic&utm_campaign=gmb&utm_content=website%20click"
+        }
+      ]
+    },
+    "uiuc_operated_filtered": [
+      {
+        "name": "University of Illinois at Urbana-Champaign Family & Graduate Housing Office",
+        "address": "Orchard Downs, 1841 Orchard Pl, Urbana, IL 61801",
+        "rating": "3.8",
+        "phone": "(217) 333-5656",
+        "website": "http://www.housing.illinois.edu/"
+      },
+      {
+        "name": "Orchard Downs",
+        "address": "1801-1815 Orchard Pl, Urbana, IL 61801",
+        "rating": "3.8",
+        "phone": "(217) 333-5656",
+        "website": "https://housing.illinois.edu/orchard-downs"
+      },
+      {
+        "name": "Campus Circle Urbana",
+        "address": "1010 W University Ave, Urbana, IL 61801",
+        "rating": "3.8",
+        "phone": "(217) 866-0892",
+        "website": "https://www.campuscircleapartments.com/?switch_cls[id]=25368&utm_source=google%20-%20entratammb&utm_medium=organic&utm_campaign=gmb&utm_content=website%20click"
+      },
+      {
+        "name": "University Group",
+        "address": "212 E Springfield Ave, Champaign, IL 61820",
+        "rating": "3.8",
+        "phone": "(217) 352-3182",
+        "website": "http://ugroupcu.com/"
+      },
+      {
+        "name": "Hub on Campus Champaign - Daniel",
+        "address": "812 S 6th St, Champaign, IL 61820",
+        "rating": "3.8",
+        "phone": "(217) 318-5770",
+        "website": "https://huboncampus.com/champaign/?utm_source=GoogleMyBusiness&utm_medium=organic&utm_campaign=GMB&switch_cls[id]=66734"
+      },
+      {
+        "name": "Orchard Down 1977 Apartment",
+        "address": "Urbana, IL 61801",
+        "rating": "3.8",
+        "phone": "N/A",
+        "website": "N/A"
+      },
+      {
+        "name": "Campus Oaks Apartments",
+        "address": "502 W Green St, Urbana, IL 61801",
+        "rating": "3.8",
+        "phone": "(224) 723-0861",
+        "website": "http://www.campusoaks.net/"
+      }
+    ]
+  }
+}
+```
+
+
+
+## Round 3 — Collected Facts (2026-03-25)
+
+```json
+{
+  "round": 3,
+  "date": "2026-03-25",
+  "dealership_distance_selection": {
+    "note": "Driving distances from Red Roof Inn (212 W Anthony Dr, Champaign) to each candidate dealership. The 3 closest are kept for Shuo's Sun–Tue visit plan.",
+    "origin": "212 W Anthony Dr, Champaign, IL 61821",
+    "all_distances": [
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "4 min",
+        "distance_raw": "1.7 miles",
+        "distance_mi": 1.7
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "drive_time": "7 min",
+        "distance_raw": "2.1 miles",
+        "distance_mi": 2.1
+      },
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "2 min",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "2 min",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "2 min",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      }
     ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": [
+    "top3_closest": [
       {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:00 PM, 6:30 PM, 7:00 PM, 7:30 PM, 8:00 PM"
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "4 min",
+        "distance": "1.7 miles"
       },
       {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "drive_time": "7 min",
+        "distance": "2.1 miles"
       },
       {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "2 min",
+        "distance": ""
       }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
     ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": [
+    "excluded": [
       {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:00 PM, 6:30 PM, 7:00 PM, 7:30 PM, 8:00 PM"
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "distance": "",
+        "reason": "farther than top 3"
       },
       {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:30 PM, 6:45 PM, 7:00 PM, 7:15 PM, 7:30 PM"
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "distance": "",
+        "reason": "farther than top 3"
       }
     ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": []
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign"
-    ],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": []
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [],
-    "all_saved": false
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
-  }
-}
-```
-
-
-## Round 2 — collected 2026-03-22
-
-```json
-{
-  "visit_week": "March 28 – April 1, 2026",
-  "concretization_date": "2026-03-22",
-  "round": 2,
-  "changes_from_round_1": [
-    "Papa Del's moved from dinner to lunch on Sat Mar 28",
-    "Saturday dinner is now TBD — OpenTable candidates provided",
-    "Created Google Maps saved list for housing halls tour",
-    "Created Google Maps saved list for Chinese restaurants"
-  ],
-  "saturday_mar28": {
-    "lunch_at_papa_dels": {
-      "note": "Papa Del's confirmed as Saturday lunch (user requested change from dinner).",
-      "details": [
-        {
-          "name": "Papa Del's Pizza Factory",
-          "address": "\n1201 S Neil St, Champaign, IL 61820",
-          "rating": "4.1",
-          "phone": "(217) 359-7700",
-          "website": "https://www.papadels.com/"
-        }
-      ]
-    },
-    "dinner_candidates_via_opentable": [
-      {
-        "name": "Hamilton Walker's",
-        "cuisine": "Steakhouse • Champaign",
-        "rating": "Exceptional (1722)",
-        "available_times": "6:30 PM, 7:00 PM, 7:30 PM"
-      },
-      {
-        "name": "Ko Fusion - Downtown",
-        "cuisine": "Sushi • Champaign",
-        "rating": "Exceptional (152)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Tenkyu",
-        "cuisine": "Sushi • Champaign",
-        "rating": "N/A",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "Houlihan's - Champaign",
-        "cuisine": "American • Champaign",
-        "rating": "Awesome (312)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      },
-      {
-        "name": "The Axe Bar",
-        "cuisine": "American • Champaign",
-        "rating": "Exceptional (192)",
-        "available_times": "6:45 PM, 7:00 PM, 7:15 PM"
-      }
-    ]
-  },
-  "sun_to_tue_mar29_31": {
-    "housing_tour_map_list": {
-      "note": "Google Maps saved list for the seven AC traditional halls to tour in person.",
-      "saved_list_name": "UIUC Housing Tour",
-      "places_added": [
-        "Allen Hall UIUC"
-      ],
-      "all_saved": false
-    }
-  },
-  "chinese_restaurants_map_list": {
-    "note": "Google Maps saved list covering Chinatown Buffet + five 4.9★ options.",
-    "saved_list_name": "Champaign Chinese Restaurants",
-    "places_added": [
-      "Chinatown Buffet Champaign IL",
-      "Northern Cuisine 404 E Green St Champaign",
-      "Golden Harbor 505 S Neil St Champaign",
-      "Dimsum House 402 E Green St Champaign",
-      "Peking Garden 206 N Randolph St Champaign",
-      "Cravings 603 S Wright St Champaign"
-    ],
-    "all_saved": true
   }
 }
 ```

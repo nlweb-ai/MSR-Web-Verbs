@@ -4,8 +4,15 @@ The task description has multiple versions, saved in the folder tasks\{task_name
 Here are the steps to refine task-xxxx.
 (1) Think about places where the description is not concrete.
 (2) Try to find functions that help the user concretize these places. You should read the signature.txt file in every subfolder of verbs. Use tasks\sample\sample.py as a sample to generate a py file named "{py_code_name}.py" according to your refinement strategy. (Note: You should only produce the "automate(page)" function and the required imports — do NOT generate a main() function or any if __name__ == '__main__' block. The app will call automate(page) directly with a live browser page.)
+
+CRITICAL for import paths: Each verb subfolder contains a .py file with the actual functions. The import must use the REAL .py filename (without .py extension), NOT the function name. For example, if verbs/maps_google_com__nearby/ contains maps_nearby.py, the correct import is: from maps_google_com__nearby.maps_nearby import search_nearby, NearbySearchRequest — NOT from maps_google_com__nearby.search_nearby import ... List the files in each verb subfolder you plan to use to find the correct .py filename before writing imports.
 (3) When writing the py code, add comments to explain the reasoning of your refinement strategy. 
-(4) You will not have the permission to write the py file into a working directory, so please simply output it in stdout.
+(4) You will not have the permission to write the py file into a working directory, so please output it in stdout wrapped between the exact markers ===START_CODE=== and ===END_CODE=== (do NOT use ``` code fences). For example:
+===START_CODE===
+import ...
+def automate(page):
+    ...
+===END_CODE===
 (5) The py code should implement the logic to collect the newly-obtained knowledge in details in the returned json object, and append it to the file tasks\{task_name}\known_facts.md. Basically, the return variable named "result" should be saved into known_facts.md.
 (6) Do not ask me whether you should proceed to generate code. Just go ahead to generate the code.
 

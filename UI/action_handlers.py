@@ -7,6 +7,198 @@ import tkinter as tk
 from copilot import copilot_stream
 
 
+def save_task(app):
+    """Save the current task tab content to disk."""
+    current_tab = app.tasks_notebook.select()
+    if not current_tab:
+        return
+    tab_text = app.tasks_notebook.tab(current_tab, "text")
+    match = re.search(r'V(\d+)', tab_text)
+    if not match:
+        return
+    task_number = match.group(1)
+    tab_frame = app.tasks_notebook.nametowidget(current_tab)
+    from file_loader import find_text_widget
+    text_widget = find_text_widget(tab_frame)
+    if not text_widget:
+        return
+    task_content = text_widget.get("1.0", tk.END).strip()
+    task_file = os.path.join(app.case_dir, f"task-{task_number}.md")
+    os.makedirs(os.path.dirname(task_file), exist_ok=True)
+    with open(task_file, 'w', encoding='utf-8') as f:
+        f.write(task_content)
+    app.chat_display.config(state=tk.NORMAL)
+    app.chat_display.insert(tk.END, f"Task saved to {task_file}\n", "copilot")
+    app.chat_display.see(tk.END)
+    app.chat_display.config(state=tk.DISABLED)
+
+
+def modify_task(app):
+    """Modify the current task using user instructions from the input box.
+
+    Reads user instructions, the current task content, sends both to Copilot,
+    and saves the result as the next task version.
+    """
+    from file_loader import find_text_widget
+
+    # Get user instructions from input box
+    instructions = app.input_box.get().strip()
+    if not instructions:
+        app.chat_display.config(state=tk.NORMAL)
+        app.chat_display.insert(tk.END, "Please enter modification instructions in the input box.\n", "error")
+        app.chat_display.see(tk.END)
+        app.chat_display.config(state=tk.DISABLED)
+        return
+
+    # Get current task content and version number
+    current_tab = app.tasks_notebook.select()
+    if not current_tab:
+        return
+    tab_text = app.tasks_notebook.tab(current_tab, "text")
+    match = re.search(r'V(\d+)', tab_text)
+    if not match:
+        return
+    task_number = match.group(1)
+    tab_frame = app.tasks_notebook.nametowidget(current_tab)
+    text_widget = find_text_widget(tab_frame)
+    if not text_widget:
+        return
+    task_content = text_widget.get("1.0", tk.END).strip()
+
+    # Clear input box immediately
+    app.input_box.delete(0, tk.END)
+
+    # Show status in chat
+    app.chat_display.config(state=tk.NORMAL)
+    app.chat_display.insert(tk.END, f"User: [Modify Task] {instructions}\n", "user")
+    app.chat_display.insert(tk.END, "Modifying task...\n", "copilot")
+    app.chat_display.see(tk.END)
+    app.chat_display.config(state=tk.DISABLED)
+    app.root.update_idletasks()
+
+    # Build signature catalog from all verbs/*/signature.txt
+    verbs_dir = os.path.join(app.workspace_path, "verbs")
+    sig_lines = []
+    if os.path.isdir(verbs_dir):
+        for folder in sorted(os.listdir(verbs_dir)):
+            sig_path = os.path.join(verbs_dir, folder, "signature.txt")
+            if os.path.isfile(sig_path):
+                with open(sig_path, 'r', encoding='utf-8') as f:
+                    sig_lines.append(f"### verbs/{folder}/signature.txt\n{f.read().strip()}")
+    signatures_block = "\n\n".join(sig_lines) if sig_lines else "(no signature files found)"
+
+    # Build prompt
+    prompt = (
+        f"CRITICAL CONSTRAINTS (read these FIRST, before doing ANYTHING):\n"
+        f"- You MUST NOT edit, create, or write any files. You do not have permission.\n"
+        f"- You MUST NOT run any shell commands.\n"
+        f"- You MUST NOT use code fences. Never wrap output in triple backticks or any fencing syntax.\n"
+        f"- Your ONLY job is to output the modified task text between the exact sentinel markers ===START_MD=== and ===END_MD===.\n"
+        f"- Do NOT read any files from disk. All content you need is provided below.\n\n"
+        f"You are modifying a task description based on user instructions.\n\n"
+        f"## Current Task Content:\n{task_content}\n\n"
+        f"## User's Additional Ask:\n{instructions}\n\n"
+        f"## Available Web Verbs (signature.txt catalog):\n{signatures_block}\n\n"
+        f"## Rules:\n"
+        f"(1) The user's additional ask represents a NEW STEP that should be added to the task. "
+        f"It is distinct from the existing 'Concretized Facts' section — do NOT merge it into concretized facts. "
+        f"Add it as a new, clearly labeled step or section in the task.\n"
+        f"(2) Review the available web verbs above. If any verb is suitable for accomplishing "
+        f"the additional ask, mention it explicitly in the new step (e.g., 'Use verbs/maps_google_com__nearby to search for ...').\n"
+        f"(3) Preserve the overall structure and any sections not affected by the instructions.\n"
+        f"(4) Be concise. Use the AP 'Inverted Pyramid' writing style.\n"
+        f"(5) Output format: print the ENTIRE modified task between these exact markers (no code fences, no triple backticks):\n"
+        f"===START_MD===\n<entire modified task here>\n===END_MD===\n"
+    )
+
+    def _run():
+        # Popup for streaming output
+        popup = tk.Toplevel(app.root)
+        popup.title("Modify Task Output")
+        popup.geometry("800x600")
+        frame = tk.Frame(popup)
+        frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        scrollbar = tk.Scrollbar(frame)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        display = tk.Text(frame, wrap=tk.WORD, yscrollcommand=scrollbar.set,
+                          font=("Courier", 12), fg="blue")
+        display.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=display.yview)
+        display.config(state=tk.NORMAL)
+        popup.update()
+
+        chunks = []
+        for chunk in copilot_stream(prompt, app.workspace_path):
+            if chunk:
+                chunks.append(chunk)
+                display.insert(tk.END, chunk + "\n")
+                display.see(tk.END)
+                display.update_idletasks()
+                popup.update()
+        display.config(state=tk.DISABLED)
+        popup.destroy()
+
+        # Overwrite current version
+        task_file = os.path.join(app.case_dir, f"task-{task_number}.md")
+        os.makedirs(os.path.dirname(task_file), exist_ok=True)
+
+        full_task = "\n".join(chunks).strip()
+        start_tag = "===START_MD==="
+        end_tag = "===END_MD==="
+        start_idx = full_task.find(start_tag)
+        end_idx = full_task.find(end_tag)
+        if start_idx != -1 and end_idx != -1:
+            full_task = full_task[start_idx + len(start_tag):end_idx]
+        full_task = full_task.strip()
+
+        with open(task_file, 'w', encoding='utf-8') as f:
+            f.write(full_task)
+
+        # Refresh the current tab content
+        tab_frame = app.tasks_notebook.nametowidget(current_tab)
+        tw = find_text_widget(tab_frame)
+        if tw:
+            tw.delete("1.0", tk.END)
+            tw.insert(tk.END, full_task)
+
+        app.chat_display.config(state=tk.NORMAL)
+        app.chat_display.insert(tk.END, f"Task V{task_number} updated in place.\n\n", "copilot")
+        app.chat_display.see(tk.END)
+        app.chat_display.config(state=tk.DISABLED)
+
+    threading.Thread(target=_run, daemon=True).start()
+
+
+def preview_task(app):
+    """Show the current task tab content rendered as markdown in a popup."""
+    from file_loader import find_text_widget
+    from markdown_renderer import render_markdown, configure_markdown_tags
+    current_tab = app.tasks_notebook.select()
+    if not current_tab:
+        return
+    tab_text = app.tasks_notebook.tab(current_tab, "text")
+    tab_frame = app.tasks_notebook.nametowidget(current_tab)
+    text_widget = find_text_widget(tab_frame)
+    if not text_widget:
+        return
+    content = text_widget.get("1.0", tk.END).strip()
+    popup = tk.Toplevel(app.root)
+    popup.title(f"Preview — {tab_text}")
+    screen_w = app.root.winfo_screenwidth()
+    pw = screen_w // 2
+    ph = 500
+    px = (screen_w - pw) // 2
+    py = (app.root.winfo_screenheight() - ph) // 2
+    popup.geometry(f"{pw}x{ph}+{px}+{py}")
+    from tkinter import scrolledtext
+    display = scrolledtext.ScrolledText(popup, wrap=tk.WORD, font=("Consolas", 12), bg="#f5f5f5", state=tk.DISABLED)
+    display.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+    configure_markdown_tags(display)
+    display.config(state=tk.NORMAL)
+    render_markdown(display, content)
+    display.config(state=tk.DISABLED)
+
+
 def submit_message(app):
     """Handle message submission
     
@@ -21,6 +213,9 @@ def submit_message(app):
         
         # Append user's prompt to chat display
         app.chat_display.insert(tk.END, f"User: {message}\n", "user")
+        
+        # Clear the input box immediately
+        app.input_box.delete(0, tk.END)
         
         # Auto-scroll to the bottom
         app.chat_display.see(tk.END)
@@ -37,6 +232,9 @@ def submit_message(app):
         # Insert copilot label
         app.chat_display.insert(tk.END, "Copilot: ", "copilot")
         
+        # Configure a tag for log lines so we can remove them later
+        app.chat_display.tag_configure("log_line", foreground="#999999")
+        
         # Get existing conversation as context
         conversation_history = app.chat_display.get("1.0", tk.END).strip()
         
@@ -51,9 +249,24 @@ def submit_message(app):
         for chunk in copilot_stream(message_with_context, app.case_dir):
             if chunk:
                 response_received = True
-                app.chat_display.insert(tk.END, "\n" + chunk, "copilot")
+                # Check if this is a file-reading log line
+                stripped = chunk.lstrip()
+                if stripped.startswith(('●', '│', '└')):
+                    app.chat_display.insert(tk.END, "\n" + chunk, "log_line")
+                else:
+                    app.chat_display.insert(tk.END, "\n" + chunk, "copilot")
                 app.chat_display.see(tk.END)
                 app.root.update_idletasks()  # Force UI update for each chunk
+        
+        # Remove log lines now that the full response is displayed
+        while True:
+            tag_range = app.chat_display.tag_ranges("log_line")
+            if not tag_range:
+                break
+            # Each pair is (start, end)
+            start, end = tag_range[0], tag_range[1]
+            # Delete from start of line (include the preceding newline)
+            app.chat_display.delete(f"{start} - 1c", end)
         
         if not response_received:
             app.chat_display.insert(tk.END, "No response or error occurred.", "error")
@@ -66,9 +279,6 @@ def submit_message(app):
         
         # Disable chat display to prevent manual editing
         app.chat_display.config(state=tk.DISABLED)
-        
-        # Clear the input box
-        app.input_box.delete(0, tk.END)
         
         # Set focus back to input box
         app.input_box.focus_set()
@@ -212,22 +422,13 @@ def generate_strategy(app):
         # Write the generated code to file
         full_code = "\n".join(generated_code)
         
-        # Extract content between markdown code fences if present
-        full_code = full_code.strip()
-        
-        # Find the first occurrence of ``` (with optional language identifier)
-        start_marker_match = re.search(r'^\s*```(?:python|[a-z]*)\s*$', full_code, re.MULTILINE)
-        if start_marker_match:
-            start_pos = start_marker_match.end()
-            # Skip any whitespace/newline after the opening marker
-            while start_pos < len(full_code) and full_code[start_pos] in '\r\n':
-                start_pos += 1
-            
-            # Find the closing ``` after the start marker
-            end_marker_match = re.search(r'^\s*```\s*$', full_code[start_pos:], re.MULTILINE)
-            if end_marker_match:
-                # Extract content between markers
-                full_code = full_code[start_pos:start_pos + end_marker_match.start()]
+        # Extract content between sentinel markers
+        start_tag = "===START_CODE==="
+        end_tag = "===END_CODE==="
+        start_idx = full_code.find(start_tag)
+        end_idx = full_code.find(end_tag)
+        if start_idx != -1 and end_idx != -1:
+            full_code = full_code[start_idx + len(start_tag):end_idx]
         
         full_code = full_code.strip()
         
@@ -307,6 +508,15 @@ def generate_strategy(app):
             popup.destroy()
             
             full_summary = "\n".join(strategy_summary).strip()
+            
+            # Extract content between sentinel markers
+            start_tag = "===START_MD==="
+            end_tag = "===END_MD==="
+            start_idx = full_summary.find(start_tag)
+            end_idx = full_summary.find(end_tag)
+            if start_idx != -1 and end_idx != -1:
+                full_summary = full_summary[start_idx + len(start_tag):end_idx]
+            full_summary = full_summary.strip()
             
             # Create strategy file
             strategy_file = os.path.join(app.case_dir, f"strategy-{task_number}.md")
@@ -444,6 +654,7 @@ def execute_strategy(app):
         def _finish(result_text):
             def _show():
                 app.chat_display.config(state=tk.NORMAL)
+                #app.chat_display.insert(tk.END, f"{result_text}\n\n", "copilot")
                 app.chat_display.insert(tk.END, f"Execution completed.\n", "copilot")
                 app.chat_display.see(tk.END)
                 app.chat_display.config(state=tk.DISABLED)
@@ -494,15 +705,13 @@ def execute_strategy(app):
             os.makedirs(os.path.dirname(task_file), exist_ok=True)
 
             full_task = "\n".join(refined_task).strip()
-            # Strip markdown code fences if present
-            start_match = re.search(r'^\s*```(?:markdown|md|[a-z]*)\s*$', full_task, re.MULTILINE)
-            if start_match:
-                start_pos = start_match.end()
-                while start_pos < len(full_task) and full_task[start_pos] in '\r\n':
-                    start_pos += 1
-                end_match = re.search(r'^\s*```\s*$', full_task[start_pos:], re.MULTILINE)
-                if end_match:
-                    full_task = full_task[start_pos:start_pos + end_match.start()]
+            # Extract content between sentinel markers
+            start_tag = "===START_MD==="
+            end_tag = "===END_MD==="
+            start_idx = full_task.find(start_tag)
+            end_idx = full_task.find(end_tag)
+            if start_idx != -1 and end_idx != -1:
+                full_task = full_task[start_idx + len(start_tag):end_idx]
             full_task = full_task.strip()
 
             with open(task_file, 'w', encoding='utf-8') as f:

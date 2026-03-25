@@ -43,9 +43,8 @@ def get_maps_directions(
     result = {"route": "", "time": "", "distance": "", "steps": []}
     try:
         print("STEP 1: Navigate to Google Maps directions...")
-        url = "https://www.google.com/maps/dir/Space+Needle,+Seattle,+WA/Pike+Place+Market,+Seattle,+WA/"
-        page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        page.wait_for_timeout(8000)
+        page.goto("https://www.google.com/maps/dir//", wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_timeout(5000)
 
         # Dismiss popups
         for sel in ["button:has-text('Accept')", "button:has-text('OK')",
@@ -57,6 +56,24 @@ def get_maps_directions(
                     page.wait_for_timeout(500)
             except Exception:
                 pass
+
+        # Fill in the origin
+        print(f"  Entering origin: {ORIGIN}")
+        origin_box = page.locator("input[aria-label*='tarting point'], input[aria-label*='Choose starting point']").first
+        origin_box.click(timeout=5000)
+        origin_box.fill(ORIGIN)
+        page.wait_for_timeout(1500)
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(3000)
+
+        # Fill in the destination
+        print(f"  Entering destination: {DESTINATION}")
+        dest_box = page.locator("input[aria-label*='estination'], input[aria-label*='Choose destination']").first
+        dest_box.click(timeout=5000)
+        dest_box.fill(DESTINATION)
+        page.wait_for_timeout(1500)
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(5000)
 
         # Ensure driving mode is selected
         try:

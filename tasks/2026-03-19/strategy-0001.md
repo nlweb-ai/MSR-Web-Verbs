@@ -1,24 +1,28 @@
-● Read tmpg2gdkwdc.txt
-  │ ~\AppData\Local\Temp\tmpg2gdkwdc.txt
-  └ 153 lines read
-## Summary of the Trip Planning Helper
-### What It Does
-This is a helper that automatically gathers information to plan a family visit to **Champaign, Illinois** (home of the University of Illinois) during the week of **March 28 – April 1, 2026**.
+## What This Does (In Plain English)
+This is a **trip planning helper** that automatically looks up useful information for an upcoming visit to Champaign, Illinois.
 ---
-### Main Steps (in order)
-1. **Looks up Papa Del's Pizza** — finds details about a specific deep-dish pizza restaurant in Champaign to lock in as the Saturday (March 28) dinner spot.
-2. **Finds Saturday lunch options** — searches for up to 5 restaurants available for 2 people on Saturday, so someone named Shuo can pick one on the day.
-3. **Creates a sightseeing list** — saves 8 famous UIUC campus spots (like the Alma Mater Statue and Memorial Stadium) into a Google Maps list called *"UIUC Photo Walk Mar 28"* for a walking photography tour.
-4. **Searches for car dealerships** — finds up to 5 car dealerships near Champaign to visit Sunday through Tuesday (March 29–31).
-5. **Looks up student housing costs** — searches for University of Illinois dorm room prices (double room with a standard meal plan) to help understand what living on campus costs.
-6. **Finds Chinese restaurants** — searches for Chinese restaurants in Champaign. One place, **Chinatown Buffet**, is already confirmed; it finds up to 5 more as backup options.
+## Overall Goal
+Help plan a trip to Champaign, IL (home of the University of Illinois) for Shuo and Ashley arriving **Saturday, March 28, 2026**, through roughly Tuesday, March 31.
 ---
-### What Information Is Collected
-- Restaurant names, ratings, and available booking times
-- Campus landmark names and whether they were saved successfully
-- Car dealership names, addresses, phone numbers, and websites
-- Dorm hall names and their yearly costs
-- Chinese restaurant details (excluding Chinatown Buffet from the extra list)
+## The Trip Schedule
+- **Saturday, March 28:** Shuo and Ashley arrive in the morning (driving from Chicago O'Hare airport). They have lunch together, then dinner at **Papa Del's Pizza** — Ashley's special request.
+- **Sunday–Tuesday, March 29–31:** Ashley attends university events. Shuo spends the days exploring car dealerships, checking out apartments, visiting campus sights, and trying Chinese food (especially **Chinatown Buffet**).
 ---
-### Final Output
-All collected information is organized by day/date range and **saved to a notes file** on the computer for future reference.
+## Main Steps (What the Helper Looks Up)
+1. **Papa Del's Pizza details** — Confirms the address, hours, and contact info for Saturday's dinner.
+2. **Saturday lunch spots** — Finds up to 5 restaurants near the university campus for the midday meal on arrival day.
+3. **Chinese restaurants** — Finds up to 5 options, with Chinatown Buffet as the planned stop and others as backups.
+4. **Car dealerships** — Lists up to 5 places for Shuo to visit and shop for a car.
+5. **University housing/apartments** — Lists up to 5 student apartment communities to tour near campus.
+6. **Campus landmark photo spots** — Finds up to 5 iconic UIUC spots worth visiting and photographing.
+---
+## What Information Is Collected
+For each place found, the helper gathers:
+- **Name** of the business or location
+- **Address**
+- **Star rating**
+- **Phone number**
+- **Website**
+---
+## What Happens With the Results
+All the gathered information is organized into a neat summary (covering the schedule, dining options, car dealerships, apartments, and photo spots) and **saved to a notes file** called `known_facts.md` for future reference.

@@ -48,10 +48,12 @@ def handle_task_tab_changed(app, event=None):
         # Check if this is the highest version
         match = re.search(r'V(\d+)', tab_text)
         if match and int(match.group(1)) == app.highest_task_version:
-            # Show button
+            # Show buttons
+            app.save_task_button.pack(side='left', padx=(0, 4))
             app.generate_strategy_button.pack(side='left')
         else:
-            # Hide button
+            # Hide buttons
+            app.save_task_button.pack_forget()
             app.generate_strategy_button.pack_forget()
 
 

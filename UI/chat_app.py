@@ -20,7 +20,32 @@ from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_f
 
 from file_loader import load_files_as_tabs
 from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
-from action_handlers import submit_message, open_task, generate_strategy, execute_strategy
+from action_handlers import submit_message, open_task, generate_strategy, execute_strategy, save_task, preview_task, modify_task
+
+
+def _add_tooltip(widget, text):
+    """Show a tooltip on hover for the given widget."""
+    tip = None
+
+    def on_enter(event):
+        nonlocal tip
+        tip = tk.Toplevel(widget)
+        tip.wm_overrideredirect(True)
+        x = widget.winfo_rootx() + widget.winfo_width() // 2
+        y = widget.winfo_rooty() + widget.winfo_height() + 4
+        tip.wm_geometry(f"+{x}+{y}")
+        label = tk.Label(tip, text=text, bg="#333", fg="white", font=("Arial", 10),
+                         padx=6, pady=2, relief=tk.SOLID, borderwidth=1)
+        label.pack()
+
+    def on_leave(event):
+        nonlocal tip
+        if tip:
+            tip.destroy()
+            tip = None
+
+    widget.bind("<Enter>", on_enter)
+    widget.bind("<Leave>", on_leave)
 
 
 class ChatApp:
@@ -95,7 +120,7 @@ class ChatApp:
         self.root.geometry(f"{work_w // 2}x{tkinter_h}+{work_x}+{work_y}")
         self.root.update_idletasks()
 
-        # Set three equal vertical panes based on actual content height
+        # Split three panes equally: Chat, Tasks, Strategies each get 1/3
         self.left_pane.sash_place(0, 0, tkinter_h // 3)
         self.left_pane.sash_place(1, 0, (tkinter_h * 2) // 3)
 
@@ -129,55 +154,19 @@ class ChatApp:
         self.left_pane = tk.PanedWindow(self.root, orient=tk.VERTICAL, sashwidth=5)
         self.left_pane.pack(fill=tk.BOTH, expand=True)
 
-        # Three vertically stacked panes: Tasks (upper), Strategies (middle), Chat (lower)
+        # Three vertically stacked panes: Chat (upper), Tasks (middle), Strategies (lower)
+        self._create_chat_pane(self.left_pane)
         self._create_tasks_pane(self.left_pane)
         self._create_strategies_pane(self.left_pane)
-        self._create_chat_pane(self.left_pane)
     
     def _create_control_panel(self):
         """Create the control panel bar at the top of the application."""
         panel = tk.Frame(self.root, bg="#ECECEC", relief=tk.GROOVE, borderwidth=1)
         panel.pack(fill=tk.X, side=tk.TOP)
 
-        # --- Debug group (left) ---
-        debug_frame = tk.Frame(panel, bg="#ECECEC")
-        debug_frame.pack(side=tk.LEFT, padx=8, pady=4)
-
-        run_btn = tk.Button(
-            debug_frame, text="\u25b6  Run",
-            command=lambda: self.debug_run(),
-            bg="#4CAF50", fg="white", font=("Arial", 11, "bold"),
-            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
-        )
-        run_btn.pack(side=tk.LEFT, padx=(0, 4))
-
-        step_over_btn = tk.Button(
-            debug_frame, text="\u21b7  Step Over",
-            command=lambda: self.debug_step_over(),
-            bg="#2196F3", fg="white", font=("Arial", 11, "bold"),
-            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
-        )
-        step_over_btn.pack(side=tk.LEFT, padx=(0, 4))
-
-        step_into_btn = tk.Button(
-            debug_frame, text="\u21b3  Step Into",
-            command=lambda: self.debug_step_into(),
-            bg="#2196F3", fg="white", font=("Arial", 11, "bold"),
-            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
-        )
-        step_into_btn.pack(side=tk.LEFT)
-
         # --- Utility group (right) ---
         right_frame = tk.Frame(panel, bg="#ECECEC")
         right_frame.pack(side=tk.RIGHT, padx=8, pady=4)
-
-        reposition_btn = tk.Button(
-            right_frame, text="Reposition UI",
-            command=lambda: self.reposition_ui(),
-            bg="#9C27B0", fg="white", font=("Arial", 11, "bold"),
-            padx=8, pady=2, relief=tk.FLAT, cursor="hand2"
-        )
-        reposition_btn.pack(side=tk.RIGHT, padx=(4, 0))
 
         # Chrome connection status — click when failed to reconnect
         self._chrome_status_label = tk.Label(
@@ -195,28 +184,64 @@ class ChatApp:
         upper_left = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
         parent.add(upper_left)
         
-        # Header frame for label and buttons
-        tasks_header_frame = tk.Frame(upper_left, bg="white")
-        tasks_header_frame.pack(fill=tk.X, pady=5)
+        # Colored header bar
+        tasks_header_frame = tk.Frame(upper_left, bg="#2E7D32")
+        tasks_header_frame.pack(fill=tk.X)
         
         # Tasks label
-        tasks_label = tk.Label(tasks_header_frame, text="Tasks", bg="white", font=("Arial", 14, "bold"))
-        tasks_label.pack(side=tk.LEFT, padx=5)
+        tasks_label = tk.Label(tasks_header_frame, text="Tasks", bg="#2E7D32", fg="white",
+                               font=("Arial", 13, "bold"))
+        tasks_label.pack(side=tk.LEFT, padx=8, pady=4)
         
         # Button frame for right-aligned buttons
-        tasks_button_frame = tk.Frame(tasks_header_frame, bg="white")
+        tasks_button_frame = tk.Frame(tasks_header_frame, bg="#2E7D32")
         tasks_button_frame.pack(side=tk.RIGHT, padx=5)
         
-        # Generate Strategy button
+        # Preview button (always visible)
+        preview_task_button = tk.Button(
+            tasks_button_frame,
+            text="\U0001F441",
+            command=lambda: preview_task(self),
+            bg="#43A047",
+            fg="white",
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
+        )
+        preview_task_button.pack(side=tk.LEFT, padx=(0, 4))
+        _add_tooltip(preview_task_button, "Render Markdown")
+
+        # Save button (floppy disk icon, only visible on latest tab)
+        self.save_task_button = tk.Button(
+            tasks_button_frame,
+            text="\U0001F4BE",
+            command=lambda: save_task(self),
+            bg="#43A047",
+            fg="white",
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
+        )
+        _add_tooltip(self.save_task_button, "Save")
+
+        # Generate Strategy button (puzzle piece icon)
         self.generate_strategy_button = tk.Button(
             tasks_button_frame,
-            text="Generate Strategy",
+            text="\U0001F9E9",
             command=lambda: generate_strategy(self),
-            bg="#FF9800",
+            bg="#43A047",
             fg="white",
-            font=("Arial", 12, "bold"),
-            padx=10
+            font=("Arial", 16),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
         )
+        _add_tooltip(self.generate_strategy_button, "Generate Strategy")
         
         # Create notebook for tasks
         self.tasks_notebook = ttk.Notebook(upper_left)
@@ -231,28 +256,33 @@ class ChatApp:
         lower_left = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
         parent.add(lower_left)
         
-        # Header frame for label and button
-        strategies_header_frame = tk.Frame(lower_left, bg="white")
-        strategies_header_frame.pack(fill=tk.X, pady=5)
+        # Colored header bar
+        strategies_header_frame = tk.Frame(lower_left, bg="#E65100")
+        strategies_header_frame.pack(fill=tk.X)
         
         # Strategies label
-        strategies_label = tk.Label(strategies_header_frame, text="Strategies", bg="white", font=("Arial", 14, "bold"))
-        strategies_label.pack(side=tk.LEFT, padx=5)
+        strategies_label = tk.Label(strategies_header_frame, text="Strategies", bg="#E65100", fg="white",
+                                    font=("Arial", 13, "bold"))
+        strategies_label.pack(side=tk.LEFT, padx=8, pady=4)
         
         # Button frame for right-aligned button
-        strategies_button_frame = tk.Frame(strategies_header_frame, bg="white")
+        strategies_button_frame = tk.Frame(strategies_header_frame, bg="#E65100")
         strategies_button_frame.pack(side=tk.RIGHT, padx=5)
         
-        # Execute button
+        # Execute button (play icon)
         self.execute_button = tk.Button(
             strategies_button_frame,
-            text="Execute",
+            text="\u25b6",
             command=lambda: execute_strategy(self),
-            bg="#F44336",
+            bg="#FF8A65",
             fg="white",
-            font=("Arial", 12, "bold"),
-            padx=10
+            font=("Arial", 16),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
         )
+        _add_tooltip(self.execute_button, "Execute")
         
         # Create notebook for strategies
         self.strategies_notebook = ttk.Notebook(lower_left)
@@ -267,6 +297,12 @@ class ChatApp:
         chat_pane = tk.Frame(parent, bg="white", relief=tk.RIDGE, borderwidth=2)
         parent.add(chat_pane)
 
+        # Colored header bar
+        chat_header = tk.Frame(chat_pane, bg="#1565C0")
+        chat_header.pack(fill=tk.X)
+        tk.Label(chat_header, text="Chat", bg="#1565C0", fg="white",
+                 font=("Arial", 13, "bold")).pack(side=tk.LEFT, padx=8, pady=4)
+
         # Task name control frame at the top
         task_control_frame = tk.Frame(chat_pane)
         task_control_frame.pack(fill=tk.X, padx=5, pady=5)
@@ -280,17 +316,37 @@ class ChatApp:
         self.task_name_input.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         self.task_name_input.insert(0, self.task_name)
 
+        # Reposition UI button
+        reposition_btn = tk.Button(
+            task_control_frame,
+            text="\u267B",
+            command=lambda: self.reposition_ui(),
+            bg="#AB47BC",
+            fg="white",
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
+        )
+        reposition_btn.pack(side=tk.RIGHT)
+        _add_tooltip(reposition_btn, "Reposition UI")
+
         # Open Task button
         open_task_button = tk.Button(
             task_control_frame,
-            text="Open Task",
+            text="\U0001F4D6",
             command=lambda: open_task(self),
-            bg="#2196F3",
+            bg="#42A5F5",
             fg="white",
-            font=("Arial", 12, "bold"),
-            padx=10
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
         )
         open_task_button.pack(side=tk.RIGHT)
+        _add_tooltip(open_task_button, "Open Task")
 
         # Chat display area
         chat_frame = tk.Frame(chat_pane)
@@ -300,7 +356,7 @@ class ChatApp:
             chat_frame,
             wrap=tk.WORD,
             width=40,
-            height=20,
+            height=5,
             state=tk.DISABLED,
             bg="white",
             font=("Arial", 12)
@@ -326,26 +382,50 @@ class ChatApp:
         # New button
         new_button = tk.Button(
             input_frame,
-            text="New",
+            text="\u2795",
             command=lambda: self._clear_chat(),
-            bg="#FF9800",
+            bg="#FFA726",
             fg="white",
-            font=("Arial", 12, "bold"),
-            padx=15
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
         )
-        new_button.pack(side=tk.RIGHT, padx=(0, 5))
+        new_button.pack(side=tk.RIGHT)
+        _add_tooltip(new_button, "New Chat")
+        
+        # Modify Task button
+        modify_task_button = tk.Button(
+            input_frame,
+            text="\U0001F4DD",
+            command=lambda: modify_task(self),
+            bg="#42A5F5",
+            fg="white",
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
+        )
+        modify_task_button.pack(side=tk.RIGHT)
+        _add_tooltip(modify_task_button, "Modify Task")
         
         # Submit button
         submit_button = tk.Button(
             input_frame,
-            text="Submit",
+            text="\u2714",
             command=lambda: submit_message(self),
-            bg="#4CAF50",
+            bg="#66BB6A",
             fg="white",
-            font=("Arial", 12, "bold"),
-            padx=15
+            font=("Arial", 14),
+            padx=4, pady=2,
+            relief=tk.RAISED,
+            bd=2,
+            cursor="hand2"
         )
         submit_button.pack(side=tk.RIGHT)
+        _add_tooltip(submit_button, "Submit")
     
     def _load_initial_data(self):
         """Load initial task and strategy files"""
@@ -374,17 +454,6 @@ class ChatApp:
     # ------------------------------------------------------------------
     # Debug control stubs — wire these up to execution logic as needed
     # ------------------------------------------------------------------
-    def debug_run(self):
-        """Run: execute the full strategy."""
-        execute_strategy(self)
-
-    def debug_step_over(self):
-        """Step Over: placeholder for step-over execution."""
-        pass
-
-    def debug_step_into(self):
-        """Step Into: placeholder for step-into execution."""
-        pass
 
     def _kill_all_chrome(self):
         """Kill all running Chrome processes and wait until they are fully gone."""

@@ -11,3 +11,9 @@ Here is the function:
 ```
 
 Please provide the summary in markdown format with clear headings and bullet points.
+
+IMPORTANT: Wrap your entire output between the exact markers ===START_MD=== and ===END_MD=== (do NOT use ``` code fences). For example:
+===START_MD===
+## Summary
+...
+===END_MD===
