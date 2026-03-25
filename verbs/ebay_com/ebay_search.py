@@ -16,9 +16,7 @@ import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 
 from dataclasses import dataclass
-
-
-URL = "https://www.ebay.com/sch/i.html?_nkw=vintage%20mechanical%20keyboard&LH_BIN=1&_sop=15"
+from urllib.parse import quote_plus
 
 
 def dismiss_popups(page):
@@ -76,8 +74,8 @@ def search_ebay_listings(
     raw_results = []
     try:
         print("STEP 1: Navigate to eBay search raw_results...")
-        page.goto(URL, wait_until="domcontentloaded", timeout=30000)
-        page.wait_for_timeout(2000)
+        url = f"https://www.ebay.com/sch/i.html?_nkw={quote_plus(search_query)}&LH_BIN=1&_sop=15"
+        page.goto(url, wait_until="domcontentloaded", timeout=30000)
         dismiss_popups(page)
         print(f"   Loaded: {page.url}\n")
 
@@ -85,7 +83,7 @@ def search_ebay_listings(
         loaded = False
         for wait_sel in [".srp-raw_results", "li.s-item", ".s-item__title", "[data-viewport]"]:
             try:
-                page.wait_for_selector(wait_sel, timeout=5000)
+                page.wait_for_selector(wait_sel, timeout=2000)
                 print(f"   ✅ Selector '{wait_sel}' appeared")
                 loaded = True
                 break
@@ -98,14 +96,15 @@ def search_ebay_listings(
         # Scroll to trigger lazy loading
         for _ in range(2):
             page.evaluate("window.scrollBy(0, 600)")
-            page.wait_for_timeout(500)
+            page.wait_for_timeout(200)
         page.evaluate("window.scrollTo(0, 0)")
-        page.wait_for_timeout(500)
+        page.wait_for_timeout(200)
 
         print("STEP 2: Extract product listings...")
 
         # ──────────────────────────────────────────────────────
-        # Strategy 1: Single JS evaluate — extracts all at once, no per-element timeouts
+        # Strategy 1: Single JS evaluate — extracts all at once
+        # Supports both new (s-card) and legacy (s-item) eBay layouts
         # ──────────────────────────────────────────────────────
         skip_phrases = ["shop on ebay", "picks for you", "raw_results matching", "related:", "save this search", "trending on", "see all", "sponsored"]
 
@@ -113,14 +112,53 @@ def search_ebay_listings(
             const raw_results = [];
             const skip = ["shop on ebay", "picks for you", "raw_results matching", "related:", "save this search", "trending on", "see all", "sponsored"];
 
-            // Try .s-item first, then .srp-raw_results > li
-            let items = document.querySelectorAll('li.s-item');
-            if (items.length === 0) items = document.querySelectorAll('.srp-raw_results > li');
+            // New eBay layout: li.s-card inside ul.srp-results
+            let items = document.querySelectorAll('ul.srp-results > li.s-card');
+            if (items.length > 0) {
+                for (const item of items) {
+                    if (raw_results.length >= max) break;
+
+                    // Title via .s-card__title (role=heading)
+                    let title = '';
+                    const titleEl = item.querySelector('.s-card__title');
+                    if (titleEl) title = titleEl.innerText.trim();
+                    if (!title) {
+                        const linkEl = item.querySelector('a.s-card__link');
+                        if (linkEl) title = linkEl.innerText.trim();
+                    }
+                    title = title.replace(/Opens in a new window or tab/gi, '').trim();
+                    if (!title || title.length < 5) continue;
+                    const lower = title.toLowerCase();
+                    if (skip.some(s => lower.startsWith(s))) continue;
+
+                    // Price: first .s-card__attribute-row containing $
+                    let price = '';
+                    const attrRows = item.querySelectorAll('.s-card__attribute-row');
+                    for (const row of attrRows) {
+                        const txt = row.innerText.trim();
+                        const m = txt.match(/^\\$(\\d[\\d,.]*)/);
+                        if (m && !price) { price = '$' + m[1]; break; }
+                    }
+
+                    // Shipping: attribute row with delivery/shipping
+                    let shipping = 'N/A';
+                    for (const row of attrRows) {
+                        const txt = row.innerText.trim();
+                        if (/delivery|shipping|free/i.test(txt)) { shipping = txt; break; }
+                    }
+
+                    if (title && price) raw_results.push({ title: title.substring(0, 120), price, shipping });
+                }
+                return raw_results;
+            }
+
+            // Legacy eBay layout: li.s-item
+            items = document.querySelectorAll('li.s-item');
+            if (items.length === 0) items = document.querySelectorAll('.srp-results > li');
 
             for (const item of items) {
                 if (raw_results.length >= max) break;
 
-                // Title: try .s-item__title, then role=heading, then first link
                 let title = '';
                 const titleEl = item.querySelector('.s-item__title') || item.querySelector('[role="heading"]');
                 if (titleEl) title = titleEl.innerText.trim();
@@ -128,14 +166,12 @@ def search_ebay_listings(
                     const linkEl = item.querySelector('a.s-item__link, a');
                     if (linkEl) title = linkEl.innerText.trim();
                 }
-                // Clean "Opens in a new window or tab"
                 title = title.replace(/Opens in a new window or tab/gi, '').trim();
 
                 if (!title || title.length < 5) continue;
                 const lower = title.toLowerCase();
                 if (skip.some(s => lower.startsWith(s))) continue;
 
-                // Price
                 let price = '';
                 const priceEl = item.querySelector('.s-item__price') || item.querySelector('[class*="price"]');
                 if (priceEl) price = priceEl.innerText.trim();
@@ -144,7 +180,6 @@ def search_ebay_listings(
                     if (m) price = '$' + m[1];
                 }
 
-                // Shipping
                 let shipping = 'N/A';
                 const shipEl = item.querySelector('.s-item__shipping') || item.querySelector('.s-item__freeXDays') || item.querySelector('[class*="shipping"]');
                 if (shipEl) shipping = shipEl.innerText.trim();

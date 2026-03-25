@@ -20,7 +20,7 @@ from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_f
 
 from file_loader import load_files_as_tabs
 from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
-from action_handlers import submit_message, open_task, generate_strategy, execute_strategy, save_task, preview_task, modify_task
+from action_handlers import submit_message, open_task, create_task, generate_strategy, execute_strategy, save_task, preview_task, modify_task
 
 
 def _add_tooltip(widget, text):
@@ -311,10 +311,22 @@ class ChatApp:
         task_label = tk.Label(task_control_frame, text="Task Name:", font=("Arial", 12))
         task_label.pack(side=tk.LEFT, padx=(0, 5))
 
-        # Task name input
-        self.task_name_input = tk.Entry(task_control_frame, font=("Arial", 12))
+        # Task name dropdown (populated from tasks/ subfolders)
+        tasks_root = os.path.join(self.workspace_path, "tasks")
+        task_folders = sorted(
+            [d for d in os.listdir(tasks_root)
+             if os.path.isdir(os.path.join(tasks_root, d)) and d != "sample"],
+            reverse=True
+        )
+        self.task_name_input = ttk.Combobox(
+            task_control_frame, values=task_folders, font=("Arial", 12), state="readonly"
+        )
         self.task_name_input.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
-        self.task_name_input.insert(0, self.task_name)
+        if self.task_name in task_folders:
+            self.task_name_input.current(task_folders.index(self.task_name))
+        elif task_folders:
+            self.task_name_input.current(0)
+        self.task_name_input.bind("<<ComboboxSelected>>", lambda e: open_task(self))
 
         # Reposition UI button
         reposition_btn = tk.Button(
@@ -332,12 +344,12 @@ class ChatApp:
         reposition_btn.pack(side=tk.RIGHT)
         _add_tooltip(reposition_btn, "Reposition UI")
 
-        # Open Task button
-        open_task_button = tk.Button(
+        # Create Task button
+        create_task_btn = tk.Button(
             task_control_frame,
-            text="\U0001F4D6",
-            command=lambda: open_task(self),
-            bg="#42A5F5",
+            text="\u2728",
+            command=lambda: create_task(self),
+            bg="#66BB6A",
             fg="white",
             font=("Arial", 14),
             padx=4, pady=2,
@@ -345,8 +357,8 @@ class ChatApp:
             bd=2,
             cursor="hand2"
         )
-        open_task_button.pack(side=tk.RIGHT)
-        _add_tooltip(open_task_button, "Open Task")
+        create_task_btn.pack(side=tk.RIGHT)
+        _add_tooltip(create_task_btn, "Create Task")
 
         # Chat display area
         chat_frame = tk.Frame(chat_pane)

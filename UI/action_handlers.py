@@ -4,6 +4,7 @@ import os
 import re
 import threading
 import tkinter as tk
+import tkinter.messagebox
 from copilot import copilot_stream
 
 
@@ -147,9 +148,29 @@ def modify_task(app):
         end_tag = "===END_MD==="
         start_idx = full_task.find(start_tag)
         end_idx = full_task.find(end_tag)
-        if start_idx != -1 and end_idx != -1:
-            full_task = full_task[start_idx + len(start_tag):end_idx]
-        full_task = full_task.strip()
+        if start_idx == -1 or end_idx == -1 or end_idx <= start_idx:
+            app.chat_display.config(state=tk.NORMAL)
+            app.chat_display.insert(
+                tk.END,
+                f"Error: Could not extract markdown (missing ===START_MD=== / ===END_MD=== markers). "
+                f"Task V{task_number} was NOT overwritten.\n\n",
+                "error",
+            )
+            app.chat_display.see(tk.END)
+            app.chat_display.config(state=tk.DISABLED)
+            return
+
+        full_task = full_task[start_idx + len(start_tag):end_idx].strip()
+        if not full_task:
+            app.chat_display.config(state=tk.NORMAL)
+            app.chat_display.insert(
+                tk.END,
+                f"Error: Extracted markdown is empty. Task V{task_number} was NOT overwritten.\n\n",
+                "error",
+            )
+            app.chat_display.see(tk.END)
+            app.chat_display.config(state=tk.DISABLED)
+            return
 
         with open(task_file, 'w', encoding='utf-8') as f:
             f.write(full_task)
@@ -282,6 +303,62 @@ def submit_message(app):
         
         # Set focus back to input box
         app.input_box.focus_set()
+
+
+def create_task(app):
+    """Prompt for a new task name, create the folder and initial task-0001.md, then open it."""
+    import tkinter.simpledialog as simpledialog
+    from file_loader import load_files_as_tabs
+    from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
+
+    new_name = simpledialog.askstring("Create Task", "Enter task name:", parent=app.root)
+    if not new_name or not new_name.strip():
+        return
+    new_name = new_name.strip()
+
+    task_dir = os.path.join(app.workspace_path, "tasks", new_name)
+    if os.path.exists(task_dir):
+        tk.messagebox.showwarning("Task Exists", f"Task '{new_name}' already exists.", parent=app.root)
+        return
+
+    os.makedirs(task_dir, exist_ok=True)
+    task_file = os.path.join(task_dir, "task-0001.md")
+    with open(task_file, 'w', encoding='utf-8') as f:
+        f.write("Describe your task ...")
+
+    # Save to cache
+    cache_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache.txt")
+    with open(cache_file, 'w') as f:
+        f.write(new_name)
+
+    # Update app state
+    app.task_name = new_name
+    app.case_dir = task_dir
+
+    # Refresh the dropdown
+    tasks_root = os.path.join(app.workspace_path, "tasks")
+    task_folders = sorted(
+        [d for d in os.listdir(tasks_root)
+         if os.path.isdir(os.path.join(tasks_root, d)) and d != "sample"],
+        reverse=True
+    )
+    app.task_name_input['values'] = task_folders
+    if new_name in task_folders:
+        app.task_name_input.current(task_folders.index(new_name))
+
+    # Clear and reload tabs
+    for tab in app.tasks_notebook.tabs():
+        app.tasks_notebook.forget(tab)
+    for tab in app.strategies_notebook.tabs():
+        app.strategies_notebook.forget(tab)
+
+    load_files_as_tabs(app, app.tasks_notebook, "task-*.md")
+    load_files_as_tabs(app, app.strategies_notebook, "strategy-*.md")
+
+    app.highest_task_version = update_highest_version(app.tasks_notebook, 'highest_task_version')
+    app.highest_strategy_version = update_highest_version(app.strategies_notebook, 'highest_strategy_version')
+    handle_task_tab_changed(app)
+    handle_strategy_tab_changed(app)
 
 
 def open_task(app):

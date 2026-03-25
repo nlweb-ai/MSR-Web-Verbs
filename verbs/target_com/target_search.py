@@ -14,7 +14,6 @@ from urllib.request import urlopen
 
 QUERY   = "coffee maker"
 MAX     = 5
-URL     = f"https://www.target.com/s?searchTerm={QUERY.replace(' ', '+')}"
 
 REFERENCE = json.loads(r"""
 [
@@ -86,7 +85,8 @@ class TargetSearchResult:
 
 
 def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSearchResult:
-    page.goto(URL, wait_until="domcontentloaded", timeout=30000)
+    url = f"https://www.target.com/s?searchTerm={request.search_query.replace(' ', '+')}"
+    page.goto(url, wait_until="domcontentloaded", timeout=30000)
     page.wait_for_timeout(4000)
     dismiss(page)
 
@@ -99,48 +99,96 @@ def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSe
     except Exception:
         pass
 
-    # Extract from body text
-    text = page.inner_text("body")
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
-
+    # Extract via product card selectors (more reliable than raw text parsing)
     products = []
-    i = 0
-    while i < len(lines) and len(products) < request.max_results:
-        line = lines[i]
-        # Target product prices like "$XX.XX"
-        price_match = re.match(r'^\$(\d+(?:\.\d{2})?)', line)
-        if price_match and i > 0:
-            name = None
-            for back in range(i - 1, max(i - 5, -1), -1):
-                candidate = lines[back]
-                if (len(candidate) > 10
-                    and not candidate.startswith('$')
-                    and not re.match(r'^\d+(\.\d)?\s*out of', candidate)
-                    and 'Sponsored' not in candidate
-                    and not candidate.startswith('Save ')
-                    and candidate not in ('Add to cart', 'Shop', 'Pickup', 'Delivery', 'Shipping')):
-                    name = candidate
-                    break
-            if not name:
-                i += 1
-                continue
 
-            price_str = "$" + price_match.group(1)
+    # Target uses data-test="@web/ProductCard/title" for product title links
+    TITLE_SELECTORS = [
+        '[data-test="@web/ProductCard/title"]',
+        '[data-test*="ProductCard/title"]',
+    ]
 
-            rating = "N/A"
-            for near in range(max(i - 3, 0), min(i + 5, len(lines))):
-                rm = re.search(r'(\d+\.\d)\s*out of\s*5', lines[near])
-                if rm:
-                    rating = rm.group(1)
-                    break
+    cards_found = False
+    for title_sel in TITLE_SELECTORS:
+        titles = page.locator(title_sel)
+        count = titles.count()
+        if count > 0:
+            cards_found = True
+            for idx in range(min(count, request.max_results)):
+                el = titles.nth(idx)
+                name = el.inner_text().strip()
+                if not name:
+                    continue
 
-            if not any(p["name"] == name for p in products):
-                products.append({
-                    "name": name,
-                    "price": price_str,
-                    "rating": rating,
-                })
-        i += 1
+                # Walk up to the product card container to find price/rating nearby
+                card = el.evaluate("""el => {
+                    let node = el;
+                    for (let i = 0; i < 8; i++) {
+                        node = node.parentElement;
+                        if (!node) return null;
+                        if (node.querySelector('[data-test="product-details"]') ||
+                            node.querySelector('[data-test="current-price"]') ||
+                            node.textContent.match(/\\$\\d+/))
+                            return node.outerHTML;
+                    }
+                    return node ? node.outerHTML : null;
+                }""")
+
+                price_str = ""
+                rating = "N/A"
+                if card:
+                    pm = re.search(r'\$(\d+(?:\.\d{2})?)', card)
+                    if pm:
+                        price_str = "$" + pm.group(1)
+                    rm = re.search(r'(\d+\.\d)\s*out of\s*5', card)
+                    if rm:
+                        rating = rm.group(1)
+
+                if not any(p["name"] == name for p in products):
+                    products.append({"name": name, "price": price_str, "rating": rating})
+            break  # stop after first working selector
+
+    # Fallback: text-based extraction with stricter filtering
+    if not cards_found:
+        SKIP_PATTERNS = re.compile(
+            r'^(Same.day Delivery|Highly rated|Shipping dates may vary|Free shipping'
+            r'|Pick it up|In stock|Only at Target|Clearance|Sale|New|Best seller'
+            r'|Not available|Out of stock|Limited stock|Add to cart|Shop|Pickup'
+            r'|Delivery|Shipping|Sign in|Create account|Registry|Weekly Ad'
+            r'|Target Circle|Redcard|Gift Cards|Find a Store|Orders|get it)',
+            re.IGNORECASE,
+        )
+        text = page.inner_text("body")
+        lines = [l.strip() for l in text.splitlines() if l.strip()]
+        i = 0
+        while i < len(lines) and len(products) < request.max_results:
+            line = lines[i]
+            price_match = re.match(r'^\$(\d+(?:\.\d{2})?)', line)
+            if price_match and i > 0:
+                name = None
+                for back in range(i - 1, max(i - 5, -1), -1):
+                    candidate = lines[back]
+                    if (len(candidate) > 15
+                        and not candidate.startswith('$')
+                        and not re.match(r'^\d+(\.\d)?\s*out of', candidate)
+                        and 'Sponsored' not in candidate
+                        and not candidate.startswith('Save ')
+                        and not SKIP_PATTERNS.match(candidate)):
+                        name = candidate
+                        break
+                if not name:
+                    i += 1
+                    continue
+                price_str = "$" + price_match.group(1)
+                rating = "N/A"
+                for near in range(max(i - 3, 0), min(i + 5, len(lines))):
+                    rm = re.search(r'(\d+\.\d)\s*out of\s*5', lines[near])
+                    if rm:
+                        rating = rm.group(1)
+                        break
+                if not any(p["name"] == name for p in products):
+                    products.append({"name": name, "price": price_str, "rating": rating})
+            i += 1
 
     print()
     print("=" * 60)
