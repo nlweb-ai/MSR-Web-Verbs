@@ -119,7 +119,7 @@ def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSe
 
 
 def test_amazon_products() -> None:
-    request = AmazonSearchRequest(query="travel adapter worldwide", max_results=5)
+    request = AmazonSearchRequest(query="Qunol Ultra CoQ10 100mg", max_results=5)
     user_data_dir = os.path.join(
         os.environ["USERPROFILE"],
         "AppData", "Local", "Google", "Chrome", "User Data", "Default"

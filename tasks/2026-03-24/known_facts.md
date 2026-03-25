@@ -1,264 +1,256 @@
 
-
-## CoQ10 Shopping Results (2026-03-25)
+## CoQ10 Shopping Summary (as of 2026-03-25)
 
 ### Amazon
-- **Jarrow Formulas Q-Absorb Coq10 100 Mg, 120 Ct** | Price: $36.99 | Rating: 5.0
-- **Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels** | Price: $54.99 | Rating: 4.8
-- **CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements** | Price: $19.95 | Rating: 4.8
-- **Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count** | Price: $36.99 | Rating: 4.8
-- **ANDREW LESSMAN Coenzyme Q-10 200 mg 60 Capsules - Essential for Energy Production and Optimum Key Organ Function, Anti-Oxidant Support, Depleted by Aging, Plus B-Complex. Easy to Swallow Capsules** | Price: $29.90 | Rating: 4.8
+- **Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels** — $54.99 (rating: 4.8)
+- **CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements** — $19.95 (rating: 4.8)
+- **Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count** — $36.99 (rating: 4.8)
+- **Puritan's Pride Coenzyme CoQ10 200mg, Dietary Supplement for Heart Health, Oral Gum Health, and Healthy Aging Support, 240 Rapid Release Softgels, 2-Pack** — $48.59 (rating: 4.8)
+- **CoQ10 400mg SoftGels COQ10 - CQ10 Coenzyme Q10 Supplement, Plus PQQ, Omega 3, and Vitamin E, for Heart and Cellular Energy, 120 Servings** — $25.64 (rating: 4.8)
 
 ### Walmart
-- **Force Factor Total Beets Ultimate Heart Health, Blood Pressure Support with CoQ10 & Beet Root for Ni...** | Price: $34.98 | Rating: 4.6
-- **Overall pick Spring Valley Rapid-Release CoQ10 Heart Health Dietary Supplement Softgels, 100 mg, 60 ...** | Price: $9.88 | Rating: 4.7
-- **Qunol Ultra CoQ10 Softgels, 100mg, Heart Health, Coenzyme Q10 Dietary Supplement, 60 Count** | Price: $18.96 | Rating: 4.8
-- **Spring Valley Rapid-Release CoQ10 Dietary Supplement Softgels for Heart Health, 200 mg, 60 Count** | Price: $18.96 | Rating: 4.7
-- **BEAU COQ10 Coenzyme Q10 200mg Vegetarian Capsule Promotes Cardiovascular Health Heart Health - 120Ct** | Price: $12.39 | Rating: 4.6
-
-### Costco
+- **Force Factor Total Beets Ultimate Heart Health, Blood Pressure Support with CoQ10 & Beet Root for Ni...** — $34.98 (rating: 4.6)
+- **Qunol Ultra CoQ10 Softgels, 100mg, Heart Health, Coenzyme Q10 Dietary Supplement, 60 Count** — $18.96 (rating: 4.8)
+- **Available in additional 2 options** — $21.88 (rating: 4.8)
+- **BEAU COQ10 Coenzyme Q10 200mg Vegetarian Capsule Promotes Cardiovascular Health Heart Health - 120Ct** — $12.39 (rating: 4.6)
+- **Qunol Ultra CoQ10 CoEnzyme Q10 for Heart Health and Energy Production Dietary Supplement Softgels, 1...** — $29.97 (rating: 4.8)
 
 ### Target
-- **Qunol Ultra CoQ10 Dietary Supplement Softgels - 120ct: Certified Gluten-Free, CoQ-10 100mg per Serving** | Price: $29.99 | Rating: N/A
-- **Qunol CoQ10 100mg Vitamin Vegan Gummies - 60ct** | Price: $12.19 | Rating: N/A
-- **B Beworth CoQ10 200mg, Support Energy, Heart Healthy & Antioxidant, 120 Veggie Capsules** | Price: $17.84 | Rating: N/A
-- **Nature Made CoQ10 400mg Softgels for Heart Health Support - 40ct: Gluten-Free, Omegas and Fish Oil, Unflavored** | Price: $30.49 | Rating: N/A
-- **Nature Made CoQ10 200mg Softgels for Heart Health Support - 40ct** | Price: $23.99 | Rating: N/A
+- **Qunol Ultra CoQ10 Dietary Supplement Softgels - 120ct: Certified Gluten-Free, CoQ-10 100mg per Serving** — $29.99 (rating: N/A)
+- **Nutricost CoQ10 Capsules (100 MG) (120 Capsules)** — $16.95 (rating: N/A)
+- **Alliwise CoQ10 200mg Coenzyme Q10 Supplements, Antioxidant Heart Health & Energy Support** — $17.59 (rating: N/A)
+- **Nature Made CoQ10 200mg Softgels for Heart Health Support - 40ct** — $23.99 (rating: N/A)
 
 ### eBay
-- **Coenzyme Q-10 Softgels, 200mg, Increase Energy & Stamina, Heart Health Support** | Price: $5.99 | Shipping: Free delivery
-- **Medline Coenzyme Q10 | 30 100mg Softgels | Ref OTCM00005 Heart Health** | Price: $1.99 | Shipping: +$4.99 delivery
-- **10/60/120Pcs Coenzyme Q-10 Softgels 200mg ,Heart Health,Energy,Stamina Support** | Price: $6.99 | Shipping: Free delivery
-- **CoQ10 Capsules 200mg - High Absorption Supplements, Support Heart Health** | Price: $7.03 | Shipping: Free delivery
-- **CoQ10 400mg - Blood Pressure Cardiovascular Heart Health, Energy Production** | Price: $7.03 | Shipping: Free delivery
+- **Blood Circulation Supplement - Blood Pressure Support, Heart Health Capsules** — $6.96 (shipping: Free delivery)
+- **CoQ10 Capsules 200mg - High Absorption Supplements, Support Heart Health** — $7.03 (shipping: Free delivery)
+- **CoQ10 200mg - for Heart & Cardiovascular Health, Cellular Energy Production** — $7.57 (shipping: Free delivery)
+- **CoQ10 Capsules- High Absorption, Antioxidant Support, Heart Health & Energy** — $7.57 (shipping: Free delivery)
+- **Ubiquinol CoQ10 100mg - Heart Health, Antioxidant, Blood Pressure Balance** — $7.57 (shipping: Free delivery)
 
-```json
-{
-  "query": "CoQ10",
-  "summary": "CoQ10 product search across major online and retail shopping platforms",
-  "amazon": [
-    {
-      "name": "Jarrow Formulas Q-Absorb Coq10 100 Mg, 120 Ct",
-      "price": "$36.99",
-      "rating": "5.0"
-    },
-    {
-      "name": "Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels",
-      "price": "$54.99",
-      "rating": "4.8"
-    },
-    {
-      "name": "CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements",
-      "price": "$19.95",
-      "rating": "4.8"
-    },
-    {
-      "name": "Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count",
-      "price": "$36.99",
-      "rating": "4.8"
-    },
-    {
-      "name": "ANDREW LESSMAN Coenzyme Q-10 200 mg 60 Capsules - Essential for Energy Production and Optimum Key Organ Function, Anti-Oxidant Support, Depleted by Aging, Plus B-Complex. Easy to Swallow Capsules",
-      "price": "$29.90",
-      "rating": "4.8"
-    }
-  ],
-  "walmart": [
-    {
-      "name": "Force Factor Total Beets Ultimate Heart Health, Blood Pressure Support with CoQ10 & Beet Root for Ni...",
-      "price": "$34.98",
-      "rating": "4.6"
-    },
-    {
-      "name": "Overall pick Spring Valley Rapid-Release CoQ10 Heart Health Dietary Supplement Softgels, 100 mg, 60 ...",
-      "price": "$9.88",
-      "rating": "4.7"
-    },
-    {
-      "name": "Qunol Ultra CoQ10 Softgels, 100mg, Heart Health, Coenzyme Q10 Dietary Supplement, 60 Count",
-      "price": "$18.96",
-      "rating": "4.8"
-    },
-    {
-      "name": "Spring Valley Rapid-Release CoQ10 Dietary Supplement Softgels for Heart Health, 200 mg, 60 Count",
-      "price": "$18.96",
-      "rating": "4.7"
-    },
-    {
-      "name": "BEAU COQ10 Coenzyme Q10 200mg Vegetarian Capsule Promotes Cardiovascular Health Heart Health - 120Ct",
-      "price": "$12.39",
-      "rating": "4.6"
-    }
-  ],
-  "costco": [],
-  "target": [
-    {
-      "name": "Qunol Ultra CoQ10 Dietary Supplement Softgels - 120ct: Certified Gluten-Free, CoQ-10 100mg per Serving",
-      "price": "$29.99",
-      "rating": "N/A"
-    },
-    {
-      "name": "Qunol CoQ10 100mg Vitamin Vegan Gummies - 60ct",
-      "price": "$12.19",
-      "rating": "N/A"
-    },
-    {
-      "name": "B Beworth CoQ10 200mg, Support Energy, Heart Healthy & Antioxidant, 120 Veggie Capsules",
-      "price": "$17.84",
-      "rating": "N/A"
-    },
-    {
-      "name": "Nature Made CoQ10 400mg Softgels for Heart Health Support - 40ct: Gluten-Free, Omegas and Fish Oil, Unflavored",
-      "price": "$30.49",
-      "rating": "N/A"
-    },
-    {
-      "name": "Nature Made CoQ10 200mg Softgels for Heart Health Support - 40ct",
-      "price": "$23.99",
-      "rating": "N/A"
-    }
-  ],
-  "ebay": [
-    {
-      "title": "Coenzyme Q-10 Softgels, 200mg, Increase Energy & Stamina, Heart Health Support",
-      "price": "$5.99",
-      "shipping": "Free delivery"
-    },
-    {
-      "title": "Medline Coenzyme Q10 | 30 100mg Softgels | Ref OTCM00005 Heart Health",
-      "price": "$1.99",
-      "shipping": "+$4.99 delivery"
-    },
-    {
-      "title": "10/60/120Pcs Coenzyme Q-10 Softgels 200mg ,Heart Health,Energy,Stamina Support",
-      "price": "$6.99",
-      "shipping": "Free delivery"
-    },
-    {
-      "title": "CoQ10 Capsules 200mg - High Absorption Supplements, Support Heart Health",
-      "price": "$7.03",
-      "shipping": "Free delivery"
-    },
-    {
-      "title": "CoQ10 400mg - Blood Pressure Cardiovascular Heart Health, Energy Production",
-      "price": "$7.03",
-      "shipping": "Free delivery"
-    }
-  ]
-}
-```
-
-
-## Expanded Amazon CoQ10 Search (2026-03-25)
-
-| Product | Price | Rating | Dosage | Count | $/ct |
-|---------|-------|--------|--------|-------|------|
-| NATURE TARGET Ubiquinol CoQ10 200mg softgels with PQQ & Turm... | $20.88 | 4.8 | 200mg | 120 | $0.1740 |
-| Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Wate... | $54.99 | 4.8 | 100mg | 240 | $0.2291 |
-| Qunol Ultra CoQ10 100mg Softgels- 3x Better Absorption, Anti... | $20.99 | 4.7 | 100mg | 90 | $0.2332 |
-| Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supple... | $36.99 | 4.8 | 600mg | 120 | $0.3083 |
-| CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula... | $19.95 | 4.8 | 800mg | 60 | $0.3325 |
-| Nature Made CoQ10 200mg Softgels, Dietary Supplement for Hea... | $36.08 | 4.7 | 200mg | 105 | $0.3436 |
-| ANDREW LESSMAN Coenzyme Q-10 200 mg 60 Capsules - Essential ... | $29.90 | 4.8 | 200mg | 60 | $0.4983 |
-| Puritan's Pride Coenzyme CoQ10 200mg, Dietary Supplement for... | $82.00 | 4.8 | 200mg | N/A | N/A |
-| Heivy Coenzyme Q10, 99% Purity CoQ10 200mg, CO Q 10 Suppleme... | $9.99 | 4.8 | 200mg | N/A | N/A |
-| Puritan's Pride Coenzyme CoQ10 100mg, Dietary Supplement for... | $27.99 | 4.7 | 100mg | N/A | N/A |
-
-**Best value on Amazon**: NATURE TARGET Ubiquinol CoQ10 200mg softgels with PQQ & Turmeric, High Absorption Coenzyme Q10 Supplement with ALA & Black Pepper, Antioxidant for Heart & Brain Health, Energy Production, 120 Count | $20.88 | 200mg × 120ct = $0.1740/ct
+---
 
 ```json
 {
   "query": "CoQ10 supplement",
-  "summary": "Expanded Amazon CoQ10 search with dosage and per-count cost analysis (up to 10 results)",
-  "products": [
-    {
-      "name": "NATURE TARGET Ubiquinol CoQ10 200mg softgels with PQQ & Turmeric, High Absorption Coenzyme Q10 Supplement with ALA & Black Pepper, Antioxidant for Heart & Brain Health, Energy Production, 120 Count",
-      "price": "$20.88",
-      "rating": "4.8",
-      "dosage_mg": 200,
-      "count": 120,
-      "per_count_cost": 0.174
-    },
-    {
-      "name": "Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels",
-      "price": "$54.99",
-      "rating": "4.8",
-      "dosage_mg": 100,
-      "count": 240,
-      "per_count_cost": 0.2291
-    },
-    {
-      "name": "Qunol Ultra CoQ10 100mg Softgels- 3x Better Absorption, Antioxidant for Heart Health & Energy Production, Coenzyme Q10 Vitamins and Supplements, 3 Month Supply, 90 Count",
-      "price": "$20.99",
-      "rating": "4.7",
-      "dosage_mg": 100,
-      "count": 90,
-      "per_count_cost": 0.2332
-    },
-    {
-      "name": "Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count",
-      "price": "$36.99",
-      "rating": "4.8",
-      "dosage_mg": 600,
-      "count": 120,
-      "per_count_cost": 0.3083
-    },
-    {
-      "name": "CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements",
-      "price": "$19.95",
-      "rating": "4.8",
-      "dosage_mg": 800,
-      "count": 60,
-      "per_count_cost": 0.3325
-    },
-    {
-      "name": "Nature Made CoQ10 200mg Softgels, Dietary Supplement for Heart Health Support, 105 Softgels, 105 Day Supply",
-      "price": "$36.08",
-      "rating": "4.7",
-      "dosage_mg": 200,
-      "count": 105,
-      "per_count_cost": 0.3436
-    },
-    {
-      "name": "ANDREW LESSMAN Coenzyme Q-10 200 mg 60 Capsules - Essential for Energy Production and Optimum Key Organ Function, Anti-Oxidant Support, Depleted by Aging, Plus B-Complex. Easy to Swallow Capsules",
-      "price": "$29.90",
-      "rating": "4.8",
-      "dosage_mg": 200,
-      "count": 60,
-      "per_count_cost": 0.4983
-    },
-    {
-      "name": "Puritan's Pride Coenzyme CoQ10 200mg, Dietary Supplement for Heart Health, Oral Gum Health, and Healthy Aging Support, 240 Rapid Release Softgels, 2-Pack",
-      "price": "$82.00",
-      "rating": "4.8",
-      "dosage_mg": 200,
-      "count": null,
-      "per_count_cost": null
-    },
-    {
-      "name": "Heivy Coenzyme Q10, 99% Purity CoQ10 200mg, CO Q 10 Supplement Support Heart Health, Antioxidants & Energy Supplements, Made in USA, 60 Vegan Capsules",
-      "price": "$9.99",
-      "rating": "4.8",
-      "dosage_mg": 200,
-      "count": null,
-      "per_count_cost": null
-    },
-    {
-      "name": "Puritan's Pride Coenzyme CoQ10 100mg, Dietary Supplement for Heart Health, Blood Pressure, Oral Gum Health, and Healthy Aging Support, 60 Day Supply, 240 Rapid Release Softgels",
-      "price": "$27.99",
-      "rating": "4.7",
-      "dosage_mg": 100,
-      "count": null,
-      "per_count_cost": null
-    }
-  ],
-  "best_value": {
-    "name": "NATURE TARGET Ubiquinol CoQ10 200mg softgels with PQQ & Turmeric, High Absorption Coenzyme Q10 Supplement with ALA & Black Pepper, Antioxidant for Heart & Brain Health, Energy Production, 120 Count",
-    "price": "$20.88",
-    "rating": "4.8",
-    "dosage_mg": 200,
-    "count": 120,
-    "per_count_cost": 0.174
+  "date": "2026-03-25",
+  "amazon": {
+    "products": [
+      {
+        "name": "Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels",
+        "price": "$54.99",
+        "rating": "4.8"
+      },
+      {
+        "name": "CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements",
+        "price": "$19.95",
+        "rating": "4.8"
+      },
+      {
+        "name": "Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count",
+        "price": "$36.99",
+        "rating": "4.8"
+      },
+      {
+        "name": "Puritan's Pride Coenzyme CoQ10 200mg, Dietary Supplement for Heart Health, Oral Gum Health, and Healthy Aging Support, 240 Rapid Release Softgels, 2-Pack",
+        "price": "$48.59",
+        "rating": "4.8"
+      },
+      {
+        "name": "CoQ10 400mg SoftGels COQ10 - CQ10 Coenzyme Q10 Supplement, Plus PQQ, Omega 3, and Vitamin E, for Heart and Cellular Energy, 120 Servings",
+        "price": "$25.64",
+        "rating": "4.8"
+      }
+    ]
+  },
+  "walmart": {
+    "products": [
+      {
+        "name": "Force Factor Total Beets Ultimate Heart Health, Blood Pressure Support with CoQ10 & Beet Root for Ni...",
+        "price": "$34.98",
+        "rating": "4.6"
+      },
+      {
+        "name": "Qunol Ultra CoQ10 Softgels, 100mg, Heart Health, Coenzyme Q10 Dietary Supplement, 60 Count",
+        "price": "$18.96",
+        "rating": "4.8"
+      },
+      {
+        "name": "Available in additional 2 options",
+        "price": "$21.88",
+        "rating": "4.8"
+      },
+      {
+        "name": "BEAU COQ10 Coenzyme Q10 200mg Vegetarian Capsule Promotes Cardiovascular Health Heart Health - 120Ct",
+        "price": "$12.39",
+        "rating": "4.6"
+      },
+      {
+        "name": "Qunol Ultra CoQ10 CoEnzyme Q10 for Heart Health and Energy Production Dietary Supplement Softgels, 1...",
+        "price": "$29.97",
+        "rating": "4.8"
+      }
+    ]
+  },
+  "target": {
+    "products": [
+      {
+        "name": "Qunol Ultra CoQ10 Dietary Supplement Softgels - 120ct: Certified Gluten-Free, CoQ-10 100mg per Serving",
+        "price": "$29.99",
+        "rating": "N/A"
+      },
+      {
+        "name": "Nutricost CoQ10 Capsules (100 MG) (120 Capsules)",
+        "price": "$16.95",
+        "rating": "N/A"
+      },
+      {
+        "name": "Alliwise CoQ10 200mg Coenzyme Q10 Supplements, Antioxidant Heart Health & Energy Support",
+        "price": "$17.59",
+        "rating": "N/A"
+      },
+      {
+        "name": "Nature Made CoQ10 200mg Softgels for Heart Health Support - 40ct",
+        "price": "$23.99",
+        "rating": "N/A"
+      }
+    ]
+  },
+  "ebay": {
+    "listings": [
+      {
+        "title": "Blood Circulation Supplement - Blood Pressure Support, Heart Health Capsules",
+        "price": "$6.96",
+        "shipping": "Free delivery"
+      },
+      {
+        "title": "CoQ10 Capsules 200mg - High Absorption Supplements, Support Heart Health",
+        "price": "$7.03",
+        "shipping": "Free delivery"
+      },
+      {
+        "title": "CoQ10 200mg - for Heart & Cardiovascular Health, Cellular Energy Production",
+        "price": "$7.57",
+        "shipping": "Free delivery"
+      },
+      {
+        "title": "CoQ10 Capsules- High Absorption, Antioxidant Support, Heart Health & Energy",
+        "price": "$7.57",
+        "shipping": "Free delivery"
+      },
+      {
+        "title": "Ubiquinol CoQ10 100mg - Heart Health, Antioxidant, Blood Pressure Balance",
+        "price": "$7.57",
+        "shipping": "Free delivery"
+      }
+    ]
+  }
+}
+```
+
+## Amazon CoQ10 Extended Search – 15 Results (as of 2026-03-25)
+
+### Amazon (query: "coq10", 15 items)
+- **Jarrow Formulas Q-Absorb Coq10 100 Mg, 120 Ct** — $36.99 (rating: 5.0)
+- **Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels** — $54.99 (rating: 4.8)
+- **CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements** — $19.95 (rating: 4.8)
+- **Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count** — $36.99 (rating: 4.8)
+- **Kirkland Signature CoQ10 300 mg., 100 Softgels (3 Pack)** — $66.80 (rating: 4.8)
+- **Puritan's Pride Coenzyme CoQ10 200mg, Dietary Supplement for Heart Health, Oral Gum Health, and Healthy Aging Support, 240 Rapid Release Softgels, 2-Pack** — $48.59 (rating: 4.8)
+- **CoQ10 400mg SoftGels COQ10 - CQ10 Coenzyme Q10 Supplement, Plus PQQ, Omega 3, and Vitamin E, for Heart and Cellular Energy, 120 Servings** — $25.64 (rating: 4.8)
+- **Micro Ingredients CoQ10 200mg Per Serving, 240 Softgels | Made with Coconut MCT Oil | Coenzyme Q10 (Ubiquinone) | Non-GMO** — $26.95 (rating: 4.8)
+- **Kirkland wcaqZ, COQ10 300 mg 100 Softgels (Pack of 2)** — $46.88 (rating: 4.8)
+- **ZEBORA CoQ10-600mg-Softgels - Extra Strength Coenzyme Q10 with PQQ, Omega-3 & BioPerine - High Absorption CoQ10 Supplements Antioxidant (Ubiquinone) for Heart Health & Energy Production, 120 Softgels** — $25.29 (rating: 4.8)
+- **CoQ10 Gummies with PQQ - 400 MG Coenzyme Q10 High Potency, Enhanced with Ayurvedic Herbs, Adaptogenic Mushroom Blend & Probiotics for Heart, Brain, Energy, Immunity, Cherry Flavor, 120 Vegan Gummies** — $29.94 (rating: 4.8)
+- **Coenzyme Q10** — $5.00 (rating: N/A)
+- **CoQ10 200mg Softgels with PQQ & Omega 3, Maximum Absorption Coenzyme Q10, Powerful Antioxidant for Heart & Energy Health, 120 Count, 4 Month Supply, Non-GMO** — $19.10 (rating: 4.8)
+- **Designs for Health CoQnol 100mg - CoQ10 Ubiquinol with Superior Bioavailability + Exclusive Absorption Technology - Double CoenzymeQ10 Boost with GG - Heart, Healthy Aging + Cell Support (60 Softgels)** — $50.99 (rating: 4.8)
+- **Nature Made CoQ10, Softgels Helps Supports Heart Function & Cellular Energy Production, Unflavored, 200 mg, 140 Count** — N/A (rating: 4.8)
+
+---
+
+```json
+{
+  "query": "coq10",
+  "date": "2026-03-25",
+  "amazon": {
+    "products": [
+      {
+        "name": "Jarrow Formulas Q-Absorb Coq10 100 Mg, 120 Ct",
+        "price": "$36.99",
+        "rating": "5.0"
+      },
+      {
+        "name": "Qunol Ultra CoQ10 100mg, 3x Better Absorption, Patented Water and Fat Soluble Natural Supplement Form of Coenzyme Q10, Antioxidant for Heart Health, 240 Count Softgels",
+        "price": "$54.99",
+        "rating": "4.8"
+      },
+      {
+        "name": "CoQ10 Powerful Antioxidant Supplement - Extra Strong Formula 800mg, 60 Capsules, 1-Month Supply with Coenzyme Q10 Vitamins and Supplements",
+        "price": "$19.95",
+        "rating": "4.8"
+      },
+      {
+        "name": "Ubiquinol CoQ10-600mg-Softgel, Active Coq10 Ubiquinol Supplement with Vitamin E & Omega 3, 6, 9, High Absorption-Coenzyme-Q10, Powerful Antioxidant for Energy Production, Tested, 120 Count",
+        "price": "$36.99",
+        "rating": "4.8"
+      },
+      {
+        "name": "Kirkland Signature CoQ10 300 mg., 100 Softgels (3 Pack)",
+        "price": "$66.80",
+        "rating": "4.8"
+      },
+      {
+        "name": "Puritan's Pride Coenzyme CoQ10 200mg, Dietary Supplement for Heart Health, Oral Gum Health, and Healthy Aging Support, 240 Rapid Release Softgels, 2-Pack",
+        "price": "$48.59",
+        "rating": "4.8"
+      },
+      {
+        "name": "CoQ10 400mg SoftGels COQ10 - CQ10 Coenzyme Q10 Supplement, Plus PQQ, Omega 3, and Vitamin E, for Heart and Cellular Energy, 120 Servings",
+        "price": "$25.64",
+        "rating": "4.8"
+      },
+      {
+        "name": "Micro Ingredients CoQ10 200mg Per Serving, 240 Softgels | Made with Coconut MCT Oil | Coenzyme Q10 (Ubiquinone) | Non-GMO",
+        "price": "$26.95",
+        "rating": "4.8"
+      },
+      {
+        "name": "Kirkland wcaqZ, COQ10 300 mg 100 Softgels (Pack of 2)",
+        "price": "$46.88",
+        "rating": "4.8"
+      },
+      {
+        "name": "ZEBORA CoQ10-600mg-Softgels - Extra Strength Coenzyme Q10 with PQQ, Omega-3 & BioPerine - High Absorption CoQ10 Supplements Antioxidant (Ubiquinone) for Heart Health & Energy Production, 120 Softgels",
+        "price": "$25.29",
+        "rating": "4.8"
+      },
+      {
+        "name": "CoQ10 Gummies with PQQ - 400 MG Coenzyme Q10 High Potency, Enhanced with Ayurvedic Herbs, Adaptogenic Mushroom Blend & Probiotics for Heart, Brain, Energy, Immunity, Cherry Flavor, 120 Vegan Gummies",
+        "price": "$29.94",
+        "rating": "4.8"
+      },
+      {
+        "name": "Coenzyme Q10",
+        "price": "$5.00",
+        "rating": "N/A"
+      },
+      {
+        "name": "CoQ10 200mg Softgels with PQQ & Omega 3, Maximum Absorption Coenzyme Q10, Powerful Antioxidant for Heart & Energy Health, 120 Count, 4 Month Supply, Non-GMO",
+        "price": "$19.10",
+        "rating": "4.8"
+      },
+      {
+        "name": "Designs for Health CoQnol 100mg - CoQ10 Ubiquinol with Superior Bioavailability + Exclusive Absorption Technology - Double CoenzymeQ10 Boost with GG - Heart, Healthy Aging + Cell Support (60 Softgels)",
+        "price": "$50.99",
+        "rating": "4.8"
+      },
+      {
+        "name": "Nature Made CoQ10, Softgels Helps Supports Heart Function & Cellular Energy Production, Unflavored, 200 mg, 140 Count",
+        "price": "N/A",
+        "rating": "4.8"
+      }
+    ]
   }
 }
 ```

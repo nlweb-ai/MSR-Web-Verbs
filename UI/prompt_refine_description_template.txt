@@ -5,11 +5,24 @@ In the previous rounds of refinements, you have collected known facts in the fil
 
 Here are the instructions.
 (1) Incorporate the known facts into task-xxxx.md to produce task-yyyy.md.
-(2) task-yyyy.md should have a section that explicitly summarizes the facts that are concretized by known_facts.md. These facts will not need to be refined in the future rounds of refinements.
+(2) The output MUST use exactly this two-section format:
+
+## Describe your new request
+(Enter your text)
+
+## Already Known (No Further Refinement Needed)
+<summarize all concretized facts here>
+
+The first section ("Describe your new request") must always contain the placeholder "(Enter your text)" so the user knows to type their next request there. Do NOT fill it in with generated content.
+The second section ("Already Known") should summarize all facts that have been concretized by known_facts.md and previous task versions. These facts will not need further refinement.
 (3) Be concise. The "Inverted Pyramid" writing style, used by The Associated Press (AP), is good. 
 (4) You will not have the permission to write the task-yyyy.md file into a working directory, so please output it in stdout wrapped between the exact markers ===START_MD=== and ===END_MD=== (do NOT use ``` code fences). For example:
 ===START_MD===
-# Task description here
-...
+## Describe your new request
+(Enter your text)
+
+## Already Known (No Further Refinement Needed)
+- Fact 1 ...
+- Fact 2 ...
 ===END_MD===
 

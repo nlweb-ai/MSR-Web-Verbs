@@ -26,6 +26,7 @@ import os
 #   Gemini 3 Pro (Preview)
 
 DEFAULT_MODEL = "claude-sonnet-4.6"
+CODE_SUMMARY_MODEL = "claude-haiku-4.5"
 
 def copilot_stream(prompt, cwd=None, model=DEFAULT_MODEL, *extra):
     """Stream copilot responses as they arrive using SSE format.

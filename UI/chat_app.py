@@ -144,6 +144,15 @@ class ChatApp:
                  background=[('selected', '#4CAF50'), ('!selected', '#E0E0E0')],
                  foreground=[('selected', 'white'), ('!selected', 'black')],
                  font=[('selected', ('Arial', 12, 'bold')), ('!selected', ('Arial', 12))])
+        
+        # Style for Strategies notebook tabs
+        style.configure('Strategies.TNotebook.Tab',
+                       padding=[10, 5],
+                       font=('Arial', 12))
+        style.map('Strategies.TNotebook.Tab',
+                 background=[('selected', '#F57C00'), ('!selected', '#E0E0E0')],
+                 foreground=[('selected', 'white'), ('!selected', 'black')],
+                 font=[('selected', ('Arial', 12, 'bold')), ('!selected', ('Arial', 12))])
     
     def _create_ui(self):
         """Create all UI components"""
@@ -233,7 +242,7 @@ class ChatApp:
             tasks_button_frame,
             text="\U0001F9E9",
             command=lambda: generate_strategy(self),
-            bg="#43A047",
+            bg="#E65100",
             fg="white",
             font=("Arial", 16),
             padx=4, pady=2,
@@ -274,7 +283,7 @@ class ChatApp:
             strategies_button_frame,
             text="\u25b6",
             command=lambda: execute_strategy(self),
-            bg="#FF8A65",
+            bg="#2E7D32",
             fg="white",
             font=("Arial", 16),
             padx=4, pady=2,
@@ -285,7 +294,7 @@ class ChatApp:
         _add_tooltip(self.execute_button, "Execute")
         
         # Create notebook for strategies
-        self.strategies_notebook = ttk.Notebook(lower_left)
+        self.strategies_notebook = ttk.Notebook(lower_left, style='Strategies.TNotebook')
         self.strategies_notebook.pack(fill=tk.BOTH, expand=True)
         
         # Bind tab change event
@@ -349,7 +358,7 @@ class ChatApp:
             task_control_frame,
             text="\u2728",
             command=lambda: create_task(self),
-            bg="#66BB6A",
+            bg="#AB47BC",
             fg="white",
             font=("Arial", 14),
             padx=4, pady=2,
@@ -396,7 +405,7 @@ class ChatApp:
             input_frame,
             text="\u2795",
             command=lambda: self._clear_chat(),
-            bg="#FFA726",
+            bg="#42A5F5",
             fg="white",
             font=("Arial", 14),
             padx=4, pady=2,
@@ -412,7 +421,7 @@ class ChatApp:
             input_frame,
             text="\U0001F4DD",
             command=lambda: modify_task(self),
-            bg="#42A5F5",
+            bg="#66BB6A",
             fg="white",
             font=("Arial", 14),
             padx=4, pady=2,
@@ -426,9 +435,9 @@ class ChatApp:
         # Submit button
         submit_button = tk.Button(
             input_frame,
-            text="\u2714",
+            text="\U0001F4AC",
             command=lambda: submit_message(self),
-            bg="#66BB6A",
+            bg="#42A5F5",
             fg="white",
             font=("Arial", 14),
             padx=4, pady=2,
@@ -437,7 +446,7 @@ class ChatApp:
             cursor="hand2"
         )
         submit_button.pack(side=tk.RIGHT)
-        _add_tooltip(submit_button, "Submit")
+        _add_tooltip(submit_button, "Ask")
     
     def _load_initial_data(self):
         """Load initial task and strategy files"""
@@ -657,9 +666,21 @@ class ChatApp:
                 time.sleep(2.0)
                 user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
 
-            # Task loop: process automate() calls submitted by execute_strategy
+            # Task loop: process automate() calls submitted by execute_strategy.
+            # We poll with a short timeout instead of blocking forever so that
+            # Playwright's internal event loop keeps running.  Without this,
+            # CDP messages from Chrome (e.g. address-bar navigations) are never
+            # processed and the omnibox appears to hang.
             while True:
-                item = self._pw_task_queue.get()   # blocks until work arrives
+                try:
+                    item = self._pw_task_queue.get(timeout=0.3)
+                except Exception:          # queue.Empty on timeout
+                    # Pump Playwright's event loop so Chrome stays responsive
+                    try:
+                        self.page.evaluate("void 0")
+                    except Exception:
+                        pass
+                    continue
                 if item is None:                   # sentinel: shut down
                     break
                 fn, result_q = item

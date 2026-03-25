@@ -3,6 +3,7 @@ Please analyze the following function and create a clear, concise summary that e
 2. What the overall goal/task is
 3. The main steps performed (in order)
 4. What data is being collected or processed
+5. Whenever a web verb is used (i.e., a function imported from the verbs/ folder such as search_amazon_products, search_nearby, etc.), display the verb name formatted as inline code using backticks — e.g., `walmart_com/walmart_search` or `maps_google_com__nearby/maps_nearby`. Use the folder/module name, not the function name.
 
 Here is the function:
 

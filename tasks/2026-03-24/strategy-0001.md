@@ -1,23 +1,24 @@
-## What This Does (In Plain English)
-This is a **shopping helper** that automatically looks up a popular heart-health supplement called **CoQ10** (Coenzyme Q10) across five major stores — all at once — so you don't have to visit each site yourself.
----
-## Overall Goal
-Find and compare CoQ10 products from multiple online stores, then save all the results in one place for easy review.
----
-## Steps It Takes (In Order)
-1. **Searches Amazon** — looks up up to 5 CoQ10 products, collecting name, price, and customer rating
-2. **Searches Walmart** — same thing, good for budget-friendly options
-3. **Searches Costco** — looks for bulk/value packs (name and price only, no ratings)
-4. **Searches Target** — checks mainstream retail, collecting name, price, and rating
-5. **Searches eBay** — checks the resale market, collecting listing title, price, and shipping cost
-6. **Saves everything** to a file called `known_facts.md` with today's date, neatly organized by store
-7. **Returns all results** in a tidy, organized package
----
-## What Information Is Collected
-| Store   | Product Name | Price | Star Rating | Shipping Cost |
-|---------|-------------|-------|-------------|---------------|
-| Amazon  | ✅ | ✅ | ✅ | ❌ |
-| Walmart | ✅ | ✅ | ✅ | ❌ |
-| Costco  | ✅ | ✅ | ❌ | ❌ |
-| Target  | ✅ | ✅ | ✅ | ❌ |
-| eBay    | ✅ | ✅ | ❌ | ✅ |
+## CoQ10 Supplement Shopping Assistant
+### Overall Goal
+This tool helps someone find and compare CoQ10 supplements (a popular health product) across multiple stores to see what's available, how much things cost, and what customers think of them.
+### Main Steps (In Order)
+1. **Search Amazon** — Look for CoQ10 supplements on Amazon
+2. **Search Walmart** — Check Walmart's online and in-store selection
+3. **Search Target** — Look up CoQ10 products at Target
+4. **Search eBay** — Find deals and other options on eBay
+5. **Organize Results** — Combine all the information into a neat summary
+6. **Save Information** — Write everything down in a file for future reference
+### Data Being Collected
+The tool collects the following information about each supplement:
+- **Product name** — What the product is called
+- **Price** — How much it costs
+- **Customer ratings** — What other customers thought of it
+- **Shipping info** (for eBay) — How much it costs to ship
+### Web Verbs Used
+The following shopping tools are used to search retailers:
+- `amazon_com__products/search_amazon_products` — Searches Amazon's catalog
+- `walmart_com__products/search_walmart_products` — Searches Walmart's selection
+- `target_com__products/search_target_products` — Searches Target's inventory
+- `ebay_com__listings/search_ebay_listings` — Searches eBay for deals
+### Result
+All the information collected is saved in one place so it can be easily compared and reviewed later.

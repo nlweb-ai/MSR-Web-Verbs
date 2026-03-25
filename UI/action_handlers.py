@@ -5,7 +5,7 @@ import re
 import threading
 import tkinter as tk
 import tkinter.messagebox
-from copilot import copilot_stream
+from copilot import copilot_stream, CODE_SUMMARY_MODEL
 
 
 def save_task(app):
@@ -102,13 +102,18 @@ def modify_task(app):
         f"## Available Web Verbs (signature.txt catalog):\n{signatures_block}\n\n"
         f"## Rules:\n"
         f"(1) The user's additional ask represents a NEW STEP that should be added to the task. "
-        f"It is distinct from the existing 'Concretized Facts' section — do NOT merge it into concretized facts. "
+        f"It is distinct from the existing 'Already Known' section — do NOT merge it into that section. "
         f"Add it as a new, clearly labeled step or section in the task.\n"
         f"(2) Review the available web verbs above. If any verb is suitable for accomplishing "
         f"the additional ask, mention it explicitly in the new step (e.g., 'Use verbs/maps_google_com__nearby to search for ...').\n"
         f"(3) Preserve the overall structure and any sections not affected by the instructions.\n"
-        f"(4) Be concise. Use the AP 'Inverted Pyramid' writing style.\n"
-        f"(5) Output format: print the ENTIRE modified task between these exact markers (no code fences, no triple backticks):\n"
+        f"(4) The output MUST use exactly this two-section format:\n"
+        f"## Describe your new request\n(Enter your text)\n\n"
+        f"## Already Known (No Further Refinement Needed)\n<all concretized facts here>\n\n"
+        f"The first section must always contain the placeholder '(Enter your text)' so the user knows to type their next request there. Do NOT fill it in.\n"
+        f"The second section should contain all accumulated known facts from previous versions plus any new facts.\n"
+        f"(5) Be concise. Use the AP 'Inverted Pyramid' writing style.\n"
+        f"(6) Output format: print the ENTIRE modified task between these exact markers (no code fences, no triple backticks):\n"
         f"===START_MD===\n<entire modified task here>\n===END_MD===\n"
     )
 
@@ -324,7 +329,7 @@ def create_task(app):
     os.makedirs(task_dir, exist_ok=True)
     task_file = os.path.join(task_dir, "task-0001.md")
     with open(task_file, 'w', encoding='utf-8') as f:
-        f.write("Describe your task ...")
+        f.write("## Describe your new request\n(Enter your text)\n\n## Already Known (No Further Refinement Needed)\nNothing yet (agent will fill in)\n")
 
     # Save to cache
     cache_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache.txt")
@@ -571,7 +576,7 @@ def generate_strategy(app):
             
             # Get summary from copilot
             strategy_summary = []
-            for chunk in copilot_stream(summary_prompt, app.workspace_path):
+            for chunk in copilot_stream(summary_prompt, app.workspace_path, model=CODE_SUMMARY_MODEL):
                 if chunk:
                     strategy_summary.append(chunk)
                     summary_display.insert(tk.END, chunk + "\n")
