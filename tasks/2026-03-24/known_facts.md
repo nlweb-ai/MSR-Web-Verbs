@@ -254,3 +254,59 @@
   }
 }
 ```
+
+## CVS Stores in Bellevue, WA (as of 2026-03-26)
+
+### Search ZIP: 98004
+- **10116 NE 8TH ST, BELLEVUE, WA, 98004** | Phone: (425) 454-3111 | Hours: Open, closes at 10:00 PM | Pharmacy: Yes | MinuteClinic: Unknown
+- **107 BELLEVUE WAY, SE, BELLEVUE, WA, 98004** | Phone: (425) 454-1818 | Hours: Open, closes at 10:00 PM | Pharmacy: Yes | MinuteClinic: Unknown
+- **3023 78TH AVE SE, MERCER ISLAND, WA, 98040** | Phone: (206) 236-0776 | Hours: Open, closes at 9:00 PM | Pharmacy: Yes | MinuteClinic: Unknown
+- **653 156TH AVE NE, BELLEVUE, WA, 98007** | Phone: (425) 641-9105 | Hours: Open, closes at 10:00 PM | Pharmacy: Yes | MinuteClinic: Unknown
+- **10625 NE 68TH ST, KIRKLAND, WA, 98033** | Phone: (425) 827-3934 | Hours: Open, closes at 9:00 PM | Pharmacy: Yes | MinuteClinic: Unknown
+
+---
+
+```json
+{
+  "query": "CVS stores in Bellevue, WA",
+  "date": "2026-03-26",
+  "zip_code_searched": "98004",
+  "stores": [
+    {
+      "address": "10116 NE 8TH ST, BELLEVUE, WA, 98004",
+      "phone": "(425) 454-3111",
+      "hours": "Open, closes at 10:00 PM",
+      "has_pharmacy": "Yes",
+      "has_minuteclinic": "Unknown"
+    },
+    {
+      "address": "107 BELLEVUE WAY, SE, BELLEVUE, WA, 98004",
+      "phone": "(425) 454-1818",
+      "hours": "Open, closes at 10:00 PM",
+      "has_pharmacy": "Yes",
+      "has_minuteclinic": "Unknown"
+    },
+    {
+      "address": "3023 78TH AVE SE, MERCER ISLAND, WA, 98040",
+      "phone": "(206) 236-0776",
+      "hours": "Open, closes at 9:00 PM",
+      "has_pharmacy": "Yes",
+      "has_minuteclinic": "Unknown"
+    },
+    {
+      "address": "653 156TH AVE NE, BELLEVUE, WA, 98007",
+      "phone": "(425) 641-9105",
+      "hours": "Open, closes at 10:00 PM",
+      "has_pharmacy": "Yes",
+      "has_minuteclinic": "Unknown"
+    },
+    {
+      "address": "10625 NE 68TH ST, KIRKLAND, WA, 98033",
+      "phone": "(425) 827-3934",
+      "hours": "Open, closes at 9:00 PM",
+      "has_pharmacy": "Yes",
+      "has_minuteclinic": "Unknown"
+    }
+  ]
+}
+```
