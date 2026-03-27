@@ -1,3 +1,0 @@
-2026-03-21 21:16:23,761 - embedding_wrapper - ERROR - exception:167 - Error during batch embedding generation with provider azure_openai
-NoneType: None
-2026-03-21 21:16:23,761 - embedding_wrapper - ERROR - log_with_context:181 - Batch embedding generation failed | Context: provider=azure_openai - model=text-embedding-3-small - batch_size=1 - error_type=AuthenticationError - error_message=Error code: 401 - {'error': {'code': '401', 'message': 'Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource.'}}

@@ -692,7 +692,7 @@ def execute_strategy(app):
         
         # Submit automate() to the Playwright worker thread via the task queue.
         # All page calls MUST run on the same thread that called sync_playwright().start()
-        # (i.e. the _pw_worker thread in chat_app.py). We submit a callable and wait for
+        # (i.e. the _pw_worker thread in app.py). We submit a callable and wait for
         # the result on a separate dispatcher thread so the UI stays responsive.
         import importlib.util, queue as _queue
 

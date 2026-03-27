@@ -1,0 +1,2 @@
+playwright==1.52.0
+# GitHub Copilot CLI 1.0.13-0 (installed via `gh extension install github/gh-copilot`)
