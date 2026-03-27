@@ -16,6 +16,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 from dateutil.relativedelta import relativedelta
@@ -52,12 +53,15 @@ class SouthwestFlightSearchResult:
 def select_airport(page, input_selector: str, code: str) -> str:
     """Type airport code into combobox and select from autocomplete dropdown."""
     inp = page.locator(input_selector).first
+    checkpoint(f"click airport input {input_selector}")
     inp.evaluate("el => el.click()")
     page.wait_for_timeout(300)
 
     # Clear existing value and type the 3-letter code char-by-char
+    checkpoint(f"clear airport input {input_selector}")
     inp.fill("")
     page.wait_for_timeout(200)
+    checkpoint(f"type airport code '{code}' into {input_selector}")
     for ch in code:
         inp.type(ch, delay=80)
     page.wait_for_timeout(2500)  # wait for autocomplete dropdown
@@ -71,6 +75,7 @@ def select_airport(page, input_selector: str, code: str) -> str:
             if "area airports" in text.lower():
                 continue  # skip area grouping header
             if option.is_visible(timeout=1500):
+                checkpoint(f"click airport option for {code}")
                 option.evaluate("el => el.click()")
                 page.wait_for_timeout(500)
                 val = inp.input_value()
@@ -83,6 +88,7 @@ def select_airport(page, input_selector: str, code: str) -> str:
     try:
         first_opt = page.locator(f'[role="option"]:has-text("{code}")').first
         if first_opt.is_visible(timeout=1500):
+            checkpoint(f"click first airport option for {code}")
             first_opt.evaluate("el => el.click()")
             page.wait_for_timeout(500)
             val = inp.input_value()
@@ -92,8 +98,10 @@ def select_airport(page, input_selector: str, code: str) -> str:
         pass
 
     # Last fallback: Arrow down + Enter
+    checkpoint(f"press ArrowDown for airport {code}")
     page.keyboard.press("ArrowDown")
     page.wait_for_timeout(200)
+    checkpoint(f"press Enter for airport {code}")
     page.keyboard.press("Enter")
     page.wait_for_timeout(500)
     val = inp.input_value()
@@ -104,20 +112,24 @@ def select_airport(page, input_selector: str, code: str) -> str:
 def fill_date_field(page, input_selector: str, mm_dd: str):
     """Fill a masked date field (placeholder __/__) by typing digits only."""
     inp = page.locator(input_selector).first
+    checkpoint(f"click date field {input_selector}")
     inp.evaluate("el => el.click()")
     page.wait_for_timeout(300)
 
     # Select all existing text so we overwrite it
+    checkpoint(f"select all in date field {input_selector}")
     page.keyboard.press("Control+a")
     page.wait_for_timeout(200)
 
     # Type ONLY the digits — the mask inserts the slash automatically
     digits = mm_dd.replace("/", "")
+    checkpoint(f"type date digits '{digits}' into {input_selector}")
     for ch in digits:
         inp.type(ch, delay=80)
     page.wait_for_timeout(300)
 
     # Blur to commit
+    checkpoint(f"press Tab to commit date {input_selector}")
     page.keyboard.press("Tab")
     page.wait_for_timeout(300)
 
@@ -137,6 +149,7 @@ def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) 
 
         # ── STEP 1: Navigate ─────────────────────────────────────────
         print("STEP 1: Navigate to Southwest booking page...")
+        checkpoint("navigate to Southwest booking page")
         page.goto(
             "https://www.southwest.com/air/booking/",
             wait_until="domcontentloaded", timeout=30000,
@@ -152,6 +165,7 @@ def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) 
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
@@ -193,6 +207,7 @@ def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) 
 
         # ── STEP 3: Submit ────────────────────────────────────────────
         print("STEP 3: Click Search...")
+        checkpoint("click Search button")
         page.locator("#flightBookingSubmit").first.evaluate("el => el.click()")
 
         # Wait for results page (URL contains select-depart or select-)
@@ -202,6 +217,7 @@ def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) 
         except Exception:
             print(f"  ⚠ URL didn't match pattern. Current: {page.url[:120]}")
             # Try JS click as fallback
+            checkpoint("retry click Search button via JS")
             page.evaluate("document.querySelector('#flightBookingSubmit')?.click()")
             page.wait_for_timeout(15000)
             print(f"  Current URL after retry: {page.url[:120]}")
@@ -368,4 +384,5 @@ def test_southwest_flights():
 
 
 if __name__ == "__main__":
-    test_southwest_flights()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_southwest_flights)

@@ -25,6 +25,7 @@ from urllib.request import urlopen
 import sys as _sys
 _sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import find_chrome_executable, get_free_port
+from playwright_debugger import checkpoint
 
 
 def extract_listings(page, max_listings=5):
@@ -158,9 +159,11 @@ def search_redfin_homes(page: Page, request: RedfinSearchRequest) -> RedfinSearc
         query = request.location.replace(" ", "%20").replace(",", "%2C")
         url = f"https://www.redfin.com/city/16163/WA/Seattle/apartments-for-rent"
         print(f"Navigating to Redfin rentals for {request.location}...")
+        checkpoint("Navigate to Redfin rentals page")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
         for _ in range(3):
+            checkpoint("Scroll down to load more listings")
             page.evaluate("window.scrollBy(0, 600)")
             page.wait_for_timeout(800)
         raw = extract_listings(page, request.max_results)
@@ -231,4 +234,5 @@ def test_search_redfin_homes() -> None:
 
 
 if __name__ == "__main__":
-    test_search_redfin_homes()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_redfin_homes)

@@ -22,6 +22,9 @@ from dataclasses import dataclass
 from typing import List, Tuple
 from playwright.sync_api import Page, sync_playwright
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
+
 
 @dataclass(frozen=True)
 class HousingSearchRequest:
@@ -60,6 +63,7 @@ def search_housing_cost(page: Page, request: HousingSearchRequest) -> HousingSea
 
     try:
         print("Loading housing.illinois.edu/cost ...")
+        checkpoint("Navigate to housing.illinois.edu/cost")
         page.goto("https://www.housing.illinois.edu/cost")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -76,6 +80,7 @@ def search_housing_cost(page: Page, request: HousingSearchRequest) -> HousingSea
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=2000):
+                    checkpoint(f"Dismiss cookie/overlay button: {sel}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -95,6 +100,7 @@ def search_housing_cost(page: Page, request: HousingSearchRequest) -> HousingSea
         summary = details_section.locator("summary").first
         is_open = details_section.get_attribute("open")
         if is_open is None:
+            checkpoint("Click to expand 'New Resident Rates' accordion")
             summary.evaluate("el => el.click()")
             page.wait_for_timeout(1000)
         print("  Expanded 'New Resident Rates 2026 – 2027'")
@@ -254,4 +260,5 @@ def test_search_housing_cost() -> None:
 
 
 if __name__ == "__main__":
-    test_search_housing_cost()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_housing_cost)

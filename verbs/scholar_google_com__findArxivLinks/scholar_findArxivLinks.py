@@ -16,6 +16,7 @@ from urllib.request import urlopen
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, find_chrome_executable
+from playwright_debugger import checkpoint
 
 
 @dataclass(frozen=True)
@@ -49,6 +50,7 @@ def find_arxiv_links_for_paper(
     try:
         # ── STEP 1: Navigate to Google Scholar ────────────────────────────
         print("STEP 1: Navigate to Google Scholar...")
+        checkpoint("Navigate to Google Scholar")
         page.goto("https://scholar.google.com/", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(2000)
 
@@ -63,6 +65,7 @@ def find_arxiv_links_for_paper(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=800):
+                    checkpoint("Dismiss consent banner")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -75,6 +78,7 @@ def find_arxiv_links_for_paper(
         print(f'STEP 2: Search for "{query}"...')
 
         # Concretized: fill search input via JS and click search button
+        checkpoint("Fill search input with query")
         page.evaluate("""(q) => {
             const input = document.getElementById('gs_hdr_tsi') || document.querySelector('input[name="q"]');
             if (input) {
@@ -84,6 +88,7 @@ def find_arxiv_links_for_paper(
         }""", query)
         page.wait_for_timeout(500)
 
+        checkpoint("Click search button")
         page.evaluate("""() => {
             const btn = document.getElementById('gs_hdr_tsb') || document.querySelector('button[aria-label="Search"]');
             if (btn) btn.click();
@@ -150,6 +155,7 @@ def find_arxiv_links_for_paper(
 
             if all_versions_url:
                 print(f"  Navigating to All versions: {all_versions_url}")
+                checkpoint("Navigate to All versions page")
                 page.goto(all_versions_url, wait_until="domcontentloaded", timeout=15000)
                 page.wait_for_timeout(3000)
 
@@ -269,4 +275,5 @@ def test_scholar_paper_search():
 
 
 if __name__ == "__main__":
-    test_scholar_paper_search()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_scholar_paper_search)

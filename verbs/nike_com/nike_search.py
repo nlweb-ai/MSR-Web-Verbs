@@ -10,6 +10,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 import shutil
 
 from dataclasses import dataclass
@@ -45,6 +46,7 @@ def search_nike_products(page: Page, request: NikeSearchRequest) -> NikeSearchRe
     results = []
     try:
         print("STEP 1: Navigate to Nike search...")
+        checkpoint("Navigate to Nike search results for running shoes men")
         page.goto("https://www.nike.com/w?q=running+shoes+men&sort=price", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
 
@@ -53,6 +55,7 @@ def search_nike_products(page: Page, request: NikeSearchRequest) -> NikeSearchRe
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Click cookie/popup dismiss button: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -60,6 +63,7 @@ def search_nike_products(page: Page, request: NikeSearchRequest) -> NikeSearchRe
 
         # Scroll to load products
         for _ in range(3):
+            checkpoint("Scroll down to load more products")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(1000)
 
@@ -163,4 +167,5 @@ def test_nike_products():
 
 
 if __name__ == "__main__":
-    test_nike_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_nike_products)

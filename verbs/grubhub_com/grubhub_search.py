@@ -14,6 +14,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -59,6 +60,7 @@ def search_grubhub_restaurants(
     try:
         # ── STEP 1: Navigate to Grubhub ──────────────────────────────
         print("STEP 1: Navigate to Grubhub...")
+        checkpoint("Navigate to Grubhub")
         page.goto("https://www.grubhub.com/", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
         print(f"  Loaded: {page.url}")
@@ -67,8 +69,10 @@ def search_grubhub_restaurants(
         print(f'STEP 2: Setting delivery address = "{ADDRESS}"...')
         addr_input = page.locator('[data-testid="address-input"]')
         if addr_input.is_visible(timeout=5000):
+            checkpoint("Click address input")
             addr_input.click(timeout=3000)
             page.wait_for_timeout(300)
+            checkpoint(f"Fill address: {ADDRESS}")
             addr_input.fill(ADDRESS, timeout=3000)
             page.wait_for_timeout(2000)
             print("  Address typed")
@@ -78,11 +82,13 @@ def search_grubhub_restaurants(
         # Click "See what's nearby" to submit
         submit_btn = page.locator('[data-testid="start-order-search-btn"]')
         if submit_btn.is_visible(timeout=3000):
+            checkpoint("Click 'See what's nearby' button")
             submit_btn.click(timeout=5000)
             page.wait_for_timeout(6000)
             print(f"  Navigated to: {page.url}")
         else:
             print("  WARNING: submit button not found, navigating directly")
+            checkpoint("Navigate to Grubhub lets-eat fallback")
             page.goto(
                 "https://www.grubhub.com/lets-eat",
                 wait_until="domcontentloaded",
@@ -94,10 +100,13 @@ def search_grubhub_restaurants(
         print(f'STEP 3: Searching for "{QUERY}"...')
         search_input = page.locator('[data-testid="search-autocomplete-input"]')
         if search_input.is_visible(timeout=5000):
+            checkpoint("Click search input")
             search_input.click(timeout=3000)
             page.wait_for_timeout(300)
+            checkpoint(f"Fill search: {QUERY}")
             search_input.fill(QUERY, timeout=3000)
             page.wait_for_timeout(1000)
+            checkpoint("Press Enter to search")
             page.keyboard.press("Enter")
             page.wait_for_timeout(6000)
             print(f"  Search results: {page.url}")
@@ -109,6 +118,7 @@ def search_grubhub_restaurants(
                 "&searchTerm=Thai+food&queryText=Thai+food"
             )
             print(f"  Search input not found, falling back to URL")
+            checkpoint("Navigate to Grubhub search URL fallback")
             page.goto(search_url, wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(6000)
 
@@ -263,4 +273,5 @@ def test_search_grubhub_restaurants() -> None:
 
 
 if __name__ == "__main__":
-    test_search_grubhub_restaurants()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_grubhub_restaurants)

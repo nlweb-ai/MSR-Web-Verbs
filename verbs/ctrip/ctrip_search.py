@@ -19,6 +19,7 @@ from datetime import date, timedelta
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 
 @dataclass(frozen=True)
@@ -74,6 +75,7 @@ def search_ctrip_trains(
             f"&rDate=&trainsNo=&from=trains_mainpage"
         )
         print(f"Loading search raw_results: {search_url}")
+        checkpoint("Navigate to Ctrip train search results")
         page.goto(search_url)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(8000)
@@ -91,6 +93,7 @@ def search_ctrip_trains(
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint("Click dismiss popup button")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -238,4 +241,5 @@ def test_search_ctrip_trains() -> None:
 
 
 if __name__ == "__main__":
-    test_search_ctrip_trains()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_ctrip_trains)

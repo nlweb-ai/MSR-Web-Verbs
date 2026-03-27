@@ -20,6 +20,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 
 @dataclass(frozen=True)
@@ -70,6 +71,7 @@ def search_booking_hotels(
     try:
         # ── Navigate ──────────────────────────────────────────────────────
         print("Loading Booking.com...")
+        checkpoint("Navigate to https://www.booking.com")
         page.goto("https://www.booking.com")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(3000)
@@ -86,6 +88,7 @@ def search_booking_hotels(
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Dismiss popup: {selector}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -100,8 +103,10 @@ def search_booking_hotels(
             'input[name="ss"], '
             'input[placeholder*="Where are you going"]'
         ).first
+        checkpoint("Click destination search input")
         search_input.evaluate("el => el.click()")
         page.wait_for_timeout(500)
+        checkpoint(f"Type destination: {destination}")
         search_input.fill("")
         search_input.type(destination, delay=50)
         print(f'  Typed "{destination}"')
@@ -115,9 +120,11 @@ def search_booking_hotels(
                 '[class*="autocomplete"] li'
             ).first
             suggestion.wait_for(state="visible", timeout=5000)
+            checkpoint("Click first autocomplete suggestion")
             suggestion.evaluate("el => el.click()")
             print("  Selected first suggestion")
         except Exception:
+            checkpoint("Press Enter (no autocomplete suggestion)")
             page.keyboard.press("Enter")
             print("  No autocomplete suggestion, pressed Enter")
         page.wait_for_timeout(1000)
@@ -130,6 +137,7 @@ def search_booking_hotels(
         checkin_cell = page.locator(f'[data-date="{checkin_str}"]').first
         try:
             checkin_cell.wait_for(state="visible", timeout=5000)
+            checkpoint(f"Click check-in date: {checkin_str}")
             checkin_cell.evaluate("el => el.click()")
             print(f"  Clicked check-in date: {checkin_str}")
         except Exception:
@@ -140,6 +148,7 @@ def search_booking_hotels(
                 '[data-testid="searchbox-dates-container"], '
                 'button[data-testid="date-display-field-start"]'
             ).first
+            checkpoint("Click date field to open calendar")
             date_field.evaluate("el => el.click()")
             page.wait_for_timeout(1000)
 
@@ -160,6 +169,7 @@ def search_booking_hotels(
                 if visible_dates and target_ym < visible_dates[0][:7]:
                     # Target is before visible months → go backward
                     try:
+                        checkpoint("Navigate calendar: Previous month")
                         page.locator('button[aria-label="Previous month"]').first.evaluate("el => el.click()")
                         page.wait_for_timeout(500)
                     except Exception:
@@ -167,12 +177,14 @@ def search_booking_hotels(
                 else:
                     # Target is after visible months → go forward
                     try:
+                        checkpoint("Navigate calendar: Next month")
                         page.locator('button[aria-label="Next month"]').last.evaluate("el => el.click()")
                         page.wait_for_timeout(500)
                     except Exception:
                         break
 
             checkin_cell = page.locator(f'[data-date="{checkin_str}"]').first
+            checkpoint(f"Click check-in date: {checkin_str}")
             checkin_cell.evaluate("el => el.click()")
             print(f"  Clicked check-in date: {checkin_str}")
         page.wait_for_timeout(500)
@@ -181,6 +193,7 @@ def search_booking_hotels(
         checkout_cell = page.locator(f'[data-date="{checkout_str}"]').first
         try:
             checkout_cell.wait_for(state="visible", timeout=3000)
+            checkpoint(f"Click check-out date: {checkout_str}")
             checkout_cell.evaluate("el => el.click()")
             print(f"  Clicked check-out date: {checkout_str}")
         except Exception:
@@ -189,6 +202,7 @@ def search_booking_hotels(
                 try:
                     checkout_cell = page.locator(f'[data-date="{checkout_str}"]').first
                     if checkout_cell.is_visible(timeout=1000):
+                        checkpoint(f"Click check-out date: {checkout_str}")
                         checkout_cell.evaluate("el => el.click()")
                         print(f"  Clicked check-out date: {checkout_str}")
                         break
@@ -201,12 +215,14 @@ def search_booking_hotels(
                 )
                 if visible_dates and target_ym < visible_dates[0][:7]:
                     try:
+                        checkpoint("Navigate calendar: Previous month")
                         page.locator('button[aria-label="Previous month"]').first.evaluate("el => el.click()")
                         page.wait_for_timeout(500)
                     except Exception:
                         break
                 else:
                     try:
+                        checkpoint("Navigate calendar: Next month")
                         page.locator('button[aria-label="Next month"]').last.evaluate("el => el.click()")
                         page.wait_for_timeout(500)
                     except Exception:
@@ -220,6 +236,7 @@ def search_booking_hotels(
             '[data-testid="searchbox-search-button"], '
             'button:has-text("Search")'
         ).first
+        checkpoint("Click Search button")
         search_btn.evaluate("el => el.click()")
         print("  Clicked Search button")
 
@@ -396,4 +413,5 @@ def test_search_booking_hotels() -> None:
 
 
 if __name__ == "__main__":
-    test_search_booking_hotels()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_booking_hotels)

@@ -15,6 +15,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
 import shutil
 
@@ -40,6 +41,7 @@ def dismiss_popups(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=800):
+                checkpoint(f"Dismiss popup: {sel}")
                 loc.evaluate("el => el.click()")
                 page.wait_for_timeout(300)
         except Exception:
@@ -85,12 +87,14 @@ def search_etsy_listings(
     try:
         # Visit homepage first so DataDome sets session cookies
         print("STEP 1a: Visit Etsy homepage (establish session)...")
+        checkpoint("Navigate to https://www.etsy.com/")
         page.goto("https://www.etsy.com/", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(3000)
         dismiss_popups(page)
         print(f"   Homepage loaded: {page.title()}")
 
         print("STEP 1b: Navigate to Etsy search raw_results...")
+        checkpoint(f"Navigate to {URL}")
         page.goto(URL, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(3000)
         dismiss_popups(page)
@@ -224,4 +228,5 @@ def test_search_etsy_listings() -> None:
 
 
 if __name__ == "__main__":
-    test_search_etsy_listings()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_etsy_listings)

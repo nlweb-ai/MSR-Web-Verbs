@@ -24,6 +24,7 @@ from urllib.request import urlopen, Request
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint, run_with_debugger
 from dateutil.relativedelta import relativedelta
 
 
@@ -100,6 +101,7 @@ def dismiss_popups(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=600):
+                checkpoint(f"Dismiss popup: {sel}")
                 loc.evaluate("el => el.click()")
                 page.wait_for_timeout(300)
         except Exception:
@@ -169,6 +171,7 @@ def search_expedia_hotels(
     raw_results = []
     try:
         print("STEP 2: Navigate to search results…")
+        checkpoint(f"Navigate to {url}")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(6000)
         dismiss_popups(page)
@@ -195,9 +198,11 @@ def search_expedia_hotels(
             print("   ⚠ No known result selector appeared — will try fallbacks")
 
         # Scroll to trigger lazy loading — more scrolling for 5+ cards
+        checkpoint("Scroll down to trigger lazy loading")
         for _ in range(10):
             page.evaluate("window.scrollBy(0, 600)")
             page.wait_for_timeout(600)
+        checkpoint("Scroll to top of page")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(500)
 
@@ -390,4 +395,4 @@ def test_search_expedia_hotels() -> None:
 
 
 if __name__ == "__main__":
-    test_search_expedia_hotels()
+    run_with_debugger(test_search_expedia_hotels)

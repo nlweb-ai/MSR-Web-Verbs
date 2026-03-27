@@ -18,6 +18,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -57,6 +58,7 @@ def locate_boa_branches(
     try:
         # ── Navigate ──────────────────────────────────────────────────────
         print("Loading Bank of America Locator...")
+        checkpoint("Navigate to Bank of America Locator")
         page.goto("https://www.bankofamerica.com/locator/")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -74,6 +76,7 @@ def locate_boa_branches(
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Dismiss popup: {selector}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -94,6 +97,7 @@ def locate_boa_branches(
             # Fallback: find any visible text input inside the search form
             search_input = page.locator("form input[type='text']:visible").first
             search_input.wait_for(state="visible", timeout=5000)
+        checkpoint(f"Click and type location: {location}")
         search_input.evaluate("el => el.click()")
         page.keyboard.press("Control+a")
         page.keyboard.press("Backspace")
@@ -115,6 +119,7 @@ def locate_boa_branches(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=2000):
+                    checkpoint("Click Search button")
                     btn.evaluate("el => el.click()")
                     submitted = True
                     print("  Clicked Search button")
@@ -122,6 +127,7 @@ def locate_boa_branches(
             except Exception:
                 pass
         if not submitted:
+            checkpoint("Press Enter to submit")
             page.keyboard.press("Enter")
             print("  Pressed Enter")
         page.wait_for_load_state("domcontentloaded")
@@ -268,4 +274,5 @@ def test_locate_boa_branches() -> None:
 
 
 if __name__ == "__main__":
-    test_locate_boa_branches()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_locate_boa_branches)

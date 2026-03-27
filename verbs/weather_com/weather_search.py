@@ -16,6 +16,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys, os as _os, shutil
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), '..'))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 from dataclasses import dataclass, field
 import subprocess
 import tempfile
@@ -55,6 +56,7 @@ def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> Weather
     try:
         # ── Navigate to weather.com ───────────────────────────────────
         print(f"Loading: https://weather.com")
+        checkpoint("Navigate to weather.com")
         page.goto("https://weather.com", wait_until="domcontentloaded", timeout=30000)
         # Wait for the full header search box to appear (not just the minimal homepage widget)
         try:
@@ -76,6 +78,7 @@ def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> Weather
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Dismiss popup: {sel}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -173,12 +176,15 @@ def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> Weather
         # Improved search interaction
         try:
             # Focus and clear the input
+            checkpoint("Click search input")
             search_input.click()
             page.wait_for_timeout(1000)
+            checkpoint("Clear search input")
             search_input.clear()
 
             # Type the location slowly to trigger autocomplete API calls
             print("Typing location...")
+            checkpoint(f"Type location: {request.location}")
             search_input.type(request.location, delay=100)
             print("Waiting for suggestions / API response...")
             page.wait_for_timeout(2000)
@@ -194,6 +200,7 @@ def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> Weather
                 )
 
             print(f"Using captured location URL: {location_url}")
+            checkpoint("Navigate to captured location URL")
             page.goto(location_url, timeout=15000)
             page.wait_for_load_state("domcontentloaded", timeout=10000)
             print(f"Navigation completed to: {page.url}")
@@ -288,6 +295,7 @@ def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> Weather
         try:
             link = page.locator("a[href*='5day'], a:has-text('5 Day')").first
             if link.is_visible(timeout=3000):
+                checkpoint("Click 5-day forecast link")
                 link.evaluate("el => el.click()")
                 page.wait_for_timeout(2000)
         except Exception:
@@ -295,6 +303,7 @@ def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> Weather
             current_url = page.url
             if "/weather/" in current_url and "/5day" not in current_url:
                 five_day_url = current_url.split("/weather/")[0] + "/weather/5day/" + current_url.split("/weather/")[1].split("/")[1] if "/weather/" in current_url else current_url
+                checkpoint("Navigate to 5-day forecast page")
                 page.goto(five_day_url, timeout=15000)
                 page.wait_for_timeout(2000)
 
@@ -417,9 +426,5 @@ def test_weather_forecast(location: str):
 
 
 if __name__ == "__main__":
-    try:
-        test_weather_forecast("Seattle, WA")
-    except Exception as e:
-        print(f"Error running weather forecast: {e}")
-        import traceback
-        traceback.print_exc()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_weather_forecast, "Seattle, WA")

@@ -7,6 +7,7 @@ import re, os, sys, traceback
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -39,6 +40,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
 
     try:
         print("STEP 1: Navigate to Trulia homepage...")
+        checkpoint("navigate to Trulia homepage")
         page.goto("https://www.trulia.com/", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(3000)
         
@@ -50,6 +52,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"dismiss popup: {sel}")
                     loc.click()
                     print(f"   Dismissed: {sel}")
                     page.wait_for_timeout(500)
@@ -72,6 +75,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
             try:
                 element = page.locator(selector).first
                 if element.is_visible(timeout=2000):
+                    checkpoint(f"click rent tab: {selector}")
                     element.click()
                     rent_clicked = True
                     print(f"   Clicked rent tab using selector: {selector}")
@@ -110,17 +114,21 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
         if search_input:
             # Step A: Focus and fully clear the input using keyboard (not .clear())
             # .clear() doesn't fire input/change events that Trulia's React needs
+            checkpoint("click search input to focus")
             search_input.click()
             page.wait_for_timeout(500)
             
             # Select all + delete to trigger proper React events
+            checkpoint("select all text in search input")
             page.keyboard.press("Control+a")
             page.wait_for_timeout(100)
+            checkpoint("clear search input with backspace")
             page.keyboard.press("Backspace")
             page.wait_for_timeout(500)
             
             # Step B: Type using keyboard (not .type() on element) to fire native events
             print(f"   Typing '{request.location}' via keyboard...")
+            checkpoint(f"type location '{request.location}' into search input")
             page.keyboard.type(request.location, delay=100)
             print(f"   Typed '{request.location}' into search input")
             
@@ -210,6 +218,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
                             chosen = suggestions.nth(best_match)
                             chosen_text = (chosen.text_content() or "").strip()
                             print(f"   ✅ Selecting suggestion [{best_match}]: '{chosen_text[:60]}' (score={best_score})")
+                            checkpoint(f"click autocomplete suggestion [{best_match}]")
                             chosen.click()
                             suggestion_clicked = True
                             page.wait_for_timeout(1500)
@@ -220,12 +229,16 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
             if not suggestion_clicked:
                 # Retry: click input again, clear, and retype
                 print("   No suggestions found on first try. Retrying...")
+                checkpoint("click search input for retry")
                 search_input.click()
                 page.wait_for_timeout(300)
+                checkpoint("select all text for retry")
                 page.keyboard.press("Control+a")
+                checkpoint("clear search input for retry")
                 page.keyboard.press("Backspace")
                 page.wait_for_timeout(500)
                 # Type just the city name (without state) to get broader matches
+                checkpoint(f"type city name '{city_name}' for retry")
                 page.keyboard.type(city_name, delay=120)
                 page.wait_for_timeout(3000)
                 
@@ -242,6 +255,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
                                 except Exception:
                                     pass
                             # Click the first one
+                            checkpoint("click first suggestion on retry")
                             suggestions.first.click()
                             suggestion_clicked = True
                             print(f"   ✅ Clicked first suggestion on retry")
@@ -253,10 +267,13 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
             if not suggestion_clicked:
                 print("   No autocomplete found after retry. Trying ArrowDown + Enter...")
                 try:
+                    checkpoint("click search input for ArrowDown+Enter fallback")
                     search_input.click()
                     page.wait_for_timeout(300)
+                    checkpoint("press ArrowDown to select suggestion")
                     page.keyboard.press("ArrowDown")
                     page.wait_for_timeout(500)
+                    checkpoint("press Enter to confirm suggestion")
                     page.keyboard.press("Enter")
                     suggestion_clicked = True
                     print("   Pressed ArrowDown + Enter")
@@ -278,6 +295,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
                 try:
                     element = page.locator(selector).first
                     if element.is_visible(timeout=1500):
+                        checkpoint(f"click search button: {selector}")
                         element.click()
                         search_button_clicked = True
                         print(f"   Clicked Search button: {selector}")
@@ -288,6 +306,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
             if not search_button_clicked:
                 # Fallback: press Enter
                 print("   No Search button found, pressing Enter...")
+                checkpoint("press Enter to submit search")
                 search_input.press("Enter")
             
             # Wait for navigation to results page
@@ -333,6 +352,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
                 try:
                     element = page.locator(selector).first
                     if element.is_visible(timeout=800):  # Reduced timeout since URL filtering is primary
+                        checkpoint(f"click bedroom filter: {selector}")
                         element.click()
                         bedroom_clicked = True
                         print(f"   ✅ Applied bedroom filter using selector #{i+1}: {selector}")
@@ -359,6 +379,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
                         filter_button = page.locator(selector).first
                         if filter_button.is_visible(timeout=800):  # Reduced timeout
                             print(f"   Found general bed filter: {selector}")
+                            checkpoint(f"click general bed filter: {selector}")
                             filter_button.click()
                             page.wait_for_timeout(1000)
                             
@@ -374,6 +395,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
                                 try:
                                     option = page.locator(specific_sel).first
                                     if option.is_visible(timeout=500):  # Reduced timeout
+                                        checkpoint(f"select {request.min_beds}+ beds option")
                                         option.click()
                                         bedroom_clicked = True
                                         print(f"   ✅ Selected {request.min_beds}+ beds option")
@@ -404,6 +426,7 @@ def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearc
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"dismiss popup via evaluate: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -694,4 +717,5 @@ def test_trulia_homes() -> None:
 
 
 if __name__ == "__main__":
-    test_trulia_homes()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_trulia_homes)

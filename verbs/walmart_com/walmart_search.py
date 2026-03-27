@@ -15,6 +15,7 @@ from playwright.sync_api import Page, sync_playwright, TimeoutError as PWTimeout
 import sys as _sys, os as _os, shutil, time
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), '..'))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 from dataclasses import dataclass
 import subprocess
 import tempfile
@@ -53,6 +54,7 @@ def dismiss_popups(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=600):
+                checkpoint(f"dismiss popup: {sel}")
                 loc.evaluate("el => el.click()")
                 time.sleep(0.3)
         except Exception:
@@ -217,14 +219,17 @@ def search_walmart_products(page: Page, request: WalmartSearchRequest) -> Walmar
     products = []
     try:
         print(f"Loading: {url}")
+        checkpoint(f"navigate to Walmart search: {request.search_query}")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(4000)
         dismiss_popups(page)
         page.wait_for_timeout(2000)
 
         for _ in range(3):
+            checkpoint("scroll down to load products")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(500)
+        checkpoint("scroll back to top")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(1000)
 
@@ -299,4 +304,5 @@ def test_walmart_products():
 
 
 if __name__ == "__main__":
-    test_walmart_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_walmart_products)

@@ -14,6 +14,7 @@ from playwright.sync_api import Page, sync_playwright, expect
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -41,6 +42,7 @@ def send_teams_message(page: Page, request: TeamsMessageRequest) -> TeamsMessage
 
     try:
         # Navigate to Teams
+        checkpoint("Navigate to Teams")
         page.goto("https://teams.microsoft.com/v2/")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -49,9 +51,11 @@ def send_teams_message(page: Page, request: TeamsMessageRequest) -> TeamsMessage
         # Teams uses a "New chat" button or Ctrl+N shortcut
         try:
             new_chat_btn = page.get_by_role("button", name=re.compile(r"New chat|New message|Compose", re.IGNORECASE)).first
+            checkpoint("Click New Chat button")
             new_chat_btn.evaluate("el => el.click()")
         except Exception:
             # Fallback: use keyboard shortcut
+            checkpoint("Press Ctrl+N for new chat")
             page.keyboard.press("Control+n")
         page.wait_for_timeout(2000)
 
@@ -60,20 +64,25 @@ def send_teams_message(page: Page, request: TeamsMessageRequest) -> TeamsMessage
         to_field = page.get_by_role("textbox", name=re.compile(r"^To", re.IGNORECASE)).first
         if not to_field.is_visible(timeout=3000):
             to_field = page.locator("[role='combobox'] [role='textbox']").first
+        checkpoint("Click To field")
         to_field.evaluate("el => el.click()")
+        checkpoint("Type recipient in To field")
         to_field.press_sequentially(request.recipient, delay=30)
         page.wait_for_timeout(2000)
 
         # Select the recipient from the suggestions dropdown
         try:
             suggestion = page.get_by_role("option", name=re.compile(re.escape(request.recipient.split("@")[0]), re.IGNORECASE)).first
+            checkpoint("Click recipient suggestion")
             suggestion.evaluate("el => el.click()")
         except Exception:
             # Try clicking a listbox item or pressing Enter to confirm
             try:
                 suggestion = page.locator("[role='listbox'] [role='option']").first
+                checkpoint("Click listbox suggestion")
                 suggestion.evaluate("el => el.click()")
             except Exception:
+                checkpoint("Press Enter to confirm recipient")
                 to_field.press("Enter")
         page.wait_for_timeout(2000)
 
@@ -82,15 +91,19 @@ def send_teams_message(page: Page, request: TeamsMessageRequest) -> TeamsMessage
         compose_box = page.get_by_role("textbox", name=re.compile(r"message|type|compose|new message", re.IGNORECASE)).first
         if not compose_box.is_visible(timeout=3000):
             compose_box = page.locator("[data-tid='ckeditor-replyConversation'], [role='textbox']").first
+        checkpoint("Click compose box")
         compose_box.evaluate("el => el.click()")
+        checkpoint("Type message in compose box")
         compose_box.press_sequentially(request.message, delay=50)
         page.wait_for_timeout(1000)
 
         # Send the message (click Send button or press Ctrl+Enter)
         try:
             send_btn = page.get_by_role("button", name=re.compile(r"Send", re.IGNORECASE)).first
+            checkpoint("Click Send button")
             send_btn.evaluate("el => el.click()")
         except Exception:
+            checkpoint("Press Ctrl+Enter to send")
             compose_box.press("Control+Enter")
         page.wait_for_timeout(3000)
 
@@ -146,4 +159,5 @@ def test_send_teams_message() -> None:
 
 
 if __name__ == "__main__":
-    test_send_teams_message()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_send_teams_message)

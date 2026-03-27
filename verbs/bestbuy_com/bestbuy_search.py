@@ -19,6 +19,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 @dataclass(frozen=True)
 class BestBuySearchRequest:
@@ -59,6 +60,7 @@ def search_bestbuy_products(
         search_url = f"https://www.bestbuy.com/site/searchpage.jsp?st={quote(search_term)}&sp=%2Bcustomerrating"
         print(f"Loading search raw_results (sorted by Customer Rating)...")
         print(f"  URL: {search_url}")
+        checkpoint("Navigate to Best Buy search results page")
         page.goto(search_url)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -69,8 +71,10 @@ def search_bestbuy_products(
 
         # Scroll to load products
         for _ in range(3):
+            checkpoint("Scroll down to load more products")
             page.evaluate("window.scrollBy(0, 400)")
             page.wait_for_timeout(500)
+        checkpoint("Scroll back to top of page")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(1000)
 
@@ -180,4 +184,5 @@ def test_search_bestbuy_products() -> None:
 
 
 if __name__ == "__main__":
-    test_search_bestbuy_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_bestbuy_products)

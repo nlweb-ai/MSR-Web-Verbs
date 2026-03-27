@@ -18,6 +18,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 
 MONTH_NAMES = [
@@ -79,6 +80,7 @@ def search_airbnb_listings(
 
         # ── Navigate ──────────────────────────────────────────────────
         print("Loading Airbnb...")
+        checkpoint("Navigate to https://www.airbnb.com")
         page.goto("https://www.airbnb.com")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(4000)
@@ -94,6 +96,7 @@ def search_airbnb_listings(
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Dismiss popup: {selector}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -107,6 +110,7 @@ def search_airbnb_listings(
         ).first
         try:
             search_input.wait_for(state="visible", timeout=5000)
+            checkpoint("Click search input")
             search_input.evaluate("el => el.click()")
         except Exception:
             page.locator(
@@ -117,9 +121,11 @@ def search_airbnb_listings(
             search_input = page.locator(
                 'input[name="query"], input[placeholder*="Search"]'
             ).first
+            checkpoint("Click search input (retry)")
             search_input.evaluate("el => el.click()")
         page.wait_for_timeout(500)
 
+        checkpoint(f"Type destination: {destination}")
         page.keyboard.press("Control+a")
         page.keyboard.type(destination, delay=50)
         print(f'  Typed "{destination}"')
@@ -133,9 +139,11 @@ def search_airbnb_listings(
                 '[role="option"]'
             ).first
             suggestion.wait_for(state="visible", timeout=5000)
+            checkpoint("Click first autocomplete suggestion")
             suggestion.evaluate("el => el.click()")
             print("  Selected first suggestion")
         except Exception:
+            checkpoint("Press Enter (no suggestion)")
             page.keyboard.press("Enter")
             print("  No suggestion, pressed Enter")
         page.wait_for_timeout(1500)
@@ -157,6 +165,7 @@ def search_airbnb_listings(
             try:
                 el = page.locator(sel).first
                 if el.is_visible(timeout=2000):
+                    checkpoint(f"Open guest picker: {sel}")
                     el.evaluate("el => el.click()")
                     guest_opened = True
                     break
@@ -182,6 +191,7 @@ def search_airbnb_listings(
                     '[data-testid="stepper-adults-increase-button"], '
                     'button[aria-label*="increase" i][aria-label*="adult" i]'
                 ).first
+                checkpoint("Click adults increase button")
                 inc.evaluate("el => el.click()")
                 page.wait_for_timeout(300)
             except Exception:
@@ -201,12 +211,14 @@ def search_airbnb_listings(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=2000):
+                    checkpoint("Click Search button")
                     btn.evaluate("el => el.click()")
                     search_clicked = True
                     break
             except Exception:
                 pass
         if not search_clicked:
+            checkpoint("Press Enter to search")
             page.keyboard.press("Enter")
             print("  Pressed Enter to search")
         else:
@@ -236,6 +248,7 @@ def search_airbnb_listings(
             )
 
         print(f"  New URL: {new_url}")
+        checkpoint("Navigate to URL with date/guest params")
         page.goto(new_url)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(6000)
@@ -411,4 +424,5 @@ def test_search_airbnb_listings() -> None:
 
 
 if __name__ == "__main__":
-    test_search_airbnb_listings()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_airbnb_listings)

@@ -8,11 +8,15 @@ all anti-bot measures since it's meant for programmatic access.
 import re
 from dataclasses import dataclass
 
+import os
 import sys
 import json
 import html as html_module
 from urllib.parse import quote_plus
 from urllib.request import urlopen, Request
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 MAX_RESULTS = 5
 DEFAULT_QUERY = "how to parse JSON in Python"
@@ -174,4 +178,5 @@ def test_stackoverflow_search():
 
 
 if __name__ == "__main__":
-    test_stackoverflow_search()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_stackoverflow_search)

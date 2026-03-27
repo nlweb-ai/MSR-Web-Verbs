@@ -21,6 +21,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 @dataclass(frozen=True)
 class CourseraSearchRequest:
@@ -62,6 +63,7 @@ def search_coursera_courses(
 
         search_url = f"https://www.coursera.org/search?query={quote_plus(search_term)}&productFree=true"
         print(f"Loading: {search_url}")
+        checkpoint(f"Navigate to {search_url}")
         page.goto(search_url)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -78,6 +80,7 @@ def search_coursera_courses(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Click dismiss button: {sel}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -88,8 +91,10 @@ def search_coursera_courses(
 
         # Scroll to load content
         for _ in range(3):
+            checkpoint("Scroll down 500px to load content")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(500)
+        checkpoint("Scroll back to top")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(1000)
 
@@ -203,4 +208,5 @@ def test_search_coursera_courses() -> None:
 
 
 if __name__ == "__main__":
-    test_search_coursera_courses()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_coursera_courses)

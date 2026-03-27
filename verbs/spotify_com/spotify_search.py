@@ -11,6 +11,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -41,6 +42,7 @@ def search_spotify_playlists(page: Page, request: SpotifySearchRequest) -> Spoti
     playlists = []
     try:
         print("STEP 1: Navigate to Spotify search...")
+        checkpoint("Navigate to Spotify search page")
         page.goto("https://open.spotify.com/search/jazz%20playlist", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(8000)
 
@@ -49,6 +51,7 @@ def search_spotify_playlists(page: Page, request: SpotifySearchRequest) -> Spoti
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint("Dismiss cookie banner")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
@@ -57,12 +60,14 @@ def search_spotify_playlists(page: Page, request: SpotifySearchRequest) -> Spoti
         try:
             pl_tab = page.locator("button:has-text('Playlists'), a:has-text('Playlists')").first
             if pl_tab.is_visible(timeout=2000):
+                checkpoint("Click Playlists tab")
                 pl_tab.evaluate("el => el.click()")
                 page.wait_for_timeout(3000)
         except Exception:
             pass
 
         for _ in range(5):
+            checkpoint("Scroll down to load more results")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(600)
 
@@ -177,4 +182,5 @@ def test_spotify_playlists():
 
 
 if __name__ == "__main__":
-    test_spotify_playlists()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_spotify_playlists)

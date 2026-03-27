@@ -13,6 +13,9 @@ from dataclasses import dataclass
 from typing import List
 from playwright.sync_api import Page, sync_playwright
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
+
 
 @dataclass(frozen=True)
 class NearbySearchRequest:
@@ -47,6 +50,7 @@ def search_nearby(page: Page, request: NearbySearchRequest) -> NearbySearchResul
         search_text = f"{request.query} near {request.location}"
         print(f"Loading Google Maps with query: {search_text} ...")
         encoded = search_text.replace(" ", "+")
+        checkpoint("goto Google Maps nearby search")
         page.goto(f"https://www.google.com/maps/search/{encoded}/", wait_until="domcontentloaded", timeout=30000)
 
         # Wait for either the results feed OR a direct place page (address button)
@@ -70,6 +74,7 @@ def search_nearby(page: Page, request: NearbySearchRequest) -> NearbySearchResul
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=200):
+                    checkpoint("click consent popup button")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(300)
             except Exception:
@@ -202,6 +207,7 @@ def search_nearby(page: Page, request: NearbySearchRequest) -> NearbySearchResul
             if card_idx >= len(cards):
                 break
 
+            checkpoint("click result card")
             cards[card_idx].evaluate("el => el.click()")
             try:
                 page.locator("button[data-item-id='address']").first.wait_for(state='attached', timeout=3000)
@@ -372,5 +378,6 @@ def test_papa_dels() -> None:
 
 
 if __name__ == "__main__":
-    #test_search_nearby()
-    test_papa_dels()
+    from playwright_debugger import run_with_debugger
+    #run_with_debugger(test_search_nearby)
+    run_with_debugger(test_papa_dels)

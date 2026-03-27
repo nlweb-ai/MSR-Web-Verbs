@@ -19,6 +19,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -58,6 +59,7 @@ def search_chase_branches(
     try:
         # ── Navigate to Chase locator ─────────────────────────────────────
         print("Loading Chase locator...")
+        checkpoint("Navigate to https://locator.chase.com")
         page.goto("https://locator.chase.com")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -75,6 +77,7 @@ def search_chase_branches(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Click dismiss/cookie button: {sel}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -108,13 +111,17 @@ def search_chase_branches(
         if search_input is None:
             raise Exception("Could not find search input on the page")
 
+        checkpoint("Click search input")
         search_input.evaluate("el => el.click()")
+        checkpoint("Select all text in search input")
         page.keyboard.press("Control+a")
         page.wait_for_timeout(300)
+        checkpoint(f"Fill search input with '{search_term}'")
         search_input.fill(search_term)
         page.wait_for_timeout(2000)
         print(f"  Typed: \"{search_term}\"")
 
+        checkpoint("Press Enter to submit search")
         page.keyboard.press("Enter")
         print("  Submitted search")
         page.wait_for_timeout(8000)
@@ -125,8 +132,10 @@ def search_chase_branches(
 
         # Scroll to load lazy content
         for _ in range(3):
+            checkpoint("Scroll down 400px to load lazy content")
             page.evaluate("window.scrollBy(0, 400)")
             page.wait_for_timeout(500)
+        checkpoint("Scroll back to top")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(1000)
 
@@ -213,4 +222,5 @@ def test_search_chase_branches() -> None:
 
 
 if __name__ == "__main__":
-    test_search_chase_branches()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_chase_branches)

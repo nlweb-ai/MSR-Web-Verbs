@@ -13,6 +13,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import find_chrome_executable, get_free_port
+from playwright_debugger import checkpoint
 
 
 # ── extraction ───────────────────────────────────────────
@@ -105,6 +106,7 @@ def dismiss_popups(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=600):
+                checkpoint(f"dismiss popup: {sel}")
                 loc.evaluate("el => el.click()")
                 time.sleep(0.3)
         except Exception:
@@ -122,6 +124,7 @@ def ensure_calendar_open(page, trigger_id, max_attempts=3):
     for _ in range(max_attempts):
         if is_calendar_open(page):
             return True
+        checkpoint("click calendar trigger to open")
         page.locator(trigger_id).evaluate("el => el.click()")
         page.wait_for_timeout(2000)
     return is_calendar_open(page)
@@ -140,6 +143,7 @@ def find_day_cell(page, pattern, padded):
 def click_next_month(page):
     btn = page.locator("[aria-label='Next Month']")
     if btn.count() > 0:
+        checkpoint("click next month button")
         btn.first.evaluate("el => el.click()")
         page.wait_for_timeout(600)
         return True
@@ -151,6 +155,7 @@ def navigate_to_day(page, aria, aria_pad, max_months=12):
     for _ in range(max_months):
         cell = find_day_cell(page, aria, aria_pad)
         if cell:
+            checkpoint("click target day cell")
             cell.evaluate("el => el.click()")
             page.wait_for_timeout(800)
             return True
@@ -201,6 +206,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
     try:
         # ── STEP 1: Load reservation search page ──
         print(f"STEP 1: Navigate to Hertz reservation page…")
+        checkpoint("navigate to Hertz reservation page")
         page.goto("https://www.hertz.com/rentacar/reservation/",
                   wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
@@ -209,10 +215,13 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
 
         # ── STEP 2: Fill pickup location ──
         print("STEP 2: Setting pickup location to LAX…")
+        checkpoint("click location input")
         page.locator("#locationInput").evaluate("el => el.click()")
+        checkpoint("fill location input with LAX")
         page.locator("#locationInput").fill("LAX")
         page.wait_for_timeout(2500)
         if page.locator("li[role='option']").count() > 0:
+            checkpoint("click first autocomplete option")
             page.locator("li[role='option']").first.evaluate("el => el.click()")
         page.wait_for_timeout(1500)
 
@@ -230,6 +239,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
         page.wait_for_timeout(800)
         cell = find_day_cell(page, do_aria, do_aria_pad)
         if cell:
+            checkpoint("click return date cell")
             cell.evaluate("el => el.click()")
             page.wait_for_timeout(800)
             do_found = True
@@ -242,6 +252,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
         page.wait_for_timeout(500)
 
         # Close calendar
+        checkpoint("dismiss calendar with Escape key")
         page.evaluate(
             "(() => { document.dispatchEvent(new KeyboardEvent('keydown',"
             " {key:'Escape',code:'Escape',bubbles:true}));"
@@ -250,6 +261,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
         page.wait_for_timeout(1000)
         if is_calendar_open(page):
             try:
+                checkpoint("click header to close calendar")
                 page.locator("header").first.evaluate("el => el.click()")
             except Exception:
                 pass
@@ -257,6 +269,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
 
         # ── STEP 5: Submit search ──
         print("STEP 5: Submitting search…")
+        checkpoint("click submit button")
         page.evaluate(
             "(() => { const b = document.querySelector(\"button[type='submit']\");"
             " if (b) b.click(); })()"
@@ -273,6 +286,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
                 f"&age=25"
             )
             print(f"  Form submit didn't navigate — going directly…")
+            checkpoint("navigate directly to vehicle results")
             page.goto(vehicle_url, wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(12000)
             print(f"  URL: {page.url[:120]}")
@@ -281,6 +295,7 @@ def search_hertz_cars(page: Page, request: HertzSearchRequest) -> HertzSearchRes
         snippet = page.evaluate("document.body.innerText.substring(0, 500)")
         if any(kw in snippet.lower() for kw in ["bad request", "something went wrong", "oops"]):
             print("  ⚠ Error page — reloading…")
+            checkpoint("reload error page")
             page.reload(wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(10000)
 
@@ -393,4 +408,5 @@ def test_hertz_cars():
 
 
 if __name__ == "__main__":
-    test_hertz_cars()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_hertz_cars)

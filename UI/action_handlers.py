@@ -6,6 +6,7 @@ import threading
 import tkinter as tk
 import tkinter.messagebox
 from copilot import copilot_stream, CODE_SUMMARY_MODEL
+from playwright_debugger import debug_state, _step_event
 
 
 def save_task(app):
@@ -709,6 +710,14 @@ def execute_strategy(app):
         app.root.update_idletasks()
 
         def _dispatch():
+            # Reset debugger state for this execution
+            debug_state["mode"] = "running"
+            debug_state["done"] = False
+            debug_state["action"] = ""
+            _step_event.set()  # unblock in case it was waiting
+            app.root.after(0, lambda: app._sync_debugger_buttons("running"))
+            app.root.after(0, app._dbg_poll_state)
+
             # Load the module here (file I/O only, no Playwright calls)
             try:
                 spec = importlib.util.spec_from_file_location(py_code_name, py_file)
@@ -734,7 +743,10 @@ def execute_strategy(app):
             _finish(result_text)
 
         def _finish(result_text):
+            debug_state["done"] = True
+            _step_event.set()  # unblock in case paused
             def _show():
+                app._sync_debugger_buttons("idle")
                 app.chat_display.config(state=tk.NORMAL)
                 #app.chat_display.insert(tk.END, f"{result_text}\n\n", "copilot")
                 app.chat_display.insert(tk.END, f"Execution completed.\n", "copilot")

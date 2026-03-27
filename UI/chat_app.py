@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Add verbs directory for cdp_utils
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "verbs"))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws
+from playwright_debugger import debug_state, _step_event, _lock
 
 from file_loader import load_files_as_tabs
 from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
@@ -88,6 +89,8 @@ class ChatApp:
         self._pw_worker_thread = None
         self.page = None         # set by worker thread once Chrome is ready
         self._work = (0, 0, 0, 0)
+        self._debugger_win = None  # Toplevel debugger window
+        self._dbg_widgets = {}     # debugger UI widgets
 
         # Configure notebook tab styles
         self._configure_styles()
@@ -548,6 +551,7 @@ class ChatApp:
         """
         chrome_x = work_x + work_w // 2
         chrome_w = work_w - work_w // 2
+        dbg_h = 80  # height reserved for the debugger bar above Chrome
 
         # Stop the previous worker thread before starting a new one
         if self._pw_worker_thread is not None and self._pw_worker_thread.is_alive():
@@ -558,9 +562,9 @@ class ChatApp:
 
         scale = 0.85
         chrome_x_dip = int(chrome_x / scale)
-        chrome_y_dip = int(work_y / scale)
+        chrome_y_dip = int((work_y + dbg_h) / scale)
         chrome_w_dip = int(chrome_w / scale)
-        chrome_h_dip = int(work_h / scale)
+        chrome_h_dip = int((work_h - dbg_h) / scale)
 
         # Dedicated Playwright profile — separate from Chrome's real default profile
         # (which Chrome forbids from CDP use).
@@ -638,6 +642,7 @@ class ChatApp:
                 self.page = context.new_page()
                 self.root.after(0, lambda: self._chrome_status_label.config(
                     text="Chrome: \u2705 Connected", fg="#060"))
+                self.root.after(0, lambda: self._show_debugger_window(chrome_x, work_y, chrome_w))
             except Exception as exc:
                 err_msg = str(exc)
                 def _show_err():
@@ -651,20 +656,22 @@ class ChatApp:
                 self.root.after(0, _show_err)
                 return
 
-            # Snap Chrome window into position
+            # Snap Chrome window into position (below debugger bar)
             user32 = ctypes.windll.user32
             SWP_NOZORDER = 0x0004
+            chrome_y = work_y + dbg_h
+            chrome_h = work_h - dbg_h
             deadline = time.time() + 20
             while time.time() < deadline:
                 hwnds = self._get_chrome_hwnds()
                 if hwnds:
                     self._chrome_hwnd = next(iter(hwnds))
-                    user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
+                    user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, chrome_y, chrome_w, chrome_h, SWP_NOZORDER)
                     break
                 time.sleep(0.3)
             if self._chrome_hwnd:
                 time.sleep(2.0)
-                user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
+                user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, chrome_y, chrome_w, chrome_h, SWP_NOZORDER)
 
             # Task loop: process automate() calls submitted by execute_strategy.
             # We poll with a short timeout instead of blocking forever so that
@@ -728,11 +735,141 @@ class ChatApp:
 
         if chrome_alive:
             # Just reposition it
-            user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, work_y, chrome_w, work_h, SWP_NOZORDER)
+            chrome_x = work_x + work_w // 2
+            chrome_w = work_w - work_w // 2
+            dbg_h = 80
+            chrome_y = work_y + dbg_h
+            chrome_h = work_h - dbg_h
+            user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, chrome_y, chrome_w, chrome_h, SWP_NOZORDER)
+            # Reposition debugger window above Chrome
+            if self._debugger_win:
+                try:
+                    self._debugger_win.geometry(f"{chrome_w}x{dbg_h}+{chrome_x}+{work_y}")
+                except tk.TclError:
+                    pass
         else:
             # Chrome was closed — re-launch with the persistent profile
             self._chrome_hwnd = None
             self._launch_shared_chrome(work_x, work_y, work_w, work_h)
+
+    # ── Debugger window ──────────────────────────────────────────────
+    def _show_debugger_window(self, chrome_x, chrome_y, chrome_w):
+        """Create (or re-show) the debugger Toplevel above the Chrome browser."""
+        if self._debugger_win is not None:
+            try:
+                self._debugger_win.deiconify()
+                self._sync_debugger_buttons("idle")
+                return
+            except tk.TclError:
+                pass  # window was destroyed
+
+        dbg_h = 80
+        win = tk.Toplevel(self.root)
+        win.title("Debugger")
+        win.overrideredirect(True)
+        win.attributes("-topmost", True)
+        win.configure(bg="#2B2B2B")
+        win.geometry(f"{chrome_w}x{dbg_h}+{chrome_x}+{chrome_y}")
+        self._debugger_win = win
+
+        btn_frame = tk.Frame(win, bg="#2B2B2B")
+        btn_frame.pack(pady=(6, 0))
+
+        status_var = tk.StringVar(value="IDLE")
+        status_lbl = tk.Label(btn_frame, textvariable=status_var,
+                              font=("Consolas", 11, "bold"), fg="#888",
+                              bg="#2B2B2B", width=10)
+        status_lbl.pack(side=tk.LEFT, padx=(10, 6))
+
+        break_btn = tk.Button(btn_frame, text="\u23F8 Break",
+                              command=self._dbg_on_break, width=20,
+                              font=("Segoe UI Emoji", 11), state=tk.DISABLED)
+        break_btn.pack(side=tk.LEFT, padx=4)
+
+        continue_btn = tk.Button(btn_frame, text="\u25B6 Continue",
+                                 command=self._dbg_on_continue, width=20,
+                                 font=("Segoe UI Emoji", 11), state=tk.DISABLED)
+        continue_btn.pack(side=tk.LEFT, padx=4)
+
+        step_btn = tk.Button(btn_frame, text="\u23ED Step",
+                             command=self._dbg_on_step, width=20,
+                             font=("Segoe UI Emoji", 11), state=tk.DISABLED)
+        step_btn.pack(side=tk.LEFT, padx=4)
+
+        action_var = tk.StringVar(value="")
+        action_lbl = tk.Label(win, textvariable=action_var,
+                              font=("Consolas", 14), fg="#CCC", bg="#2B2B2B",
+                              anchor=tk.W)
+        action_lbl.pack(fill=tk.X, padx=10, pady=(2, 4))
+
+        self._dbg_widgets = dict(
+            status_var=status_var, status_lbl=status_lbl,
+            action_var=action_var,
+            break_btn=break_btn, continue_btn=continue_btn,
+            step_btn=step_btn,
+        )
+        self._sync_debugger_buttons("idle")
+
+    def _sync_debugger_buttons(self, mode: str):
+        """Sync debugger button states.  mode: 'idle' | 'running' | 'paused'."""
+        w = self._dbg_widgets
+        if not w:
+            return
+        if mode == "idle":
+            w["break_btn"].config(state=tk.DISABLED)
+            w["continue_btn"].config(state=tk.DISABLED)
+            w["step_btn"].config(state=tk.DISABLED)
+            w["status_var"].set("IDLE")
+            w["status_lbl"].config(fg="#888")
+            w["action_var"].set("")
+        elif mode == "running":
+            w["break_btn"].config(state=tk.NORMAL)
+            w["continue_btn"].config(state=tk.DISABLED)
+            w["step_btn"].config(state=tk.DISABLED)
+            w["status_var"].set("RUNNING")
+            w["status_lbl"].config(fg="#4CAF50")
+        elif mode == "paused":
+            w["break_btn"].config(state=tk.DISABLED)
+            w["continue_btn"].config(state=tk.NORMAL)
+            w["step_btn"].config(state=tk.NORMAL)
+            w["status_var"].set("PAUSED")
+            w["status_lbl"].config(fg="#F44336")
+
+    def _dbg_on_break(self):
+        with _lock:
+            debug_state["mode"] = "paused"
+        self._sync_debugger_buttons("paused")
+
+    def _dbg_on_continue(self):
+        with _lock:
+            debug_state["mode"] = "running"
+        self._sync_debugger_buttons("running")
+        _step_event.set()
+
+    def _dbg_on_step(self):
+        with _lock:
+            debug_state["mode"] = "paused"
+        _step_event.set()
+
+    def _dbg_poll_state(self):
+        """Poll debug_state from the worker thread and update the UI."""
+        if self._debugger_win is None or not self._dbg_widgets:
+            return
+        try:
+            if debug_state.get("done"):
+                self._sync_debugger_buttons("idle")
+                return
+            mode = debug_state.get("mode", "running")
+            action = debug_state.get("action", "")
+            if mode == "paused":
+                self._sync_debugger_buttons("paused")
+                self._dbg_widgets["action_var"].set(f"Next: {action}" if action else "")
+            else:
+                self._sync_debugger_buttons("running")
+                self._dbg_widgets["action_var"].set(f"Running: {action}" if action else "")
+            self.root.after(200, self._dbg_poll_state)
+        except tk.TclError:
+            pass  # window destroyed
 
     def _get_chrome_hwnds(self) -> set:
         """Return handles of visible top-level windows owned by chrome.exe (not VS Code)."""

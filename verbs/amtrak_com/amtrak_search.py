@@ -29,6 +29,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 MONTHS = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
@@ -142,6 +143,7 @@ def enter_station(page, field_type, station_name, keyword):
     print(f"STEP {step}: {label} = \"{station_name}\"...")
 
     # Focus and click field by known ID
+    checkpoint(f"Click {label} field")
     page.evaluate(f"""((id) => {{
         const inp = document.getElementById(id);
         if (inp) {{ inp.focus(); inp.click(); inp.select(); }}
@@ -149,6 +151,7 @@ def enter_station(page, field_type, station_name, keyword):
     page.wait_for_timeout(500)
 
     # Clear and type
+    checkpoint(f"Type station: {station_name}")
     page.keyboard.press("Control+a")
     page.wait_for_timeout(100)
     page.keyboard.press("Backspace")
@@ -178,6 +181,7 @@ def enter_station(page, field_type, station_name, keyword):
     print(f'   Found: "{option["text"]}"')
 
     # Trusted coordinate click (deterministic)
+    checkpoint(f"Click autocomplete option: {option['text']}")
     page.mouse.click(option["x"], option["y"])
     page.wait_for_timeout(1000)
 
@@ -209,6 +213,7 @@ def set_date(page, dep):
         return r.width > 20 ? { x: r.x + r.width/2, y: r.y + r.height/2 } : null;
     })()""")
     if df:
+        checkpoint("Click date field")
         page.mouse.click(df["x"], df["y"])
         print("   Clicked date field")
     page.wait_for_timeout(2000)
@@ -462,6 +467,7 @@ def search_amtrak_trains(
     print(f"  Departure: {dep_display}  (1 adult, one-way)\n")
     try:
         print("Loading Amtrak...")
+        checkpoint("Navigate to https://www.amtrak.com")
         page.goto("https://www.amtrak.com")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(1000)
@@ -545,4 +551,5 @@ def test_search_amtrak_trains() -> None:
         finally:
             context.close()
 if __name__ == "__main__":
-    test_search_amtrak_trains()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_amtrak_trains)

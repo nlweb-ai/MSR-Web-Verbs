@@ -6,6 +6,7 @@ import re, os, sys, traceback, json, urllib.parse
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -60,6 +61,7 @@ def search_zillow_homes(page: Page, request: ZillowSearchRequest) -> ZillowSearc
         encoded_qs = urllib.parse.quote(json.dumps(query_state, separators=(',', ':')))
         search_url = f"https://www.zillow.com/{loc_slug}/?searchQueryState={encoded_qs}"
         print(f"   URL: {search_url[:120]}...")
+        checkpoint("Navigate to Zillow search results page")
         page.goto(search_url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(6000)
 
@@ -70,6 +72,7 @@ def search_zillow_homes(page: Page, request: ZillowSearchRequest) -> ZillowSearc
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -77,6 +80,7 @@ def search_zillow_homes(page: Page, request: ZillowSearchRequest) -> ZillowSearc
 
         # Scroll to load listings
         for _ in range(5):
+            checkpoint("Scroll down to load more listings")
             page.evaluate("window.scrollBy(0, 700)")
             page.wait_for_timeout(800)
 
@@ -254,4 +258,5 @@ def test_zillow_homes() -> None:
 
 
 if __name__ == "__main__":
-    test_zillow_homes()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_zillow_homes)

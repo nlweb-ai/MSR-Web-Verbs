@@ -7,6 +7,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -39,6 +40,7 @@ def search_nytimes_articles(page: Page, request: NYTimesSearchRequest) -> NYTime
     try:
         # Use the search URL directly with sort=newest
         print("STEP 1: Navigate to NYTimes search for 'artificial intelligence' sorted by newest...")
+        checkpoint("Navigate to NYTimes search for artificial intelligence sorted by newest")
         page.goto(
             "https://www.nytimes.com/search?query=artificial+intelligence&sort=newest",
             wait_until="domcontentloaded", timeout=30000,
@@ -52,6 +54,7 @@ def search_nytimes_articles(page: Page, request: NYTimesSearchRequest) -> NYTime
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint("Click dismiss banner button")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -220,4 +223,5 @@ def test_nytimes_articles():
 
 
 if __name__ == "__main__":
-    test_nytimes_articles()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_nytimes_articles)

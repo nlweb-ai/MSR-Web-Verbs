@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -38,6 +39,7 @@ def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSe
         query_encoded = request.query.replace(" ", "+")
         url = f"https://www.amazon.com/s?k={query_encoded}&s=review-rank"
         print(f"STEP 1: Navigate to Amazon search for '{request.query}'...")
+        checkpoint(f"Navigate to Amazon search: {url}")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(4000)
 
@@ -47,6 +49,7 @@ def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSe
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(400)
             except Exception:
@@ -54,6 +57,7 @@ def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSe
 
         # Scroll to load results
         for _ in range(3):
+            checkpoint("Scroll down to load more results")
             page.evaluate("window.scrollBy(0, 600)")
             page.wait_for_timeout(700)
 
@@ -119,7 +123,7 @@ def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSe
 
 
 def test_amazon_products() -> None:
-    request = AmazonSearchRequest(query="Qunol Ultra CoQ10 100mg", max_results=5)
+    request = AmazonSearchRequest(query="travel adapter worldwide", max_results=5)
     user_data_dir = os.path.join(
         os.environ["USERPROFILE"],
         "AppData", "Local", "Google", "Chrome", "User Data", "Default"
@@ -147,4 +151,5 @@ def test_amazon_products() -> None:
 
 
 if __name__ == "__main__":
-    test_amazon_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_amazon_products)

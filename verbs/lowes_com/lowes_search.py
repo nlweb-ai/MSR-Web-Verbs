@@ -8,6 +8,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -47,6 +48,7 @@ def search_lowes_products(
     try:
         # Navigate to main page first (avoid direct search URL block)
         print("STEP 1: Navigate to Lowe's homepage...")
+        checkpoint("Navigate to Lowe's homepage")
         page.goto("https://www.lowes.com", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(2000)
 
@@ -57,6 +59,7 @@ def search_lowes_products(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint("Dismiss popup")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -87,15 +90,19 @@ def search_lowes_products(
                 continue
 
         if search_box:
+            checkpoint("Click search box")
             search_box.evaluate("el => el.click()")
             page.wait_for_timeout(500)
+            checkpoint("Fill search query")
             search_box.fill("refrigerator")
             page.wait_for_timeout(500)
+            checkpoint("Press Enter to search")
             search_box.press("Enter")
             page.wait_for_load_state("domcontentloaded")
             page.wait_for_timeout(8000)
         else:
             print("   Could not find search box, trying direct category URL...")
+            checkpoint("Navigate to category URL fallback")
             page.goto("https://www.lowes.com/pl/Refrigerators/4294857981",
                        wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(8000)
@@ -103,6 +110,7 @@ def search_lowes_products(
         # Scroll to load results
         for _ in range(4):
             try:
+                checkpoint("Scroll to load results")
                 page.evaluate("window.scrollBy(0, 800)")
                 page.wait_for_timeout(800)
             except Exception:
@@ -117,6 +125,7 @@ def search_lowes_products(
                 print("   ⚠ Page returned 'Access Denied' — Lowe's bot detection triggered.")
                 print("   Retrying after wait...")
                 page.wait_for_timeout(5000)
+                checkpoint("Reload page after bot detection")
                 page.reload(wait_until="domcontentloaded")
                 page.wait_for_timeout(8000)
         except Exception:
@@ -289,4 +298,5 @@ def test_lowes_products() -> None:
 
 
 if __name__ == "__main__":
-    test_lowes_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_lowes_products)

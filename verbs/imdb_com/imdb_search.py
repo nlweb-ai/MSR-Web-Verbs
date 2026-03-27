@@ -9,6 +9,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -48,11 +49,13 @@ def search_imdb_titles(
     raw_results = []
     try:
         print("STEP 1: Navigate to IMDB and search for Christopher Nolan...")
+        checkpoint("Navigate to IMDB search for Christopher Nolan")
         page.goto("https://www.imdb.com/find/?q=Christopher+Nolan&s=nm", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(3000)
 
         print("STEP 2: Click on Christopher Nolan's page...")
         nolan_link = page.locator("a:has-text('Christopher Nolan')").first
+        checkpoint("Click on Christopher Nolan link")
         nolan_link.evaluate("el => el.click()")
         page.wait_for_timeout(3000)
 
@@ -173,4 +176,5 @@ def test_imdb_titles() -> None:
 
 
 if __name__ == "__main__":
-    test_imdb_titles()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_imdb_titles)

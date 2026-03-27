@@ -19,6 +19,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 import shutil
 
 from dataclasses import dataclass
@@ -58,6 +59,7 @@ def search_wikipedia_article(page: Page, request: WikipediaSearchRequest) -> Wik
     try:
         # ── Navigate to Wikipedia ─────────────────────────────────────
         print(f"Loading: https://en.wikipedia.org")
+        checkpoint("Navigate to Wikipedia homepage")
         page.goto("https://en.wikipedia.org", timeout=30000)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(2000)
@@ -65,11 +67,15 @@ def search_wikipedia_article(page: Page, request: WikipediaSearchRequest) -> Wik
         # ── Search for the article ────────────────────────────────────
         print(f'Searching for "{request.search_term}"...')
         search_input = page.locator("#searchInput, input[name='search']").first
+        checkpoint("Click search input")
         search_input.evaluate("el => el.click()")
         page.wait_for_timeout(300)
+        checkpoint("Select all text in search input")
         search_input.press("Control+a")
+        checkpoint("Fill search term into search input")
         search_input.fill(request.search_term)
         page.wait_for_timeout(500)
+        checkpoint("Press Enter to submit search")
         search_input.press("Enter")
         page.wait_for_timeout(3000)
         print(f"  Loaded: {page.url}\n")
@@ -189,4 +195,5 @@ def test_wikipedia_article():
 
 
 if __name__ == "__main__":
-    test_wikipedia_article()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_wikipedia_article)

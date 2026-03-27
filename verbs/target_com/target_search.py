@@ -10,6 +10,7 @@ from playwright.sync_api import Page, sync_playwright, TimeoutError as PWTimeout
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 from urllib.request import urlopen
 
 QUERY   = "coffee maker"
@@ -59,6 +60,7 @@ def dismiss(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=600):
+                checkpoint(f"dismiss: clicking {sel}")
                 loc.evaluate("el => el.click()")
                 time.sleep(0.3)
         except Exception:
@@ -86,6 +88,7 @@ class TargetSearchResult:
 
 def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSearchResult:
     url = f"https://www.target.com/s?searchTerm={request.search_query.replace(' ', '+')}"
+    checkpoint(f"navigating to Target search: {url}")
     page.goto(url, wait_until="domcontentloaded", timeout=30000)
     page.wait_for_timeout(4000)
     dismiss(page)
@@ -94,6 +97,7 @@ def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSe
     try:
         rating_filter = page.locator("text=/4 stars? & up|4\\+|Guest [Rr]ating 4/i").first
         if rating_filter.is_visible(timeout=3000):
+            checkpoint("clicking rating filter")
             rating_filter.evaluate("el => el.click()")
             page.wait_for_timeout(2000)
     except Exception:
@@ -261,4 +265,5 @@ def test_target_products():
 
 
 if __name__ == "__main__":
-    test_target_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_target_products)

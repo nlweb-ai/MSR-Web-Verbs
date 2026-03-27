@@ -15,6 +15,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 import shutil
 
 from dataclasses import dataclass
@@ -53,17 +54,21 @@ def search_youtube_videos(page: Page, request: YouTubeSearchRequest) -> YouTubeS
 
     try:
         # Navigate to YouTube
+        checkpoint("Navigate to YouTube homepage")
         page.goto("https://www.youtube.com")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(3000)
 
         # Find and fill the search box
         search_input = page.get_by_role("combobox", name=re.compile(r"Search", re.IGNORECASE)).first
+        checkpoint("Click search input")
         search_input.evaluate("el => el.click()")
+        checkpoint("Fill search query")
         search_input.fill(request.search_query)
         page.wait_for_timeout(500)
 
         # Submit the search
+        checkpoint("Press Enter to submit search")
         search_input.press("Enter")
 
         # Wait for search results to load
@@ -195,4 +200,5 @@ def test_youtube_videos():
 
 
 if __name__ == "__main__":
-    test_youtube_videos()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_youtube_videos)

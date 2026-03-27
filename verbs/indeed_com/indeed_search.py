@@ -9,6 +9,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -52,6 +53,7 @@ def search_indeed_jobs(
     try:
         print("STEP 1: Search Indeed for Data Analyst Remote jobs, sorted by date...")
         # sort=date for newest first, l=Remote
+        checkpoint("Navigate to Indeed job search results page")
         page.goto(
             "https://www.indeed.com/jobs?q=Data+Analyst&l=Remote&sort=date",
             wait_until="domcontentloaded", timeout=30000,
@@ -69,6 +71,7 @@ def search_indeed_jobs(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint("Click dismiss popup button")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -76,6 +79,7 @@ def search_indeed_jobs(
 
         # Scroll to load
         for _ in range(3):
+            checkpoint("Scroll page to load more job listings")
             page.evaluate("window.scrollBy(0, 600)")
             page.wait_for_timeout(600)
 
@@ -241,4 +245,5 @@ def test_indeed_jobs() -> None:
 
 
 if __name__ == "__main__":
-    test_indeed_jobs()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_indeed_jobs)

@@ -6,6 +6,7 @@ import re, os, sys, traceback, shutil
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
 
 from dataclasses import dataclass
@@ -46,6 +47,7 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
     restaurants = []
     try:
         print("STEP 1: Navigate to Uber Eats and set address...")
+        checkpoint("Navigate to Uber Eats homepage")
         page.goto("https://www.ubereats.com/", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
 
@@ -55,6 +57,7 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(400)
             except Exception:
@@ -76,8 +79,10 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
             try:
                 inp = page.locator(asel).first
                 if inp.is_visible(timeout=1500):
+                    checkpoint("Click address input field")
                     inp.click()
                     page.wait_for_timeout(500)
+                    checkpoint("Fill delivery address")
                     inp.fill(ADDRESS)
                     page.wait_for_timeout(2500)
                     # Click first suggestion
@@ -93,6 +98,7 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
                         try:
                             sl = page.locator(sug).first
                             if sl.is_visible(timeout=1500):
+                                checkpoint("Click address suggestion")
                                 sl.evaluate("el => el.click()")
                                 address_entered = True
                                 page.wait_for_timeout(3000)
@@ -105,6 +111,7 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
         if not address_entered:
             print("   Could not enter address via input — trying direct URL with place ID...")
             # Try with a known place ID for Seattle
+            checkpoint("Navigate to Uber Eats with Seattle place ID")
             page.goto(
                 "https://www.ubereats.com/feed?diningMode=DELIVERY&pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMlNlYXR0bGUlMkMlMjBXQSUyMiU3RA%3D%3D",
                 wait_until="domcontentloaded", timeout=30000,
@@ -126,10 +133,13 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
             try:
                 sinp = page.locator(ssel).first
                 if sinp.is_visible(timeout=2000):
+                    checkpoint("Click search input")
                     sinp.click()
                     page.wait_for_timeout(500)
+                    checkpoint("Fill search query")
                     sinp.fill(QUERY)
                     page.wait_for_timeout(1000)
+                    checkpoint("Press Enter to search")
                     page.keyboard.press("Enter")
                     search_entered = True
                     page.wait_for_timeout(5000)
@@ -138,12 +148,14 @@ def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> U
 
         if not search_entered:
             # Navigate directly to search URL — it might work now that address is set
+            checkpoint("Navigate directly to search URL")
             page.goto(f"https://www.ubereats.com/search?q={QUERY}",
                        wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(5000)
 
         # Scroll to load content
         for _ in range(6):
+            checkpoint("Scroll down to load more content")
             page.evaluate("window.scrollBy(0, 600)")
             page.wait_for_timeout(800)
 
@@ -324,4 +336,5 @@ def test_ubereats_restaurants():
 
 
 if __name__ == "__main__":
-    test_ubereats_restaurants()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_ubereats_restaurants)

@@ -8,6 +8,7 @@ import re, os, sys, traceback
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint, run_with_debugger
 
 from dataclasses import dataclass
 
@@ -36,6 +37,7 @@ def get_fidelity_quote(
     result = {}
     try:
         print("STEP 1: Navigate to Fidelity quote page...")
+        checkpoint(f"Navigate to Fidelity quote page for {SYMBOL}")
         page.goto(f"https://eresearch.fidelity.com/eresearch/evaluate/snapshot.jhtml?symbols={SYMBOL}",
                    wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
@@ -44,6 +46,7 @@ def get_fidelity_quote(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Click dismiss button: {sel}")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
@@ -136,4 +139,4 @@ def test_get_fidelity_quote() -> None:
 
 
 if __name__ == "__main__":
-    test_get_fidelity_quote()
+    run_with_debugger(test_get_fidelity_quote)

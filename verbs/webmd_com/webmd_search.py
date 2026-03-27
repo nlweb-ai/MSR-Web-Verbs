@@ -13,6 +13,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys, os as _os, shutil
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), '..'))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 from dataclasses import dataclass
 import subprocess
 import json
@@ -45,6 +46,7 @@ def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSea
     try:
         # STEP 1: Navigate to WebMD
         print("STEP 1: Navigate to WebMD...")
+        checkpoint("Navigate to WebMD homepage")
         page.goto("https://www.webmd.com", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(3000)
 
@@ -55,6 +57,7 @@ def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSea
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=500):
+                    checkpoint("Dismiss popup")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(300)
             except Exception:
@@ -84,8 +87,10 @@ def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSea
                 continue
         
         if search_input:
+            checkpoint("Click search input")
             search_input.click()
             page.wait_for_timeout(500)
+            checkpoint("Fill search input with symptom")
             search_input.fill(request.symptom)
             page.wait_for_timeout(1000)
             
@@ -94,10 +99,13 @@ def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSea
                 # Look for dropdown suggestion
                 suggestion = page.locator(f"li:has-text('{request.symptom}'), a:has-text('{request.symptom}'), [role='option']:has-text('{request.symptom}')").first
                 if suggestion.is_visible(timeout=1500):
+                    checkpoint("Click search suggestion")
                     suggestion.click()
                 else:
+                    checkpoint("Press Enter to search")
                     search_input.press("Enter")
             except Exception:
+                checkpoint("Press Enter to search (fallback)")
                 search_input.press("Enter")
             
             page.wait_for_timeout(4000)
@@ -105,6 +113,7 @@ def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSea
         else:
             # Fallback: go directly to search results page
             print("  Search input not found, using search URL...")
+            checkpoint("Navigate to search results page")
             page.goto(f"https://www.webmd.com/search/search_results/default.aspx?query={request.symptom}",
                       wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(4000)
@@ -131,6 +140,7 @@ def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSea
                     if any(x in text.lower() for x in ["sign in", "subscribe", "newsletter"]):
                         continue
                     if request.symptom.lower() in text.lower() and len(text) > 5:
+                        checkpoint("Click search result link")
                         link.click()
                         page.wait_for_timeout(4000)
                         print(f"  Clicked: {text[:50]}")
@@ -266,4 +276,5 @@ def test_webmd_conditions():
 
 
 if __name__ == "__main__":
-    test_webmd_conditions()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_webmd_conditions)

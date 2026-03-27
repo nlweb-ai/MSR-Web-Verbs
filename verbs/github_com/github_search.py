@@ -20,6 +20,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -65,6 +66,7 @@ def search_github_repos(
         # ── Navigate directly to search raw_results sorted by stars ────────
         search_url = f"https://github.com/search?q={search_term.replace(' ', '+')}&type=repositories&s=stars&o=desc"
         print(f"Loading: {search_url}")
+        checkpoint(f"Navigate to GitHub search: {search_term}")
         page.goto(search_url, timeout=30000)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -186,4 +188,5 @@ def test_search_github_repos() -> None:
 
 
 if __name__ == "__main__":
-    test_search_github_repos()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_github_repos)

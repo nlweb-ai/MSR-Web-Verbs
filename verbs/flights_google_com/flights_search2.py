@@ -21,6 +21,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint, run_with_debugger
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
 import shutil
 import subprocess
@@ -80,6 +81,7 @@ def search_google_flights(
     try:
         # ── Navigate ──────────────────────────────────────────────────────
         print("Loading Google Flights...")
+        checkpoint("Navigate to Google Flights")
         page.goto("https://www.google.com/travel/flights")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(3000)
@@ -95,6 +97,7 @@ def search_google_flights(
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint("Dismiss cookie/consent banner")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -121,8 +124,10 @@ def search_google_flights(
                     'button:has-text("One way"), '
                     'button:has-text("Multi-city")'
                 ).first
+                checkpoint("Click trip type dropdown")
                 trip_btn.evaluate("el => el.click()")
                 page.wait_for_timeout(500)
+                checkpoint("Select Round Trip option")
                 page.locator('li:has-text("Round trip"), [data-value="1"]').first.evaluate("el => el.click()")
                 page.wait_for_timeout(500)
                 print("  Selected Round Trip")
@@ -136,19 +141,24 @@ def search_google_flights(
                 'div[aria-label*="Where from" i], '
                 'input[aria-label*="Where from" i]'
             ).first
+            checkpoint("Click origin input field")
             origin_el.evaluate("el => el.click()")
             page.wait_for_timeout(500)
+            checkpoint("Select all text in origin field")
             page.keyboard.press("Control+a")
             page.wait_for_timeout(200)
+            checkpoint(f'Type origin "{origin}"')
             page.keyboard.type(origin, delay=50)
             print(f'  Typed "{origin}"')
             page.wait_for_timeout(1500)
             try:
                 suggestion = page.locator('ul[role="listbox"] li').first
                 suggestion.wait_for(state="visible", timeout=5000)
+                checkpoint("Click origin suggestion from dropdown")
                 suggestion.evaluate("el => el.click()")
                 print("  Selected origin suggestion")
             except Exception:
+                checkpoint("Press Enter to confirm origin")
                 page.keyboard.press("Enter")
                 print("  Pressed Enter (no dropdown)")
             page.wait_for_timeout(1000)
@@ -170,6 +180,7 @@ def search_google_flights(
             if dest_focused:
                 print("  Destination auto-focused after origin")
             else:
+                checkpoint("Click destination input via JS")
                 clicked = page.evaluate('''() => {
                     const inputs = document.querySelectorAll('input[role="combobox"]');
                     for (const inp of inputs) {
@@ -189,22 +200,27 @@ def search_google_flights(
                 if clicked:
                     print("  Clicked destination input via JS")
                 else:
+                    checkpoint("Force-click destination input")
                     page.locator(
                         'input[aria-label*="Where to" i]'
                     ).first.evaluate("el => el.click()")
                     print("  Force-clicked destination input")
             page.wait_for_timeout(500)
+            checkpoint("Select all text in destination field")
             page.keyboard.press("Control+a")
             page.wait_for_timeout(200)
+            checkpoint(f'Type destination "{destination}"')
             page.keyboard.type(destination, delay=50)
             print(f'  Typed "{destination}"')
             page.wait_for_timeout(1500)
             try:
                 suggestion = page.locator('ul[role="listbox"] li').first
                 suggestion.wait_for(state="visible", timeout=5000)
+                checkpoint("Click destination suggestion from dropdown")
                 suggestion.evaluate("el => el.click()")
                 print("  Selected destination suggestion")
             except Exception:
+                checkpoint("Press Enter to confirm destination")
                 page.keyboard.press("Enter")
                 print("  Pressed Enter (no dropdown)")
             page.wait_for_timeout(1000)
@@ -221,6 +237,7 @@ def search_google_flights(
             try:
                 el = page.locator(sel).first
                 if el.is_visible(timeout=2000):
+                    checkpoint("Open departure date calendar")
                     el.evaluate("el => el.click()")
                     date_opened = True
                     print("  Opened calendar via departure field")
@@ -240,6 +257,7 @@ def search_google_flights(
                 }''') or ''
                 if dep_month_label in cal_text:
                     break
+                checkpoint("Click next month in calendar")
                 went = page.evaluate('''() => {
                     const d = document.querySelector('[role="dialog"]');
                     if (!d) return false;
@@ -258,6 +276,7 @@ def search_google_flights(
 
             dep_day = departure.day
             dep_month_name = departure.strftime("%B")
+            checkpoint(f"Select departure day {dep_day}")
             dep_clicked = page.evaluate(f'''() => {{
                 const candidates = [];
                 const btns = document.querySelectorAll('[role="button"]');
@@ -299,6 +318,7 @@ def search_google_flights(
                     }''') or ''
                     if ret_month_label in cal_text:
                         break
+                    checkpoint("Click next month for return date")
                     page.evaluate('''() => {
                         const btns = document.querySelectorAll('button');
                         for (const b of btns) {
@@ -310,6 +330,7 @@ def search_google_flights(
 
             ret_day = return_date.day
             ret_month_name = return_date.strftime("%B")
+            checkpoint(f"Select return day {ret_day}")
             ret_clicked = page.evaluate(f'''() => {{
                 const candidates = [];
                 const btns = document.querySelectorAll('[role="button"]');
@@ -343,6 +364,7 @@ def search_google_flights(
                 print(f"  WARNING: Could not click return day {ret_day} ({ret_clicked})")
             page.wait_for_timeout(500)
 
+        checkpoint("Click Done button on calendar")
         done_result = page.evaluate('''() => {
             const btns = document.querySelectorAll('button');
             for (const b of btns) {
@@ -359,6 +381,7 @@ def search_google_flights(
 
         # ── STEP 5: Search ────────────────────────────────────────────────
         print("STEP 5: Searching for flights...")
+        checkpoint("Click Search button")
         search_result = page.evaluate('''() => {
             const btns = document.querySelectorAll('button');
             for (const b of btns) {
@@ -383,6 +406,7 @@ def search_google_flights(
             print("  Results loaded (price found)")
         except Exception:
             print("  Timeout waiting for price — continuing anyway")
+        checkpoint("Scroll down to see flight results")
         page.evaluate("window.scrollBy(0, 500)")
         page.wait_for_timeout(2000)
         print(f"  URL: {page.url}")
@@ -509,9 +533,11 @@ def search_google_flights(
                     xpath = toggle_info['xpath']
                     print(f"    Clicking toggle: xpath={xpath}")
                     try:
+                        checkpoint(f"Expand flight card {i+1}")
                         page.locator(f"xpath={xpath}").evaluate("el => el.click()")
                     except Exception as click_err:
                         print(f"    locator.click failed: {click_err}, trying JS click...")
+                        checkpoint(f"Expand flight card {i+1} via JS fallback")
                         page.evaluate(r'''(xp) => {
                             const r = document.evaluate(xp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
                             if (r.singleNodeValue) r.singleNodeValue.click();
@@ -529,8 +555,10 @@ def search_google_flights(
                 if delta <= 0 and toggle_info and toggle_info.get('hasToggle'):
                     print("    Didn't expand, clicking toggle again...")
                     try:
+                        checkpoint(f"Retry expanding flight card {i+1}")
                         page.locator(f"xpath={toggle_info['xpath']}").evaluate("el => el.click()")
                     except Exception:
+                        checkpoint(f"Retry expanding flight card {i+1} via JS fallback")
                         page.evaluate(r'''(xp) => {
                             const r = document.evaluate(xp, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
                             if (r.singleNodeValue) r.singleNodeValue.click();
@@ -591,12 +619,15 @@ def search_google_flights(
                 # Collapse the card (click same toggle again)
                 if toggle_info and toggle_info.get('hasToggle'):
                     try:
+                        checkpoint(f"Collapse flight card {i+1}")
                         page.locator(f"xpath={toggle_info['xpath']}").evaluate("el => el.click()")
                         page.wait_for_timeout(1500)
                     except Exception:
+                        checkpoint("Press Escape to close expanded card")
                         page.keyboard.press("Escape")
                         page.wait_for_timeout(1000)
                 else:
+                    checkpoint("Press Escape to close expanded card")
                     page.keyboard.press("Escape")
                     page.wait_for_timeout(1000)
 
@@ -691,4 +722,4 @@ def test_search_google_flights() -> None:
 
 
 if __name__ == "__main__":
-    test_search_google_flights()
+    run_with_debugger(test_search_google_flights)

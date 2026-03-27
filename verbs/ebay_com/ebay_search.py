@@ -14,6 +14,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 from urllib.parse import quote_plus
@@ -31,6 +32,7 @@ def dismiss_popups(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=800):
+                checkpoint(f"Click dismiss popup: {sel}")
                 loc.evaluate("el => el.click()")
                 page.wait_for_timeout(300)
         except Exception:
@@ -75,6 +77,7 @@ def search_ebay_listings(
     try:
         print("STEP 1: Navigate to eBay search raw_results...")
         url = f"https://www.ebay.com/sch/i.html?_nkw={quote_plus(search_query)}&LH_BIN=1&_sop=15"
+        checkpoint(f"Navigate to eBay search: {url}")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         dismiss_popups(page)
         print(f"   Loaded: {page.url}\n")
@@ -95,8 +98,10 @@ def search_ebay_listings(
 
         # Scroll to trigger lazy loading
         for _ in range(2):
+            checkpoint("Scroll down to trigger lazy loading")
             page.evaluate("window.scrollBy(0, 600)")
             page.wait_for_timeout(200)
+        checkpoint("Scroll back to top")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(200)
 
@@ -278,4 +283,5 @@ def test_search_ebay_listings() -> None:
 
 
 if __name__ == "__main__":
-    test_search_ebay_listings()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_ebay_listings)

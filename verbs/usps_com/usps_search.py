@@ -7,6 +7,7 @@ from playwright.sync_api import sync_playwright, Page
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -33,6 +34,7 @@ def lookup_usps_tracking(page: Page, request: UspsTrackingRequest) -> UspsTracki
     result = {"status": "", "last_update": "", "expected_delivery": "", "location": ""}
     try:
         print("STEP 1: Navigate to USPS tracking page...")
+        checkpoint("Navigate to USPS tracking page")
         page.goto(
             f"https://tools.usps.com/go/TrackConfirmAction?tLabels={request.tracking_number}",
             wait_until="domcontentloaded", timeout=30000,
@@ -45,6 +47,7 @@ def lookup_usps_tracking(page: Page, request: UspsTrackingRequest) -> UspsTracki
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Click popup dismiss button: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -213,4 +216,5 @@ def test_usps_tracking():
 
 
 if __name__ == "__main__":
-    test_usps_tracking()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_usps_tracking)

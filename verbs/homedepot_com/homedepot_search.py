@@ -21,6 +21,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import find_chrome_executable, get_free_port
+from playwright_debugger import checkpoint
 
 QUERY = "cordless drill"
 MAX   = 5
@@ -124,6 +125,7 @@ def dismiss(page):
         try:
             loc = page.locator(sel).first
             if loc.is_visible(timeout=600):
+                checkpoint(f"clicking dismiss button: {sel}")
                 loc.evaluate("el => el.click()")
                 time.sleep(0.3)
         except Exception:
@@ -224,4 +226,5 @@ def test_homedepot_products():
 
 
 if __name__ == "__main__":
-    test_homedepot_products()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_homedepot_products)

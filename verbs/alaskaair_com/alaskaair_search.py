@@ -14,6 +14,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 @dataclass(frozen=True)
 class AlaskaFlightSearchRequest:
     origin: str
@@ -107,6 +108,7 @@ def search_alaska_flights(
     try:
         # ── Navigate ──────────────────────────────────────────────────────
         print("Loading Alaska Airlines...")
+        checkpoint("Navigate to https://www.alaskaair.com")
         page.goto("https://www.alaskaair.com")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -117,6 +119,7 @@ def search_alaska_flights(
             try:
                 btn = page.get_by_role("button", name=re.compile(label, re.IGNORECASE))
                 if btn.first.is_visible(timeout=1000):
+                    checkpoint(f"Dismiss popup: {label}")
                     btn.first.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
                     break
@@ -136,6 +139,7 @@ def search_alaska_flights(
             ).first
             rt_radio = booking.get_by_text("Round trip", exact=False).first
             if rt_radio.is_visible(timeout=2000):
+                checkpoint("Click Round Trip radio")
                 rt_radio.evaluate("el => el.click()")
                 print("  Selected Round Trip (booking widget text)")
             else:
@@ -163,11 +167,13 @@ def search_alaska_flights(
             }})()
         """)
         if coords:
+            checkpoint(f"Click From combobox at ({int(coords['x'])}, {int(coords['y'])})")
             page.mouse.click(coords['x'], coords['y'])
             print(f"  Clicked From combobox at ({int(coords['x'])}, {int(coords['y'])})")
         else:
             print("  ERROR: From combobox not found!")
         page.wait_for_timeout(500)
+        checkpoint(f"Type origin: {origin}")
         page.keyboard.press("Control+a")
         page.keyboard.press("Backspace")
         page.keyboard.type(origin, delay=50)
@@ -175,9 +181,10 @@ def search_alaska_flights(
         page.wait_for_timeout(2000)
 
         # Select first visible suggestion (deep shadow DOM query)
+        checkpoint("Select first origin suggestion")
         if not select_first_visible_option(page):
+            checkpoint("Press Enter (no visible option)")
             page.keyboard.press("Enter")
-            print("  No visible option found, pressed Enter")
         page.wait_for_timeout(1500)
 
         # ── Fill Destination ──────────────────────────────────────────────
@@ -198,11 +205,12 @@ def search_alaska_flights(
             }})()
         """)
         if coords:
+            checkpoint(f"Click To combobox at ({int(coords['x'])}, {int(coords['y'])})")
             page.mouse.click(coords['x'], coords['y'])
-            print(f"  Clicked To combobox at ({int(coords['x'])}, {int(coords['y'])})")
         else:
             print("  ERROR: To combobox not found!")
         page.wait_for_timeout(500)
+        checkpoint(f"Type destination: {destination}")
         page.keyboard.press("Control+a")
         page.keyboard.press("Backspace")
         page.keyboard.type(destination, delay=50)
@@ -210,9 +218,10 @@ def search_alaska_flights(
         page.wait_for_timeout(2000)
 
         # Select first visible suggestion
+        checkpoint("Select first destination suggestion")
         if not select_first_visible_option(page):
+            checkpoint("Press Enter (no visible option)")
             page.keyboard.press("Enter")
-            print("  No visible option found, pressed Enter")
         page.wait_for_timeout(1500)
 
         # ── Fill Dates ────────────────────────────────────────────────────
@@ -253,18 +262,20 @@ def search_alaska_flights(
 
         if date_inputs:
             # Click departure date input by coordinates
+            checkpoint(f"Click departure date input")
             page.mouse.click(date_inputs[0]['x'], date_inputs[0]['y'])
             print(f"  Clicked departure date at ({int(date_inputs[0]['x'])}, {int(date_inputs[0]['y'])})")
             page.wait_for_timeout(800)
+            checkpoint(f"Type departure date: {departure_date}")
             page.keyboard.press("Control+a")
             page.keyboard.press("Backspace")
             page.keyboard.type(departure_date, delay=30)
-            print(f"  Typed departure: {departure_date}")
             page.wait_for_timeout(1000)
 
             # Tab to return date, then type
             page.keyboard.press("Tab")
             page.wait_for_timeout(800)
+            checkpoint(f"Type return date: {return_date}")
             page.keyboard.press("Control+a")
             page.keyboard.press("Backspace")
             page.keyboard.type(return_date, delay=30)
@@ -383,6 +394,7 @@ def search_alaska_flights(
             """)
             cx = fresh['x'] if fresh else coords['x']
             cy = fresh['y'] if fresh else coords['y']
+            checkpoint(f"Click Search flights button")
             page.mouse.click(cx, cy)
             print(f"  Clicked at ({int(cx)}, {int(cy)})")
         else:
@@ -427,8 +439,8 @@ def search_alaska_flights(
                 print(f"  URL after retry: {page.url}")
 
         if "search/results" in page.url:
-            page.wait_for_load_state("networkidle")
-            page.wait_for_timeout(5000)
+            page.wait_for_load_state("domcontentloaded")
+            page.wait_for_timeout(4000)
 
         # ── Extract flights ───────────────────────────────────────────────
         print(f"STEP 7: Extract up to {max_results} flights...")
@@ -589,4 +601,5 @@ def test_search_alaska_flights() -> None:
         finally:
             context.close()
 if __name__ == "__main__":
-    test_search_alaska_flights()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_alaska_flights)

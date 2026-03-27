@@ -8,6 +8,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -40,6 +41,7 @@ def get_glassdoor_review(
     result = {"overall_rating": "", "ceo_approval": "", "pros": [], "cons": []}
     try:
         print("STEP 1: Navigate to Glassdoor Microsoft reviews...")
+        checkpoint("Navigate to Glassdoor Microsoft reviews")
         page.goto(
             "https://www.glassdoor.com/Reviews/Microsoft-Reviews-E1651.htm",
             wait_until="domcontentloaded", timeout=30000,
@@ -55,6 +57,7 @@ def get_glassdoor_review(
 
         if "protect glassdoor" in body_check.lower():
             print("   Still blocked — trying alternative URL...")
+            checkpoint("Navigate to alternative Glassdoor URL")
             page.goto(
                 "https://www.glassdoor.com/Overview/Working-at-Microsoft-EI_IE1651.htm",
                 wait_until="domcontentloaded", timeout=30000,
@@ -69,6 +72,7 @@ def get_glassdoor_review(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -292,4 +296,5 @@ def test_get_glassdoor_review() -> None:
 
 
 if __name__ == "__main__":
-    test_get_glassdoor_review()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_get_glassdoor_review)

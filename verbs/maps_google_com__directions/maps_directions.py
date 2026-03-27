@@ -8,6 +8,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -43,6 +44,7 @@ def get_maps_directions(
     result = {"route": "", "time": "", "distance": "", "steps": []}
     try:
         print("STEP 1: Navigate to Google Maps directions...")
+        checkpoint("Navigate to Google Maps directions page")
         page.goto("https://www.google.com/maps/dir//", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(5000)
 
@@ -52,6 +54,7 @@ def get_maps_directions(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -60,18 +63,24 @@ def get_maps_directions(
         # Fill in the origin
         print(f"  Entering origin: {ORIGIN}")
         origin_box = page.locator("input[aria-label*='tarting point'], input[aria-label*='Choose starting point']").first
+        checkpoint("Click origin input box")
         origin_box.click(timeout=5000)
+        checkpoint(f"Fill origin: {ORIGIN}")
         origin_box.fill(ORIGIN)
         page.wait_for_timeout(1500)
+        checkpoint("Press Enter to confirm origin")
         page.keyboard.press("Enter")
         page.wait_for_timeout(3000)
 
         # Fill in the destination
         print(f"  Entering destination: {DESTINATION}")
         dest_box = page.locator("input[aria-label*='estination'], input[aria-label*='Choose destination']").first
+        checkpoint("Click destination input box")
         dest_box.click(timeout=5000)
+        checkpoint(f"Fill destination: {DESTINATION}")
         dest_box.fill(DESTINATION)
         page.wait_for_timeout(1500)
+        checkpoint("Press Enter to confirm destination")
         page.keyboard.press("Enter")
         page.wait_for_timeout(5000)
 
@@ -79,6 +88,7 @@ def get_maps_directions(
         try:
             driving_btn = page.locator("[data-travel_mode='0'], [aria-label*='Driving']").first
             if driving_btn.is_visible(timeout=2000):
+                checkpoint("Click driving mode button")
                 driving_btn.evaluate("el => el.click()")
                 page.wait_for_timeout(3000)
         except Exception:
@@ -147,6 +157,7 @@ def get_maps_directions(
                 try:
                     el = page.locator(expand_sel).first
                     if el.is_visible(timeout=1500):
+                        checkpoint(f"Expand route details: {expand_sel}")
                         el.evaluate("el => el.click()")
                         page.wait_for_timeout(3000)
                         break
@@ -287,4 +298,5 @@ def test_get_maps_directions() -> None:
 
 
 if __name__ == "__main__":
-    test_get_maps_directions()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_get_maps_directions)

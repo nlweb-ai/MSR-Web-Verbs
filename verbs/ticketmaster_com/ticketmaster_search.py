@@ -7,6 +7,7 @@ import re, os, traceback, sys
 from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -36,6 +37,7 @@ def search_ticketmaster_events(page: Page, request: TicketmasterSearchRequest) -
     try:
         print("STEP 1: Navigate to Ticketmaster concert search...")
         loc_encoded = request.location.replace(" ", "+")
+        checkpoint("Navigate to Ticketmaster concert search")
         page.goto(
             f"https://www.ticketmaster.com/search?q=concerts&loc={loc_encoded}&daterange=thisweekend",
             wait_until="domcontentloaded", timeout=30000,
@@ -46,6 +48,7 @@ def search_ticketmaster_events(page: Page, request: TicketmasterSearchRequest) -
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Click dismiss/accept button: {sel}")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
@@ -171,4 +174,5 @@ def test_ticketmaster_events():
 
 
 if __name__ == "__main__":
-    test_ticketmaster_events()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_ticketmaster_events)

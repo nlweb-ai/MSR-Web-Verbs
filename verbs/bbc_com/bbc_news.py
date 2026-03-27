@@ -16,6 +16,7 @@ from playwright.sync_api import sync_playwright, Page
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -50,6 +51,7 @@ def extract_bbc_headlines(
     try:
         # ── Navigate to BBC News ──────────────────────────────────────────
         print("Loading BBC News...")
+        checkpoint("Navigate to https://www.bbc.com/news")
         page.goto("https://www.bbc.com/news")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -68,6 +70,7 @@ def extract_bbc_headlines(
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint(f"Dismiss popup: {selector}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -158,4 +161,5 @@ def test_extract_bbc_headlines() -> None:
 
 
 if __name__ == "__main__":
-    test_extract_bbc_headlines()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_extract_bbc_headlines)

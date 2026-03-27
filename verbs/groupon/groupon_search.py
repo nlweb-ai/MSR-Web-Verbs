@@ -15,6 +15,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -57,6 +58,7 @@ def search_groupon_deals(
 
     try:
         print(f"STEP 1: Open Groupon and search for '{keyword}'...")
+        checkpoint("Navigate to Groupon")
         page.goto("https://www.groupon.com/", wait_until="domcontentloaded", timeout=45000)
         page.wait_for_timeout(4000)
 
@@ -70,6 +72,7 @@ def search_groupon_deals(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(400)
             except Exception:
@@ -77,9 +80,12 @@ def search_groupon_deals(
 
         search = page.locator("input[name='query'], input[type='search'], input[placeholder*='Search']").first
         search.wait_for(state="visible", timeout=10000)
+        checkpoint("Click search input")
         search.click()
+        checkpoint(f"Type search keyword: {keyword}")
         page.keyboard.press("Control+a")
         page.keyboard.type(keyword, delay=35)
+        checkpoint("Press Enter to search")
         page.keyboard.press("Enter")
         page.wait_for_timeout(7000)
 
@@ -204,4 +210,5 @@ def test_search_groupon_deals() -> None:
 
 
 if __name__ == "__main__":
-    test_search_groupon_deals()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_groupon_deals)

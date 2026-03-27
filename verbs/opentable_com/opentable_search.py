@@ -11,6 +11,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 from dateutil.relativedelta import relativedelta
@@ -50,6 +51,7 @@ def search_opentable_restaurants(page: Page, request: OpentableSearchRequest) ->
         print(f"STEP 1: Navigate to OpenTable ({request.location}, {d_str}, party {request.covers}, 7PM)...")
         from urllib.parse import quote_plus
         url = f"https://www.opentable.com/s?dateTime={d_str}T19%3A00%3A00&covers={request.covers}&term={quote_plus(request.location)}"
+        checkpoint(f"Navigate to OpenTable search for {request.location}")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(8000)
 
@@ -58,11 +60,13 @@ def search_opentable_restaurants(page: Page, request: OpentableSearchRequest) ->
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
 
         for _ in range(5):
+            checkpoint("Scroll down to load more restaurants")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(600)
 
@@ -217,4 +221,5 @@ def test_opentable_restaurants():
 
 
 if __name__ == "__main__":
-    test_opentable_restaurants()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_opentable_restaurants)

@@ -12,6 +12,7 @@ import re, json, os, shutil, traceback
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 from playwright.sync_api import Page, sync_playwright
 from dataclasses import dataclass
 import subprocess
@@ -61,6 +62,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
 
     try:
         print("Loading Uber price estimate page...")
+        checkpoint("Navigate to Uber price estimate page")
         page.goto("https://www.uber.com/us/en/price-estimate/")
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -92,6 +94,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
             try:
                 btn = page.locator(selector).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint("Dismiss popup/cookie banner")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -101,17 +104,22 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
         print(f'STEP 1: Pickup = "{pickup}"...')
         pickup_input = page.locator('input[aria-label="Pickup location"]').first
         pickup_input.wait_for(state="visible", timeout=5000)
+        checkpoint("Click pickup input field")
         pickup_input.click()
         page.wait_for_timeout(500)
+        checkpoint("Select all text in pickup input")
         page.keyboard.press("Control+a")
+        checkpoint("Clear pickup input")
         page.keyboard.press("Backspace")
         page.wait_for_timeout(200)
+        checkpoint("Type pickup location")
         pickup_input.type(pickup, delay=50)
         page.wait_for_timeout(3000)
 
         # Select first autocomplete suggestion from pickup dropdown
         pickup_dd = page.locator('[aria-label="pickup location dropdown"] li[role="option"]').first
         pickup_dd.wait_for(state="visible", timeout=5000)
+        checkpoint("Select pickup autocomplete suggestion")
         pickup_dd.click()
         print("  Selected pickup suggestion")
         page.wait_for_timeout(2000)
@@ -120,17 +128,22 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
         print(f'STEP 2: Dropoff = "{dropoff}"...')
         dropoff_input = page.locator('input[aria-label="Dropoff location"]').first
         dropoff_input.wait_for(state="visible", timeout=5000)
+        checkpoint("Click dropoff input field")
         dropoff_input.click()
         page.wait_for_timeout(500)
+        checkpoint("Select all text in dropoff input")
         page.keyboard.press("Control+a")
+        checkpoint("Clear dropoff input")
         page.keyboard.press("Backspace")
         page.wait_for_timeout(200)
+        checkpoint("Type dropoff location")
         dropoff_input.type(dropoff, delay=50)
         page.wait_for_timeout(3000)
 
         # Select autocomplete suggestion from destination dropdown
         dropoff_dd = page.locator('[aria-label="destination location dropdown"] li[role="option"]').first
         dropoff_dd.wait_for(state="visible", timeout=5000)
+        checkpoint("Select dropoff autocomplete suggestion")
         dropoff_dd.click()
         print("  Selected dropoff suggestion")
         page.wait_for_timeout(2000)
@@ -139,6 +152,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
         print("STEP 3: Get price estimate...")
         see_prices = page.locator('a[aria-label="See prices"]').first
         see_prices.wait_for(state="visible", timeout=5000)
+        checkpoint("Click See prices button")
         see_prices.click()
         print("  Clicked 'See prices'")
         page.wait_for_timeout(8000)
@@ -272,4 +286,5 @@ def test_uber_rides():
 
 
 if __name__ == "__main__":
-    test_uber_rides()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_uber_rides)

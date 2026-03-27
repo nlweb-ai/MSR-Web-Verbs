@@ -9,6 +9,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 import subprocess
@@ -43,6 +44,7 @@ def get_irs_popular_forms(
     forms = []
     try:
         print("STEP 1: Navigate to IRS Forms & Instructions page...")
+        checkpoint("Navigate to IRS Forms & Instructions page")
         page.goto(
             "https://www.irs.gov/forms-instructions",
             wait_until="domcontentloaded", timeout=30000,
@@ -54,11 +56,13 @@ def get_irs_popular_forms(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup via {sel}")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
 
         for _ in range(3):
+            checkpoint("Scroll down to load more content")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(500)
 
@@ -162,4 +166,5 @@ def test_get_irs_popular_forms() -> None:
 
 
 if __name__ == "__main__":
-    test_get_irs_popular_forms()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_get_irs_popular_forms)

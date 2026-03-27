@@ -9,6 +9,7 @@ from playwright.sync_api import Page, sync_playwright
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 from dateutil.relativedelta import relativedelta
@@ -60,6 +61,7 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
 
         print(f"STEP 1: Navigate to United ({ORIGIN_CITY} → {DESTINATION_CITY}, {d_iso} to {r_iso})...")
         # Visit homepage first to establish session
+        checkpoint("Navigate to United homepage")
         page.goto("https://www.united.com/", wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(4000)
 
@@ -69,6 +71,7 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=1500):
+                    checkpoint("Dismiss cookie banner")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -92,16 +95,20 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
             try:
                 origin_input = page.locator(sel).first
                 if origin_input.is_visible(timeout=2000):
+                    checkpoint("Click origin input field")
                     origin_input.click()
                     page.wait_for_timeout(500)
+                    checkpoint("Fill origin city")
                     origin_input.fill(ORIGIN_CITY)
                     page.wait_for_timeout(1500)
                     # Click first autocomplete suggestion
                     try:
                         sug = page.locator("li[role='option'], [class*='autocomplete'] li, [class*='suggestion']").first
                         if sug.is_visible(timeout=2000):
+                            checkpoint("Click origin autocomplete suggestion")
                             sug.click()
                     except Exception:
+                        checkpoint("Press Enter to confirm origin")
                         origin_input.press("Enter")
                     page.wait_for_timeout(500)
                     origin_filled = True
@@ -127,16 +134,20 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
             try:
                 dest_input = page.locator(sel).first
                 if dest_input.is_visible(timeout=2000):
+                    checkpoint("Click destination input field")
                     dest_input.click()
                     page.wait_for_timeout(500)
+                    checkpoint("Fill destination city")
                     dest_input.fill(DESTINATION_CITY)
                     page.wait_for_timeout(1500)
                     # Click first autocomplete suggestion
                     try:
                         sug = page.locator("li[role='option'], [class*='autocomplete'] li, [class*='suggestion']").first
                         if sug.is_visible(timeout=2000):
+                            checkpoint("Click destination autocomplete suggestion")
                             sug.click()
                     except Exception:
+                        checkpoint("Press Enter to confirm destination")
                         dest_input.press("Enter")
                     page.wait_for_timeout(500)
                     dest_filled = True
@@ -160,11 +171,14 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
                     try:
                         date_input = page.locator(sel).first
                         if date_input.is_visible(timeout=2000):
+                            checkpoint("Click departure date input")
                             date_input.click()
                             page.wait_for_timeout(1000)
                             # Type the date in MM/DD/YYYY format
+                            checkpoint("Fill departure date")
                             date_input.fill(depart.strftime("%m/%d/%Y"))
                             page.wait_for_timeout(500)
+                            checkpoint("Press Tab to move to return date")
                             date_input.press("Tab")  # Move to next field
                             page.wait_for_timeout(500)
                             break
@@ -183,8 +197,10 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
                     try:
                         ret_input = page.locator(sel).first
                         if ret_input.is_visible(timeout=2000):
+                            checkpoint("Click return date input")
                             ret_input.click()
                             page.wait_for_timeout(500)
+                            checkpoint("Fill return date")
                             ret_input.fill(ret.strftime("%m/%d/%Y"))
                             page.wait_for_timeout(500)
                             break
@@ -207,6 +223,7 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
                     try:
                         close_btn = page.locator(sel).first
                         if close_btn.is_visible(timeout=1000):
+                            checkpoint("Click date picker close button")
                             close_btn.click()
                             page.wait_for_timeout(500)
                             break
@@ -214,6 +231,7 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
                         continue
                 else:
                     # Press Escape to close any open dialog
+                    checkpoint("Press Escape to close date picker")
                     page.keyboard.press("Escape")
                     page.wait_for_timeout(500)
             except Exception:
@@ -226,12 +244,14 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
                 # Look for the "Find flights" button specifically
                 search_btn = page.locator("button[aria-label='Find flights'], button:has-text('Find flights')").first
                 if search_btn.is_visible(timeout=3000):
+                    checkpoint("Click Find flights button")
                     search_btn.click(timeout=5000)
                     page.wait_for_timeout(10000)
                 else:
                     # Fallback to generic search
                     search_btn = page.locator("button:has-text('Search')").first
                     if search_btn.is_visible(timeout=2000):
+                        checkpoint("Click Search button")
                         search_btn.click()
                         page.wait_for_timeout(10000)
             except Exception:
@@ -242,6 +262,7 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
                 f"https://www.united.com/en/us/fsr/choose-flights?"
                 f"f=SFO&t=EWR&d={d_iso}&r={r_iso}&cb=0&px=1&taxng=1&newHP=True&clm=7&st=bestmatches&tqp=R"
             )
+            checkpoint("Navigate to United search results via direct URL")
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
         
         page.wait_for_timeout(5000)
@@ -263,6 +284,7 @@ def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> Uni
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint("Dismiss popup")
                     loc.evaluate("el => el.click()")
                     page.wait_for_timeout(400)
             except Exception:
@@ -510,4 +532,5 @@ def test_united_flights():
 
 
 if __name__ == "__main__":
-    test_united_flights()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_united_flights)

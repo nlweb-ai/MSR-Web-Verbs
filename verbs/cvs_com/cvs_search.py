@@ -19,6 +19,7 @@ from playwright.sync_api import Page, sync_playwright
 import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
 
 from dataclasses import dataclass
 
@@ -59,6 +60,7 @@ def search_cvs_stores(
         # ── Navigate to store locator landing page ──────────────────
         landing_url = "https://www.cvs.com/store-locator/landing"
         print(f"Loading: {landing_url}")
+        checkpoint("Navigate to CVS store locator landing page")
         page.goto(landing_url, timeout=45000)
         page.wait_for_load_state("domcontentloaded")
         page.wait_for_timeout(5000)
@@ -75,6 +77,7 @@ def search_cvs_stores(
             try:
                 btn = page.locator(sel).first
                 if btn.is_visible(timeout=1500):
+                    checkpoint("Click dismiss popup/cookie banner")
                     btn.evaluate("el => el.click()")
                     page.wait_for_timeout(500)
             except Exception:
@@ -83,19 +86,25 @@ def search_cvs_stores(
         # ── Search by zip code ────────────────────────────────────────
         print(f"Searching for stores near {zip_code}...")
         search_input = page.locator("cvs-combobox input, input[aria-label*='Search']").first
+        checkpoint("Click search input field")
         search_input.evaluate("el => el.click()")
         page.wait_for_timeout(500)
+        checkpoint("Select all text in search input")
         search_input.press("Control+a")
+        checkpoint(f"Fill zip code '{zip_code}' into search input")
         search_input.fill(zip_code)
         page.wait_for_timeout(1000)
+        checkpoint("Press Enter to search")
         search_input.press("Enter")
         page.wait_for_timeout(8000)
         print(f"  Results loaded: {page.url}\n")
 
         # ── Scroll to load content ────────────────────────────────────
         for _ in range(3):
+            checkpoint("Scroll down 500px to load content")
             page.evaluate("window.scrollBy(0, 500)")
             page.wait_for_timeout(500)
+        checkpoint("Scroll back to top of page")
         page.evaluate("window.scrollTo(0, 0)")
         page.wait_for_timeout(1000)
 
@@ -248,4 +257,5 @@ def test_search_cvs_stores() -> None:
 
 
 if __name__ == "__main__":
-    test_search_cvs_stores()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_cvs_stores)

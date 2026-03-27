@@ -11,6 +11,7 @@ import sys as _sys
 import os as _os
 _sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
 import shutil
 
 from dataclasses import dataclass
@@ -66,6 +67,7 @@ def search_kayak_flights(
 
         print(f"STEP 1: Navigate to Kayak ({request.origin}→{request.destination}, {d_str} to {r_str})...")
         url = f"https://www.kayak.com/flights/{request.origin}-{request.destination}/{d_str}/{r_str}?sort=price_a"
+        checkpoint("Navigate to Kayak flight search results")
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(10000)
 
@@ -73,6 +75,7 @@ def search_kayak_flights(
             try:
                 loc = page.locator(sel).first
                 if loc.is_visible(timeout=800):
+                    checkpoint("Dismiss popup or overlay")
                     loc.evaluate("el => el.click()")
             except Exception:
                 pass
@@ -213,4 +216,5 @@ def test_search_kayak_flights() -> None:
 
 
 if __name__ == "__main__":
-    test_search_kayak_flights()
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_kayak_flights)
