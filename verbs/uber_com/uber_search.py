@@ -60,7 +60,11 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
     print(f"  Dropoff: {request.dropoff}\n")
     results = []
 
+    original_viewport = page.viewport_size
     try:
+        # Ensure a wide viewport so Uber renders the desktop layout
+        page.set_viewport_size({"width": 1280, "height": 900})
+
         print("Loading Uber price estimate page...")
         checkpoint("Navigate to Uber price estimate page")
         page.goto("https://www.uber.com/us/en/price-estimate/")
@@ -226,6 +230,9 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
     except Exception as e:
         print(f"\nError: {e}")
         traceback.print_exc()
+    finally:
+        if original_viewport:
+            page.set_viewport_size(original_viewport)
     return UberRideSearchResult(
         pickup=request.pickup,
         dropoff=request.dropoff,
