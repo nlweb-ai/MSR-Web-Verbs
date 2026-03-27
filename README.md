@@ -24,7 +24,7 @@ The screenshot below shows the UI planning a trip to Champaign-Urbana, IL. The a
 
 ## Getting started
 
-This project requires [Playwright](https://playwright.dev/python/) and [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli). Install dependencies with:
+This project requires [Playwright](https://playwright.dev/python/) and [GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-copilot-cli). Install dependencies with:
 
 ```
 pip install -r requirements.txt
