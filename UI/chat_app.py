@@ -551,7 +551,7 @@ class ChatApp:
         """
         chrome_x = work_x + work_w // 2
         chrome_w = work_w - work_w // 2
-        dbg_h = 80  # height reserved for the debugger bar above Chrome
+        dbg_h = 90  # height reserved for the debugger bar above Chrome
 
         # Stop the previous worker thread before starting a new one
         if self._pw_worker_thread is not None and self._pw_worker_thread.is_alive():
@@ -660,7 +660,7 @@ class ChatApp:
             user32 = ctypes.windll.user32
             SWP_NOZORDER = 0x0004
             chrome_y = work_y + dbg_h
-            chrome_h = work_h - dbg_h
+            chrome_h = work_h - dbg_h + 10  # +10 compensates for DPI rounding
             deadline = time.time() + 20
             while time.time() < deadline:
                 hwnds = self._get_chrome_hwnds()
@@ -737,9 +737,9 @@ class ChatApp:
             # Just reposition it
             chrome_x = work_x + work_w // 2
             chrome_w = work_w - work_w // 2
-            dbg_h = 80
+            dbg_h = 90
             chrome_y = work_y + dbg_h
-            chrome_h = work_h - dbg_h
+            chrome_h = work_h - dbg_h + 10  # +10 compensates for DPI rounding
             user32.SetWindowPos(self._chrome_hwnd, None, chrome_x, chrome_y, chrome_w, chrome_h, SWP_NOZORDER)
             # Reposition debugger window above Chrome
             if self._debugger_win:
@@ -763,44 +763,61 @@ class ChatApp:
             except tk.TclError:
                 pass  # window was destroyed
 
-        dbg_h = 80
+        dbg_h = 90
         win = tk.Toplevel(self.root)
         win.title("Debugger")
         win.overrideredirect(True)
         win.attributes("-topmost", True)
-        win.configure(bg="#2B2B2B")
-        win.geometry(f"{chrome_w}x{dbg_h}+{chrome_x}+{chrome_y}")
+        win.configure(bg="#1E1E2E")
+        win.geometry(f"{chrome_w - 10}x{dbg_h}+{chrome_x + 5}+{chrome_y}")
         self._debugger_win = win
 
-        btn_frame = tk.Frame(win, bg="#2B2B2B")
-        btn_frame.pack(pady=(6, 0))
+        # Top row: status + buttons
+        btn_frame = tk.Frame(win, bg="#1E1E2E")
+        btn_frame.pack(pady=(8, 0))
 
         status_var = tk.StringVar(value="IDLE")
         status_lbl = tk.Label(btn_frame, textvariable=status_var,
-                              font=("Consolas", 11, "bold"), fg="#888",
-                              bg="#2B2B2B", width=10)
-        status_lbl.pack(side=tk.LEFT, padx=(10, 6))
+                              font=("Consolas", 11, "bold"), fg="#666",
+                              bg="#1E1E2E", width=10)
+        status_lbl.pack(side=tk.LEFT, padx=(12, 8))
+
+        btn_style = dict(
+            font=("Segoe UI Emoji", 11),
+            width=20,
+            relief=tk.FLAT,
+            bd=0,
+            cursor="hand2",
+            activeforeground="white",
+        )
 
         break_btn = tk.Button(btn_frame, text="\u23F8 Break",
-                              command=self._dbg_on_break, width=20,
-                              font=("Segoe UI Emoji", 11), state=tk.DISABLED)
+                              command=self._dbg_on_break,
+                              bg="#C62828", fg="white", activebackground="#E53935",
+                              disabledforeground="#555",
+                              state=tk.DISABLED, **btn_style)
         break_btn.pack(side=tk.LEFT, padx=4)
 
         continue_btn = tk.Button(btn_frame, text="\u25B6 Continue",
-                                 command=self._dbg_on_continue, width=20,
-                                 font=("Segoe UI Emoji", 11), state=tk.DISABLED)
+                                 command=self._dbg_on_continue,
+                                 bg="#2E7D32", fg="white", activebackground="#43A047",
+                                 disabledforeground="#555",
+                                 state=tk.DISABLED, **btn_style)
         continue_btn.pack(side=tk.LEFT, padx=4)
 
         step_btn = tk.Button(btn_frame, text="\u23ED Step",
-                             command=self._dbg_on_step, width=20,
-                             font=("Segoe UI Emoji", 11), state=tk.DISABLED)
+                             command=self._dbg_on_step,
+                             bg="#1565C0", fg="white", activebackground="#1E88E5",
+                             disabledforeground="#555",
+                             state=tk.DISABLED, **btn_style)
         step_btn.pack(side=tk.LEFT, padx=4)
 
+        # Bottom row: action/next-step label
         action_var = tk.StringVar(value="")
         action_lbl = tk.Label(win, textvariable=action_var,
-                              font=("Consolas", 14), fg="#CCC", bg="#2B2B2B",
+                              font=("Consolas", 13), fg="#A0C4FF", bg="#1E1E2E",
                               anchor=tk.W)
-        action_lbl.pack(fill=tk.X, padx=10, pady=(2, 4))
+        action_lbl.pack(fill=tk.X, padx=12, pady=(4, 6))
 
         self._dbg_widgets = dict(
             status_var=status_var, status_lbl=status_lbl,
@@ -816,22 +833,22 @@ class ChatApp:
         if not w:
             return
         if mode == "idle":
-            w["break_btn"].config(state=tk.DISABLED)
-            w["continue_btn"].config(state=tk.DISABLED)
-            w["step_btn"].config(state=tk.DISABLED)
+            w["break_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
+            w["continue_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
+            w["step_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
             w["status_var"].set("IDLE")
-            w["status_lbl"].config(fg="#888")
+            w["status_lbl"].config(fg="#666")
             w["action_var"].set("")
         elif mode == "running":
-            w["break_btn"].config(state=tk.NORMAL)
-            w["continue_btn"].config(state=tk.DISABLED)
-            w["step_btn"].config(state=tk.DISABLED)
+            w["break_btn"].config(state=tk.NORMAL, bg="#C62828")
+            w["continue_btn"].config(state=tk.DISABLED, bg="#D0D0D0")
+            w["step_btn"].config(state=tk.DISABLED, bg="#D0D0D0")
             w["status_var"].set("RUNNING")
             w["status_lbl"].config(fg="#4CAF50")
         elif mode == "paused":
-            w["break_btn"].config(state=tk.DISABLED)
-            w["continue_btn"].config(state=tk.NORMAL)
-            w["step_btn"].config(state=tk.NORMAL)
+            w["break_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
+            w["continue_btn"].config(state=tk.NORMAL, bg="#2E7D32")
+            w["step_btn"].config(state=tk.NORMAL, bg="#1565C0")
             w["status_var"].set("PAUSED")
             w["status_lbl"].config(fg="#F44336")
 
