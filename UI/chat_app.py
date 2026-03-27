@@ -62,7 +62,7 @@ class ChatApp:
         self.root.title("Browser Agent Based On Web Verbs")
         
         # Set workspace path for copilot commands
-        self.workspace_path = "D:\\repos\\MSR-Web-Verbs"
+        self.workspace_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
         # Read task_name from cache.txt or use default
         cache_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cache.txt")
