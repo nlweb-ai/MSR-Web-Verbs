@@ -101,7 +101,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
                 pass
 
         # ── STEP 1: Enter pickup location ─────────────────────────────────
-        print(f'STEP 1: Pickup = "{pickup}"...')
+        print(f'STEP 1: Pickup = "{request.pickup}"...')
         pickup_input = page.locator('input[aria-label="Pickup location"]').first
         pickup_input.wait_for(state="visible", timeout=5000)
         checkpoint("Click pickup input field")
@@ -113,7 +113,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
         page.keyboard.press("Backspace")
         page.wait_for_timeout(200)
         checkpoint("Type pickup location")
-        pickup_input.type(pickup, delay=50)
+        pickup_input.type(request.pickup, delay=50)
         page.wait_for_timeout(3000)
 
         # Select first autocomplete suggestion from pickup dropdown
@@ -125,7 +125,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
         page.wait_for_timeout(2000)
 
         # ── STEP 2: Enter dropoff location ────────────────────────────────
-        print(f'STEP 2: Dropoff = "{dropoff}"...')
+        print(f'STEP 2: Dropoff = "{request.dropoff}"...')
         dropoff_input = page.locator('input[aria-label="Dropoff location"]').first
         dropoff_input.wait_for(state="visible", timeout=5000)
         checkpoint("Click dropoff input field")
@@ -137,7 +137,7 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
         page.keyboard.press("Backspace")
         page.wait_for_timeout(200)
         checkpoint("Type dropoff location")
-        dropoff_input.type(dropoff, delay=50)
+        dropoff_input.type(request.dropoff, delay=50)
         page.wait_for_timeout(3000)
 
         # Select autocomplete suggestion from destination dropdown
@@ -240,46 +240,27 @@ def test_uber_rides():
         dropoff="Downtown Seattle",
         max_results=5,
     )
-    port = get_free_port()
-    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
-    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
-    chrome_proc = subprocess.Popen(
-        [
-            chrome,
-            f"--remote-debugging-port={port}",
-            f"--user-data-dir={profile_dir}",
-            "--remote-allow-origins=*",
-            "--no-first-run",
-            "--no-default-browser-check",
-            "--disable-blink-features=AutomationControlled",
-            "--window-size=1280,987",
-            "about:blank",
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+    user_data_dir = os.path.join(
+        os.environ["USERPROFILE"],
+        "AppData", "Local", "Google", "Chrome", "User Data", "Default",
     )
-    ws_url = None
-    deadline = time.time() + 15
-    while time.time() < deadline:
-        try:
-            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
-            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
-            if ws_url:
-                break
-        except Exception:
-            pass
-        time.sleep(0.4)
-    if not ws_url:
-        raise TimeoutError("Chrome CDP not ready")
-    with sync_playwright() as pl:
-        browser = pl.chromium.connect_over_cdp(ws_url)
-        context = browser.contexts[0]
+    with sync_playwright() as playwright:
+        context = playwright.chromium.launch_persistent_context(
+            user_data_dir,
+            channel="chrome",
+            headless=False,
+            viewport=None,
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--disable-infobars",
+                "--disable-extensions",
+            ],
+        )
         page = context.pages[0] if context.pages else context.new_page()
         try:
             result = search_uber_rides(page, request)
         finally:
-            chrome_proc.terminate()
-            shutil.rmtree(profile_dir, ignore_errors=True)
+            context.close()
     print(f"\nTotal estimates: {len(result.estimates)}")
     for i, e in enumerate(result.estimates, 1):
         print(f"  {i}. {e.ride_type}  {e.price_range}")

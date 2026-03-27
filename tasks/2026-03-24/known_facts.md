@@ -310,3 +310,30 @@
   ]
 }
 ```
+
+## Google Maps List: CVS Stores Bellevue (created 2026-03-27)
+
+- List name: CVS Stores Bellevue
+- Success: True
+- Places added:
+  - CVS 10116 NE 8th St, Bellevue, WA 98004
+  - CVS 107 Bellevue Way SE, Bellevue, WA 98004
+  - CVS 653 156th Ave NE, Bellevue, WA 98007
+  - CVS 3023 78th Ave SE, Mercer Island, WA 98040
+  - CVS 10625 NE 68th St, Kirkland, WA 98033
+
+```json
+{
+  "action": "create_google_maps_list",
+  "date": "2026-03-27",
+  "list_name": "CVS Stores Bellevue",
+  "places_added": [
+    "CVS 10116 NE 8th St, Bellevue, WA 98004",
+    "CVS 107 Bellevue Way SE, Bellevue, WA 98004",
+    "CVS 653 156th Ave NE, Bellevue, WA 98007",
+    "CVS 3023 78th Ave SE, Mercer Island, WA 98040",
+    "CVS 10625 NE 68th St, Kirkland, WA 98033"
+  ],
+  "success": true
+}
+```
