@@ -32,12 +32,7 @@ class ZillowListing:
 @dataclass(frozen=True)
 class ZillowSearchResult:
     location: str
-    listings: list
-
-
-
-
-
+    listings: list[ZillowListing]
 def search_zillow_homes(page: Page, request: ZillowSearchRequest) -> ZillowSearchResult:
     listings = []
 

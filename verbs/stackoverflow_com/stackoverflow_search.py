@@ -38,11 +38,7 @@ class StackOverflowAnswer:
 @dataclass(frozen=True)
 class StackOverflowSearchResult:
     query: str
-    answers: list
-
-
-
-
+    answers: list[StackOverflowAnswer]
 def search_stackoverflow_api(query: str, max_results: int = 5) -> list:
     """
     Search StackOverflow using the public API.

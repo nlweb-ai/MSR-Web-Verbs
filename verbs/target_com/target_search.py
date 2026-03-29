@@ -83,9 +83,7 @@ class TargetProduct:
 @dataclass(frozen=True)
 class TargetSearchResult:
     search_query: str
-    products: list
-
-
+    products: list[TargetProduct]
 def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSearchResult:
     url = f"https://www.target.com/s?searchTerm={request.search_query.replace(' ', '+')}"
     checkpoint(f"navigating to Target search: {url}")

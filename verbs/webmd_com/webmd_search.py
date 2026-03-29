@@ -36,9 +36,7 @@ class WebMDCondition:
 @dataclass(frozen=True)
 class WebMDSearchResult:
     symptom: str
-    conditions: list
-
-
+    conditions: list[WebMDCondition]
 def search_webmd_conditions(page: Page, request: WebMDSearchRequest) -> WebMDSearchResult:
     """Search WebMD for a symptom and extract related conditions."""
     conditions = []

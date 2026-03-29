@@ -49,9 +49,7 @@ class UberRideEstimate:
 class UberRideSearchResult:
     pickup: str
     dropoff: str
-    estimates: list
-
-
+    estimates: list[UberRideEstimate]
 def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSearchResult:
     print("=" * 59)
     print("  Uber - Ride Price Estimate")

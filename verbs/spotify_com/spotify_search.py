@@ -35,9 +35,7 @@ class SpotifyPlaylist:
 @dataclass(frozen=True)
 class SpotifySearchResult:
     query: str
-    playlists: list
-
-
+    playlists: list[SpotifyPlaylist]
 def search_spotify_playlists(page: Page, request: SpotifySearchRequest) -> SpotifySearchResult:
     playlists = []
     try:

@@ -39,9 +39,7 @@ class OpentableRestaurant:
 @dataclass(frozen=True)
 class OpentableSearchResult:
     location: str
-    restaurants: list
-
-
+    restaurants: list[OpentableRestaurant]
 def search_opentable_restaurants(page: Page, request: OpentableSearchRequest) -> OpentableSearchResult:
     restaurants = []
     try:

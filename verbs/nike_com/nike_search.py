@@ -39,9 +39,7 @@ class NikeProduct:
 @dataclass(frozen=True)
 class NikeSearchResult:
     query: str
-    products: list
-
-
+    products: list[NikeProduct]
 def search_nike_products(page: Page, request: NikeSearchRequest) -> NikeSearchResult:
     results = []
     try:

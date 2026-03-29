@@ -61,12 +61,10 @@ def search_booking_hotels(
     checkin_display = checkin.strftime("%m/%d/%Y")
     checkout_display = checkout.strftime("%m/%d/%Y")
     raw_results = []
+    seen_names = set()
 
     print(f"  Destination: {destination}")
     print(f"  Check-in: {checkin_display}  Check-out: {checkout_display}  (2 nights)\n")
-
-    raw_results = []
-    seen_names = set()
 
     try:
         # ── Navigate ──────────────────────────────────────────────────────

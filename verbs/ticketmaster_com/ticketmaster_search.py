@@ -29,9 +29,7 @@ class TicketmasterEvent:
 @dataclass(frozen=True)
 class TicketmasterSearchResult:
     location: str
-    events: list
-
-
+    events: list[TicketmasterEvent]
 def search_ticketmaster_events(page: Page, request: TicketmasterSearchRequest) -> TicketmasterSearchResult:
     events = []
     try:

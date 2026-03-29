@@ -32,9 +32,7 @@ class NYTimesArticle:
 @dataclass(frozen=True)
 class NYTimesSearchResult:
     query: str
-    articles: list
-
-
+    articles: list[NYTimesArticle]
 def search_nytimes_articles(page: Page, request: NYTimesSearchRequest) -> NYTimesSearchResult:
     articles = []
     try:

@@ -40,9 +40,7 @@ class UberEatsRestaurant:
 class UberEatsSearchResult:
     address: str
     query: str
-    restaurants: list
-
-
+    restaurants: list[UberEatsRestaurant]
 def search_ubereats_restaurants(page: Page, request: UberEatsSearchRequest) -> UberEatsSearchResult:
     restaurants = []
     try:

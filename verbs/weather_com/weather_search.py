@@ -43,9 +43,7 @@ class WeatherForecastResult:
     location: str
     current_temp: str
     current_conditions: str
-    forecast: list
-
-
+    forecast: list[WeatherDay]
 def get_weather_forecast(page: Page, request: WeatherForecastRequest) -> WeatherForecastResult:
     print("=" * 59)
     print("  Weather.com – Weather Forecast")

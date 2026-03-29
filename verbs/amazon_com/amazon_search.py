@@ -29,9 +29,7 @@ class AmazonProduct:
 @dataclass(frozen=True)
 class AmazonSearchResult:
     query: str
-    products: list
-
-
+    products: list[AmazonProduct]
 def search_amazon_products(page: Page, request: AmazonSearchRequest) -> AmazonSearchResult:
     products = []
 

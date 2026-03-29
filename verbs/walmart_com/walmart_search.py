@@ -211,9 +211,7 @@ class WalmartProduct:
 @dataclass(frozen=True)
 class WalmartSearchResult:
     search_query: str
-    products: list
-
-
+    products: list[WalmartProduct]
 def search_walmart_products(page: Page, request: WalmartSearchRequest) -> WalmartSearchResult:
     url = f"https://www.walmart.com/search?q={request.search_query.replace(' ', '+')}&sort=best_seller"
     products = []

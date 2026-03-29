@@ -47,9 +47,7 @@ class SouthwestFlightSearchResult:
     destination: str
     departure_date: object
     return_date: object
-    flights: list
-
-
+    flights: list[SouthwestFlight]
 def select_airport(page, input_selector: str, code: str) -> str:
     """Type airport code into combobox and select from autocomplete dropdown."""
     inp = page.locator(input_selector).first

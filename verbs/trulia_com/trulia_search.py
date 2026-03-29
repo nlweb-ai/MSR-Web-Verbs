@@ -32,9 +32,7 @@ class TruliaListing:
 @dataclass(frozen=True)
 class TruliaSearchResult:
     location: str
-    listings: list
-
-
+    listings: list[TruliaListing]
 def search_trulia_homes(page: Page, request: TruliaSearchRequest) -> TruliaSearchResult:
     listings = []
 

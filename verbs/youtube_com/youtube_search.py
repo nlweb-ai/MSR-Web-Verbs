@@ -42,9 +42,7 @@ class YouTubeVideo:
 @dataclass(frozen=True)
 class YouTubeSearchResult:
     search_query: str
-    videos: list
-
-
+    videos: list[YouTubeVideo]
 def search_youtube_videos(page: Page, request: YouTubeSearchRequest) -> YouTubeSearchResult:
     """
     Search YouTube for the given query and return up to request.max_results video results,

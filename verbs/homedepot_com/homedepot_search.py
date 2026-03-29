@@ -153,9 +153,7 @@ class HomedepotProduct:
 @dataclass(frozen=True)
 class HomedepotSearchResult:
     search_query: str
-    products: list
-
-
+    products: list[HomedepotProduct]
 def search_homedepot_products(page: Page, request: HomedepotSearchRequest) -> HomedepotSearchResult:
     print(f"Page URL: {page.url[:100]}")
     dismiss(page)
