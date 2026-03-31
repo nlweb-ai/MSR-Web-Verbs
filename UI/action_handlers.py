@@ -711,6 +711,7 @@ def execute_strategy(app):
 
         def _dispatch():
             # Reset debugger state for this execution
+            app._stop_requested = False
             debug_state["mode"] = "running"
             debug_state["done"] = False
             debug_state["action"] = ""
@@ -748,11 +749,14 @@ def execute_strategy(app):
             def _show():
                 app._sync_debugger_buttons("idle")
                 app.chat_display.config(state=tk.NORMAL)
-                #app.chat_display.insert(tk.END, f"{result_text}\n\n", "copilot")
-                app.chat_display.insert(tk.END, f"Execution completed.\n", "copilot")
+                if app._stop_requested:
+                    app.chat_display.insert(tk.END, "Execution stopped by user.\n", "copilot")
+                else:
+                    app.chat_display.insert(tk.END, f"Execution completed.\n", "copilot")
                 app.chat_display.see(tk.END)
                 app.chat_display.config(state=tk.DISABLED)
-                _refine_task()
+                if not app._stop_requested:
+                    _refine_task()
             app.root.after(0, _show)
 
         def _refine_task():

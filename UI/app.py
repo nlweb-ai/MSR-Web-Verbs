@@ -88,6 +88,7 @@ class ChatApp:
         self._pw_task_queue = queue.SimpleQueue()   # items: (callable(page) -> result, result_queue) | None
         self._pw_worker_thread = None
         self.page = None         # set by worker thread once Chrome is ready
+        self._stop_requested = False  # set by Stop button to abort execution
         self._work = (0, 0, 0, 0)
         self._debugger_win = None  # Toplevel debugger window
         self._dbg_widgets = {}     # debugger UI widgets
@@ -812,6 +813,13 @@ class ChatApp:
                              state=tk.DISABLED, **btn_style)
         step_btn.pack(side=tk.LEFT, padx=4)
 
+        stop_btn = tk.Button(btn_frame, text="\u23F9 Stop",
+                             command=self._dbg_on_stop,
+                             bg="#B71C1C", fg="white", activebackground="#D32F2F",
+                             disabledforeground="#555",
+                             state=tk.DISABLED, **btn_style)
+        stop_btn.pack(side=tk.LEFT, padx=4)
+
         # Bottom row: action/next-step label
         action_var = tk.StringVar(value="")
         action_lbl = tk.Label(win, textvariable=action_var,
@@ -823,7 +831,7 @@ class ChatApp:
             status_var=status_var, status_lbl=status_lbl,
             action_var=action_var,
             break_btn=break_btn, continue_btn=continue_btn,
-            step_btn=step_btn,
+            step_btn=step_btn, stop_btn=stop_btn,
         )
         self._sync_debugger_buttons("idle")
 
@@ -836,6 +844,7 @@ class ChatApp:
             w["break_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
             w["continue_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
             w["step_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
+            w["stop_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
             w["status_var"].set("IDLE")
             w["status_lbl"].config(fg="#666")
             w["action_var"].set("")
@@ -843,12 +852,14 @@ class ChatApp:
             w["break_btn"].config(state=tk.NORMAL, bg="#C62828")
             w["continue_btn"].config(state=tk.DISABLED, bg="#D0D0D0")
             w["step_btn"].config(state=tk.DISABLED, bg="#D0D0D0")
+            w["stop_btn"].config(state=tk.NORMAL, bg="#B71C1C")
             w["status_var"].set("RUNNING")
             w["status_lbl"].config(fg="#4CAF50")
         elif mode == "paused":
             w["break_btn"].config(state=tk.DISABLED, bg="#3A3A3A")
             w["continue_btn"].config(state=tk.NORMAL, bg="#2E7D32")
             w["step_btn"].config(state=tk.NORMAL, bg="#1565C0")
+            w["stop_btn"].config(state=tk.NORMAL, bg="#B71C1C")
             w["status_var"].set("PAUSED")
             w["status_lbl"].config(fg="#F44336")
 
@@ -867,6 +878,22 @@ class ChatApp:
         with _lock:
             debug_state["mode"] = "paused"
         _step_event.set()
+
+    def _dbg_on_stop(self):
+        """Stop execution: abort the current Playwright operation and skip task refinement."""
+        self._stop_requested = True
+        with _lock:
+            debug_state["mode"] = "running"
+            debug_state["done"] = True
+        _step_event.set()
+        # Navigate page to about:blank to abort any in-flight Playwright action
+        try:
+            if self.page:
+                self.page.goto("about:blank", wait_until="commit", timeout=3000)
+        except Exception:
+            pass
+        self._sync_debugger_buttons("idle")
+        self._dbg_widgets["action_var"].set("Stopped")
 
     def _dbg_poll_state(self):
         """Poll debug_state from the worker thread and update the UI."""

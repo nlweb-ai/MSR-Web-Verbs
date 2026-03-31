@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class HuggingFaceSearchRequest:
+    query: str = "code"
+    max_param_billions: float = 9.0
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class HuggingFaceModel:
+    model_name: str
+    parameters: str
+
+
+@dataclass(frozen=True)
+class HuggingFaceSearchResult:
+    query: str
+    max_param_billions: float
+    models: list
+
+
+# Search HuggingFace for coding models that have a Safetensors section and whose
+# parameter count (as reported on the model page) is strictly under the given
+# threshold.  Returns up to ``max_results`` qualifying models, each with its
+# name and parameter count string (e.g. "7B").
+def search_huggingface_models(page: Page, request: HuggingFaceSearchRequest) -> HuggingFaceSearchResult:

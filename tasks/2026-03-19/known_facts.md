@@ -451,3 +451,148 @@
   }
 }
 ```
+
+
+## Round 5 — Collected Facts (2026-03-31)
+
+```json
+{
+  "round": 5,
+  "date": "2026-03-31",
+  "additional_ask": "Add a dim sum place to the itinerary",
+  "dim_sum_search": {
+    "query": "dim sum restaurant",
+    "location": "Champaign, IL",
+    "all_results": [
+      {
+        "name": "Dimsum house",
+        "address": "402 E Green St, Champaign, IL 61820",
+        "rating": "4.6",
+        "phone": "(217) 607-1926",
+        "website": "https://www.dimsumhouseuiuc.com/"
+      },
+      {
+        "name": "Golden Harbor Authentic Chinese Cuisine",
+        "address": "505 S Neil St, Champaign, IL 61820",
+        "rating": "4.6",
+        "phone": "(217) 398-8988",
+        "website": "http://www.goldenharboronline.com/?utm_source=google&utm_medium=website"
+      },
+      {
+        "name": "Northern Cuisine",
+        "address": "404 E Green St, Champaign, IL 61820",
+        "rating": "4.6",
+        "phone": "(217) 607-1299",
+        "website": "http://northerncuisineuiuc.com/"
+      },
+      {
+        "name": "Mid Summer Lounge",
+        "address": "623 E Green St, Champaign, IL 61820",
+        "rating": "4.6",
+        "phone": "(217) 607-1434",
+        "website": "https://www.midsummerlounge.com/"
+      },
+      {
+        "name": "Ittonken一豚轩",
+        "address": "715 S Neil St Ste A, Champaign, IL 61820",
+        "rating": "4.6",
+        "phone": "(217) 778-6068",
+        "website": "https://pos.chowbus.com/online-ordering/store/Ittonken/21539"
+      }
+    ]
+  },
+  "recommended_dim_sum": {
+    "name": "Dimsum house",
+    "address": "402 E Green St, Champaign, IL 61820",
+    "rating": "4.6",
+    "phone": "(217) 607-1926",
+    "website": "https://www.dimsumhouseuiuc.com/",
+    "itinerary_slot": "Shuo Mon Mar 30 — dim sum meal option",
+    "note": "Best-rated dim sum option found in Champaign/Urbana area. Added as primary Chinese meal option for Mar 30. Backup Chinese options (Golden Harbor, Rainbow Garden, Sunny China Buffet, Peking Garden) remain available on the same day."
+  },
+  "google_maps_list_update": {
+    "list_name": "Shuo Mar 30 (Mon)",
+    "places_added": [
+      "Red Roof Inn Champaign",
+      "UIUC Family & Graduate Housing Office",
+      "Hub on Campus Champaign - Daniel",
+      "Campus Circle Urbana",
+      "Latitude Apartments",
+      "Dimsum house",
+      "Golden Harbor Authentic Chinese Cuisine",
+      "Rainbow Garden",
+      "Sunny China Buffet",
+      "Peking Garden Restaurant"
+    ],
+    "success": true
+  }
+}
+```
+
+
+## Round 5 — Collected Facts (2026-03-31)
+
+```json
+{
+  "round": 5,
+  "date": "2026-03-31",
+  "additional_ask": "Add a dim sum place to the itinerary",
+  "dim_sum_search": {
+    "query": "dim sum restaurant",
+    "location": "Champaign, IL",
+    "all_results": [
+      {
+        "name": "Dimsum house",
+        "address": "402 E Green St, Champaign, IL 61820",
+        "rating": "4.9",
+        "phone": "(217) 607-1926",
+        "website": "https://www.dimsumhouseuiuc.com/"
+      }
+    ]
+  },
+  "recommended_dim_sum": {
+    "name": "Dimsum house",
+    "address": "402 E Green St, Champaign, IL 61820",
+    "rating": "4.9",
+    "phone": "(217) 607-1926",
+    "website": "https://www.dimsumhouseuiuc.com/",
+    "itinerary_slot": "Shuo Mon Mar 30 — dim sum meal option",
+    "note": "Best-rated dim sum option found in Champaign/Urbana area. Added as primary Chinese meal option for Mar 30. Backup Chinese options (Golden Harbor, Rainbow Garden, Sunny China Buffet, Peking Garden) remain available on the same day."
+  },
+  "google_maps_list_update": {
+    "list_name": "Shuo Mar 30 (Mon)",
+    "places_added": [],
+    "success": false
+  }
+}
+```
+
+
+## Round 5 — Collected Facts (2026-03-31)
+
+```json
+{
+  "round": 5,
+  "date": "2026-03-31",
+  "additional_ask": "Add a dim sum place to the itinerary",
+  "dim_sum_search": {
+    "query": "dim sum restaurant",
+    "location": "Champaign, IL",
+    "all_results": []
+  },
+  "recommended_dim_sum": {
+    "name": null,
+    "address": null,
+    "rating": null,
+    "phone": null,
+    "website": null,
+    "itinerary_slot": "Shuo Mon Mar 30 — dim sum meal option",
+    "note": "Best-rated dim sum option found in Champaign/Urbana area. Added as primary Chinese meal option for Mar 30. Backup Chinese options (Golden Harbor, Rainbow Garden, Sunny China Buffet, Peking Garden) remain available on the same day."
+  },
+  "google_maps_list_update": {
+    "list_name": "Shuo Mar 30 (Mon)",
+    "places_added": [],
+    "success": false
+  }
+}
+```
