@@ -12,6 +12,6 @@ class WalmartProduct:
 @dataclass(frozen=True)
 class WalmartSearchResult:
     search_query: str
-    products: list
+    products: list[WalmartProduct]
 
 def search_walmart_products(page: Page, request: WalmartSearchRequest) -> WalmartSearchResult

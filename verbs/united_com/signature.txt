@@ -17,6 +17,6 @@ class UnitedFlightSearchResult:
     destination_city: str
     departure_date: object
     return_date: object
-    flights: list
+    flights: list[UnitedFlight]
 
 def search_united_flights(page: Page, request: UnitedFlightSearchRequest) -> UnitedFlightSearchResult

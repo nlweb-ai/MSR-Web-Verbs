@@ -12,6 +12,6 @@ class TargetProduct:
 @dataclass(frozen=True)
 class TargetSearchResult:
     search_query: str
-    products: list
+    products: list[TargetProduct]
 
 def search_target_products(page: Page, request: TargetSearchRequest) -> TargetSearchResult

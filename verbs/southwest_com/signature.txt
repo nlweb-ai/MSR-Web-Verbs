@@ -18,6 +18,6 @@ class SouthwestFlightSearchResult:
     destination: str
     departure_date: object
     return_date: object
-    flights: list
+    flights: list[SouthwestFlight]
 
 def search_southwest_flights(page: Page, request: SouthwestFlightSearchRequest) -> SouthwestFlightSearchResult
