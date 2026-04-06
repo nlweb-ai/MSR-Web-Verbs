@@ -79,9 +79,13 @@ def search_uber_rides(page: Page, request: UberRideSearchRequest) -> UberRideSea
                 page.wait_for_url("**/price-estimate/**", timeout=120000)
                 print("  Login successful!")
                 page.wait_for_timeout(3000)
-            except PwTimeout:
+            except TimeoutError:
                 print("  Timeout waiting for login. Please run again after logging in.")
-                return results
+                return UberRideSearchResult(
+                    pickup=request.pickup,
+                    dropoff=request.dropoff,
+                    estimates=[],
+                )
         
         print(f"  Loaded: {page.url}\n")
 
