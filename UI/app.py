@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Add verbs directory for cdp_utils
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "verbs"))
 from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws
-from playwright_debugger import debug_state, _step_event, _lock
+from playwright_debugger import debug_state, _step_event, _lock, StopExecution
 
 from file_loader import load_files_as_tabs
 from event_handlers import update_highest_version, handle_task_tab_changed, handle_strategy_tab_changed
@@ -694,6 +694,8 @@ class ChatApp:
                 fn, result_q = item
                 try:
                     result_q.put(("ok", fn(self.page)))
+                except StopExecution:
+                    result_q.put(("stopped", "Stopped by user"))
                 except Exception as exc:
                     result_q.put(("err", exc))
 
@@ -880,18 +882,12 @@ class ChatApp:
         _step_event.set()
 
     def _dbg_on_stop(self):
-        """Stop execution: abort the current Playwright operation and skip task refinement."""
+        """Stop execution: signal checkpoint() to raise StopExecution."""
         self._stop_requested = True
         with _lock:
+            debug_state["stop"] = True
             debug_state["mode"] = "running"
-            debug_state["done"] = True
-        _step_event.set()
-        # Navigate page to about:blank to abort any in-flight Playwright action
-        try:
-            if self.page:
-                self.page.goto("about:blank", wait_until="commit", timeout=3000)
-        except Exception:
-            pass
+        _step_event.set()  # unblock if paused
         self._sync_debugger_buttons("idle")
         self._dbg_widgets["action_var"].set("Stopped")
 

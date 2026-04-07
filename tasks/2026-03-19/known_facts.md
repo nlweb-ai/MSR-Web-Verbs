@@ -596,3 +596,258 @@
   }
 }
 ```
+
+
+## Round 3 — Collected Facts (2026-03-25)
+
+```json
+{
+  "round": 3,
+  "date": "2026-03-25",
+  "dealership_distance_selection": {
+    "note": "Driving distances from Red Roof Inn (212 W Anthony Dr, Champaign) to each candidate dealership. The 3 closest are kept for Shuo's Sun–Tue visit plan.",
+    "origin": "212 W Anthony Dr, Champaign, IL 61821",
+    "all_distances": [
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      }
+    ],
+    "top3_closest": [
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "",
+        "distance": ""
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance": ""
+      },
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "",
+        "distance": ""
+      }
+    ],
+    "excluded": [
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "distance": "",
+        "reason": "farther than top 3"
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "distance": "",
+        "reason": "farther than top 3"
+      }
+    ]
+  }
+}
+```
+
+
+## Round 3 — Collected Facts (2026-03-25)
+
+```json
+{
+  "round": 3,
+  "date": "2026-03-25",
+  "dealership_distance_selection": {
+    "note": "Driving distances from Red Roof Inn (212 W Anthony Dr, Champaign) to each candidate dealership. The 3 closest are kept for Shuo's Sun–Tue visit plan.",
+    "origin": "212 W Anthony Dr, Champaign, IL 61821",
+    "all_distances": [
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "2 min",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      }
+    ],
+    "top3_closest": [
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "2 min",
+        "distance": ""
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance": ""
+      },
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "",
+        "distance": ""
+      }
+    ],
+    "excluded": [
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "distance": "",
+        "reason": "farther than top 3"
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "distance": "",
+        "reason": "farther than top 3"
+      }
+    ]
+  }
+}
+```
+
+
+## Round 3 — Collected Facts (2026-03-25)
+
+```json
+{
+  "round": 3,
+  "date": "2026-03-25",
+  "dealership_distance_selection": {
+    "note": "Driving distances from Red Roof Inn (212 W Anthony Dr, Champaign) to each candidate dealership. The 3 closest are kept for Shuo's Sun–Tue visit plan.",
+    "origin": "212 W Anthony Dr, Champaign, IL 61821",
+    "all_distances": [
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "drive_time": "",
+        "distance_raw": "",
+        "distance_mi": 9999.0
+      }
+    ],
+    "top3_closest": [
+      {
+        "name": "Sam Leman Chevrolet",
+        "address": "440 Anthony Dr, Champaign, IL 61822",
+        "drive_time": "",
+        "distance": ""
+      },
+      {
+        "name": "Sam Leman CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "drive_time": "",
+        "distance": ""
+      },
+      {
+        "name": "Autotown",
+        "address": "1200 W Bloomington Rd, Champaign, IL 61821",
+        "drive_time": "",
+        "distance": ""
+      }
+    ],
+    "excluded": [
+      {
+        "name": "Champaign CDJR",
+        "address": "1906 Moreland Blvd, Champaign, IL 61822",
+        "distance": "",
+        "reason": "farther than top 3"
+      },
+      {
+        "name": "Euro Motors",
+        "address": "50 E Springfield Ave, Champaign, IL 61820",
+        "distance": "",
+        "reason": "farther than top 3"
+      }
+    ]
+  }
+}
+```

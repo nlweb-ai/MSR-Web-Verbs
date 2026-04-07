@@ -714,6 +714,7 @@ def execute_strategy(app):
             app._stop_requested = False
             debug_state["mode"] = "running"
             debug_state["done"] = False
+            debug_state["stop"] = False
             debug_state["action"] = ""
             _step_event.set()  # unblock in case it was waiting
             app.root.after(0, lambda: app._sync_debugger_buttons("running"))
@@ -739,6 +740,9 @@ def execute_strategy(app):
                     result_text = json.dumps(value, indent=2, ensure_ascii=False)
                 except Exception:
                     result_text = str(value)
+            elif status == "stopped":
+                app._stop_requested = True
+                result_text = "Stopped by user"
             else:
                 result_text = f"ERROR: {value}"
             _finish(result_text)

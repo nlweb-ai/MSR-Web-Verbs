@@ -35,6 +35,10 @@ _root: tk.Tk | None = None
 _widgets: dict = {}
 
 
+class StopExecution(Exception):
+    """Raised by checkpoint() when the user presses Stop."""
+
+
 # ── UI construction ──────────────────────────────────────────────────
 def _create_ui():
     global _root
@@ -118,7 +122,9 @@ def _on_step():
 
 # ── Checkpoint (called from worker thread before each action) ────────
 def checkpoint(description: str):
-    """Block if paused; pass through if running."""
+    """Block if paused; pass through if running; raise StopExecution if stopped."""
+    if debug_state.get("stop"):
+        raise StopExecution("Execution stopped by user")
     if debug_state["done"]:
         return
 
@@ -133,6 +139,9 @@ def checkpoint(description: str):
             _root.after(0, lambda: _widgets["action_var"].set(f"Next: {description}"))
             _root.after(0, _sync_buttons)
         _step_event.wait()
+        # Check again after unblock — user may have pressed Stop while paused
+        if debug_state.get("stop"):
+            raise StopExecution("Execution stopped by user")
     else:
         if _root:
             _root.after(0, lambda: _widgets["action_var"].set(f"Running: {description}"))
