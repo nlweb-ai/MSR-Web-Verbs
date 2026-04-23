@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class AzurePortalOpenCloudShellRequest:
+    command: str
+    shell_type: str  # "Bash" or "PowerShell"
+
+
+@dataclass(frozen=True)
+class AzurePortalOpenCloudShellResult:
+    success: bool
+    command_output: str
+    error: str
+
+
+# Opens Cloud Shell in Azure Portal, runs a command, and returns output.
+def azure_portal_open_cloud_shell(
+    page: Page,
+    request: AzurePortalOpenCloudShellRequest,
+) -> AzurePortalOpenCloudShellResult:

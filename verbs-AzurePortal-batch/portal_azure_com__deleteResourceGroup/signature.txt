@@ -1,0 +1,16 @@
+@dataclass(frozen=True)
+class AzurePortalDeleteResourceGroupRequest:
+    resource_group_name: str
+
+
+@dataclass(frozen=True)
+class AzurePortalDeleteResourceGroupResult:
+    success: bool
+    error: str
+
+
+# Deletes a resource group in Azure Portal.
+def azure_portal_delete_resource_group(
+    page: Page,
+    request: AzurePortalDeleteResourceGroupRequest,
+) -> AzurePortalDeleteResourceGroupResult:

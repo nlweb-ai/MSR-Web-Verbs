@@ -1,0 +1,26 @@
+@dataclass(frozen=True)
+class ResourceInfo:
+    name: str
+    resource_type: str
+    location: str
+
+
+@dataclass(frozen=True)
+class AzurePortalViewResourceGroupResourcesRequest:
+    resource_group_name: str
+    max_resources: int
+
+
+@dataclass(frozen=True)
+class AzurePortalViewResourceGroupResourcesResult:
+    success: bool
+    resource_group_name: str
+    resources: tuple  # tuple of ResourceInfo
+    error: str
+
+
+# Navigates to Azure Portal > Resource groups > [RG] and extracts its resources.
+def azure_portal_view_resource_group_resources(
+    page: Page,
+    request: AzurePortalViewResourceGroupResourcesRequest,
+) -> AzurePortalViewResourceGroupResourcesResult:

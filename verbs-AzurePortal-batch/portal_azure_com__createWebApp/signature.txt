@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class AzurePortalCreateWebAppRequest:
+    web_app_name: str
+    resource_group_name: str
+    runtime_stack: str
+    region: str
+
+
+@dataclass(frozen=True)
+class AzurePortalCreateWebAppResult:
+    success: bool
+    web_app_name: str
+    web_app_url: str
+    error: str
+
+
+# Creates a new Web App in Azure Portal via App Services.
+def azure_portal_create_web_app(
+    page: Page,
+    request: AzurePortalCreateWebAppRequest,
+) -> AzurePortalCreateWebAppResult:

@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class AzurePortalViewCostAnalysisRequest:
+    pass  # no parameters needed
+
+
+@dataclass(frozen=True)
+class AzurePortalViewCostAnalysisResult:
+    success: bool
+    cost_amount: str
+    currency: str
+    error: str
+
+
+# Navigates to Azure Portal Cost Management > Cost analysis and extracts the total cost.
+def azure_portal_view_cost_analysis(
+    page: Page,
+    request: AzurePortalViewCostAnalysisRequest,
+) -> AzurePortalViewCostAnalysisResult:

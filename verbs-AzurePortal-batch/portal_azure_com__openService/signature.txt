@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class AzurePortalOpenServiceRequest:
+    service_name: str
+
+
+@dataclass(frozen=True)
+class AzurePortalOpenServiceResult:
+    success: bool
+    service_name: str
+    page_url: str
+    error: str
+
+
+# Navigates to Azure Portal and opens the specified service.
+def azure_portal_open_service(
+    page: Page,
+    request: AzurePortalOpenServiceRequest,
+) -> AzurePortalOpenServiceResult:

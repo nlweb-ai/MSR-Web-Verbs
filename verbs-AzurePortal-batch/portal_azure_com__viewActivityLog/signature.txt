@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class ActivityLogEntry:
+    operation_name: str
+    status: str
+    time: str
+    resource: str
+
+
+@dataclass(frozen=True)
+class AzurePortalViewActivityLogRequest:
+    max_entries: int
+
+
+@dataclass(frozen=True)
+class AzurePortalViewActivityLogResult:
+    success: bool
+    entries: tuple  # tuple of ActivityLogEntry
+    error: str
+
+
+# Navigates to Azure Portal > Monitor > Activity log and extracts recent entries.
+def azure_portal_view_activity_log(
+    page: Page,
+    request: AzurePortalViewActivityLogRequest,
+) -> AzurePortalViewActivityLogResult:

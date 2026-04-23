@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class AzurePortalCreateStorageAccountRequest:
+    storage_account_name: str
+    resource_group_name: str
+    region: str
+
+
+@dataclass(frozen=True)
+class AzurePortalCreateStorageAccountResult:
+    success: bool
+    storage_account_name: str
+    error: str
+
+
+# Creates a new storage account in Azure Portal.
+def azure_portal_create_storage_account(
+    page: Page,
+    request: AzurePortalCreateStorageAccountRequest,
+) -> AzurePortalCreateStorageAccountResult:

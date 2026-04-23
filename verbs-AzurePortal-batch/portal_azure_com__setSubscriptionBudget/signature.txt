@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class AzurePortalSetSubscriptionBudgetRequest:
+    budget_name: str
+    budget_amount: float
+    reset_period: str  # "Monthly", "Quarterly", "Annually"
+    alert_threshold_percent: float = 80.0  # Alert at this % of budget (0.01–1000)
+    alert_email: str = ""  # Email for budget alert notifications
+
+
+@dataclass(frozen=True)
+class AzurePortalSetSubscriptionBudgetResult:
+    success: bool
+    budget_name: str
+    budget_amount: float
+    error: str
+
+
+# Creates a new budget in Azure Portal Cost Management > Budgets.
+def azure_portal_set_subscription_budget(
+    page: Page,
+    request: AzurePortalSetSubscriptionBudgetRequest,
+) -> AzurePortalSetSubscriptionBudgetResult:

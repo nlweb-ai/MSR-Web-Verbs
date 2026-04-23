@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class VirtualMachineInfo:
+    name: str
+    resource_group: str
+    location: str
+    status: str
+
+
+@dataclass(frozen=True)
+class AzurePortalListVirtualMachinesRequest:
+    max_results: int
+
+
+@dataclass(frozen=True)
+class AzurePortalListVirtualMachinesResult:
+    success: bool
+    virtual_machines: tuple  # tuple of VirtualMachineInfo
+    error: str
+
+
+# Navigates to Azure Portal > Virtual machines and extracts the list of VMs.
+def azure_portal_list_virtual_machines(
+    page: Page,
+    request: AzurePortalListVirtualMachinesRequest,
+) -> AzurePortalListVirtualMachinesResult:
