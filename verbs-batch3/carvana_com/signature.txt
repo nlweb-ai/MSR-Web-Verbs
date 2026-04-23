@@ -1,0 +1,22 @@
+# Searches Carvana for cars matching the given query and returns up to max_results
+# listings with year/model, trim, mileage, price, and monthly payment.
+
+@dataclass(frozen=True)
+class CarvanaSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class CarvanaListing:
+    year_model: str
+    trim: str
+    mileage: str
+    price: str
+    monthly_payment: str
+
+@dataclass(frozen=True)
+class CarvanaSearchResult:
+    query: str
+    listings: list[CarvanaListing]
+
+def search_carvana_cars(page: Page, request: CarvanaSearchRequest) -> CarvanaSearchResult

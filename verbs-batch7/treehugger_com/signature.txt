@@ -1,0 +1,21 @@
+# Searches Treehugger (treehugger.com) for sustainability and environment articles.
+# Extracts title and summary for each article result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "solar panel"
+    max_results: int = 5
+
+@dataclass
+class ArticleResult:
+    title: str = ""
+    summary: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[ArticleResult]
+
+def treehugger_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

@@ -1,0 +1,18 @@
+# Searches Basketball Reference for a player's career stats. Extracts the player
+# name, points per game, rebounds per game, assists per game, games played, and
+# career points.
+
+@dataclass(frozen=True)
+class PlayerRequest:
+    player: str = "LeBron James"
+
+@dataclass
+class PlayerStats:
+    player_name: str = ""
+    ppg: str = ""
+    rpg: str = ""
+    apg: str = ""
+    games_played: str = ""
+    career_points: str = ""
+
+def basketball_ref_search(page: Page, request: PlayerRequest) -> PlayerStats:

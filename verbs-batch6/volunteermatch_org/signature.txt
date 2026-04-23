@@ -1,0 +1,18 @@
+# Searches VolunteerMatch for volunteer opportunities matching a query. For each
+# opportunity, extracts the title and URL.
+
+@dataclass(frozen=True)
+class OpportunityRequest:
+    query: str = "volunteer opportunities tutoring"
+    max_results: int = 5
+
+@dataclass
+class Opportunity:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class OpportunityResult:
+    items: List[Opportunity] = field(default_factory=list)
+
+def volunteermatch_search(page: Page, request: OpportunityRequest) -> OpportunityResult:

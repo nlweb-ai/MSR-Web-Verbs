@@ -1,0 +1,25 @@
+# Searches the Federal Register (federalregister.gov) for government documents by keyword.
+# Extracts title, agency, document type, publication date, summary, and URL.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "artificial intelligence"
+    max_results: int = 5
+
+@dataclass
+class Document:
+    title: str = ""
+    agency: str = ""
+    document_type: str = ""
+    publication_date: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass
+class SearchResult:
+    documents: list[Document]
+
+def federalregister_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

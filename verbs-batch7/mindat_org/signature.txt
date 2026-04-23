@@ -1,0 +1,24 @@
+# Searches Mindat (mindat.org) for mineral information by name/keyword.
+# Extracts mineral name, chemical formula, crystal system, hardness, color, and localities.
+
+@dataclass(frozen=True)
+class MineralSearchRequest:
+    query: str = "amethyst"
+
+@dataclass
+class MineralInfo:
+    name: str = ""
+    formula: str = ""
+    crystal_system: str = ""
+    hardness: str = ""
+    color: str = ""
+    localities: list[str]
+
+@dataclass
+class MineralSearchResult:
+    mineral: MineralInfo
+
+def mineral_search(
+    page: Page,
+    request: MineralSearchRequest,
+) -> MineralSearchResult:

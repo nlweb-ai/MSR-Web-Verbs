@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class StackOverflowSearchRequest:
+    query: str = "how to parse JSON in Python"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class StackOverflowAnswer:
+    votes: str
+    author: str
+    url: str
+    summary: str
+
+@dataclass(frozen=True)
+class StackOverflowSearchResult:
+    query: str
+    answers: list[StackOverflowAnswer]
+
+def search_stackoverflow(request: StackOverflowSearchRequest) -> StackOverflowSearchResult

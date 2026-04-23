@@ -1,0 +1,19 @@
+# Searches Zara for clothing products matching a query. For each product,
+# extracts the name, price, and product URL.
+
+@dataclass(frozen=True)
+class ZaraRequest:
+    query: str = "denim jacket"
+    max_products: int = 5
+
+@dataclass
+class ZaraProduct:
+    product_name: str = ""
+    price: str = ""
+    product_url: str = ""
+
+@dataclass
+class ZaraResult:
+    products: list = field(default_factory=list)
+
+def zara_search(page: Page, request: ZaraRequest) -> ZaraResult:

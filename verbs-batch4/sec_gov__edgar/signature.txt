@@ -1,0 +1,20 @@
+# Search SEC EDGAR for company filings by ticker symbol
+# and extract filing type, date, description, and link.
+
+@dataclass(frozen=True)
+class EdgarSearchRequest:
+    ticker: str = "TSLA"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class EdgarFiling:
+    filing_type: str = ""
+    filing_date: str = ""
+    description: str = ""
+    filing_link: str = ""
+
+@dataclass(frozen=True)
+class EdgarSearchResult:
+    filings: list = None  # list[EdgarFiling]
+
+def edgar_search(page: Page, request: EdgarSearchRequest) -> EdgarSearchResult:

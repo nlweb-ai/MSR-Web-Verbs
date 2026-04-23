@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class BricksetSearchRequest:
+    theme: str = "Star Wars"
+    max_results: int = 5
+
+
+@dataclass
+class LegoSetItem:
+    name: str = ""
+    set_number: str = ""
+    piece_count: str = ""
+    price: str = ""
+    year_released: str = ""
+    rating: str = ""
+
+
+@dataclass
+class BricksetSearchResult:
+    theme: str = ""
+    items: List[LegoSetItem] = field(default_factory=list)
+
+
+# Search Brickset for LEGO sets by theme.
+def search_brickset(page: Page, request: BricksetSearchRequest) -> BricksetSearchResult:

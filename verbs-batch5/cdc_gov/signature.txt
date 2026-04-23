@@ -1,0 +1,19 @@
+# Searches CDC.gov for health information matching a query. For each result,
+# extracts the page title, summary, and URL.
+
+@dataclass(frozen=True)
+class CDCSearchRequest:
+    search_query: str = "flu vaccination"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class CDCResult:
+    page_title: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass(frozen=True)
+class CDCSearchResult:
+    results: list = None  # list[CDCResult]
+
+def cdc_search(page: Page, request: CDCSearchRequest) -> CDCSearchResult:

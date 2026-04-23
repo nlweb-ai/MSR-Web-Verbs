@@ -1,0 +1,18 @@
+# Searches Pro Football Reference for NFL player stats matching a query.
+# For each result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class PlayerRequest:
+    query: str = "Patrick Mahomes career stats"
+    max_results: int = 5
+
+@dataclass
+class Player:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class PlayerResult:
+    items: List[Player] = field(default_factory=list)
+
+def pfr_search(page: Page, request: PlayerRequest) -> PlayerResult:

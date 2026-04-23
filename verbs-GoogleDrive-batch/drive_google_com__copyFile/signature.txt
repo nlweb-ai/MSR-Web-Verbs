@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class GoogleDriveCopyFileRequest:
+    file_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveCopyFileResult:
+    success: bool
+    copy_name: str
+    error: str
+
+
+# Makes a copy of a file in Google Drive.
+def google_drive_copy_file(
+    page: Page,
+    request: GoogleDriveCopyFileRequest,
+) -> GoogleDriveCopyFileResult:

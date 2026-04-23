@@ -1,0 +1,22 @@
+# Searches Wine Enthusiast for wine reviews matching a query. For each wine,
+# extracts the name, winery, vintage, rating, price, and tasting notes.
+
+@dataclass(frozen=True)
+class WineRequest:
+    query: str = "Pinot Noir Oregon"
+    max_wines: int = 5
+
+@dataclass
+class WineReview:
+    wine_name: str = ""
+    winery: str = ""
+    vintage: str = ""
+    rating: str = ""
+    price: str = ""
+    tasting_notes: str = ""
+
+@dataclass
+class WineResult:
+    wines: list = field(default_factory=list)
+
+def wine_search(page: Page, request: WineRequest) -> WineResult:

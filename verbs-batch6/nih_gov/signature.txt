@@ -1,0 +1,19 @@
+# Searches NIH for health research articles matching a query. For each article,
+# extracts the title, description, and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "diabetes prevention"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def nih_search(page: Page, request: ArticleRequest) -> ArticleResult:

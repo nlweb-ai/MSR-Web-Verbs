@@ -1,0 +1,18 @@
+# Searches PC Gamer for articles matching a query. For each article, extracts
+# the title and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "best graphics cards 2024"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def pcgamer_search(page: Page, request: ArticleRequest) -> ArticleResult:

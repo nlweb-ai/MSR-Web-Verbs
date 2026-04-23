@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class RoverSearchRequest:
+    location: str = "Seattle, WA"
+    max_results: int = 5
+
+
+@dataclass
+class RoverSitterItem:
+    sitter_name: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+    price_per_night: str = ""
+    services_offered: str = ""
+    distance: str = ""
+    response_time: str = ""
+
+
+@dataclass
+class RoverSearchResult:
+    items: List[RoverSitterItem] = field(default_factory=list)
+
+
+# Search for pet sitters on Rover by location.
+def rover_search(page: Page, request: RoverSearchRequest) -> RoverSearchResult:

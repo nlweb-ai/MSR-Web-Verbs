@@ -1,0 +1,24 @@
+# Searches ThriftBooks (thriftbooks.com) for used books by keyword.
+# Extracts title, author, price, condition, and format for each book result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "1984 George Orwell"
+    max_results: int = 5
+
+@dataclass
+class BookResult:
+    title: str = ""
+    author: str = ""
+    price: str = ""
+    condition: str = ""
+    format: str = ""
+
+@dataclass
+class SearchResult:
+    books: list[BookResult]
+
+def thriftbooks_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

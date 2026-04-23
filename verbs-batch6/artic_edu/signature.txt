@@ -1,0 +1,21 @@
+# Searches the Art Institute of Chicago collection via their public API.
+# For each artwork, extracts the title, artist, date, medium, and URL.
+
+@dataclass(frozen=True)
+class ArtworkRequest:
+    query: str = "Claude Monet"
+    max_artworks: int = 5
+
+@dataclass
+class Artwork:
+    title: str = ""
+    artist: str = ""
+    date: str = ""
+    medium: str = ""
+    url: str = ""
+
+@dataclass
+class ArtworkResult:
+    artworks: list = field(default_factory=list)
+
+def artic_search(page: Page, request: ArtworkRequest) -> ArtworkResult:

@@ -1,0 +1,24 @@
+# Searches Yoga Journal (yogajournal.com) for yoga articles and poses by keyword.
+# Extracts category, title, summary, author, and date for each article.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "warrior pose"
+    max_results: int = 5
+
+@dataclass
+class ArticleResult:
+    category: str = ""
+    title: str = ""
+    summary: str = ""
+    author: str = ""
+    date: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[ArticleResult]
+
+def yogajournal_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

@@ -1,0 +1,19 @@
+# Searches Pinterest for pins matching a query, then extracts
+# up to max_results pins with title and link.
+
+@dataclass(frozen=True)
+class PinterestSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class PinterestPin:
+    title: str
+    link: str
+
+@dataclass(frozen=True)
+class PinterestSearchResult:
+    query: str
+    pins: list[PinterestPin]
+
+def search_pinterest(page: Page, request: PinterestSearchRequest) -> PinterestSearchResult

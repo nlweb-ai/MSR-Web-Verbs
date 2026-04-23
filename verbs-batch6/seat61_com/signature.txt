@@ -1,0 +1,18 @@
+# Searches Seat61 for train travel guides matching a query. For each guide,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class GuideRequest:
+    query: str = "train travel Europe tips"
+    max_results: int = 5
+
+@dataclass
+class Guide:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class GuideResult:
+    items: List[Guide] = field(default_factory=list)
+
+def seat61_search(page: Page, request: GuideRequest) -> GuideResult:

@@ -1,0 +1,23 @@
+# Search for apartments on Rent.com and extract listing details including
+# property name, price range, bedrooms, and neighborhood from the results page.
+
+@dataclass(frozen=True)
+class RentSearchRequest:
+    url: str = "https://www.rent.com/illinois/chicago-apartments/2-bedrooms"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class ApartmentListing:
+    name: str = ""
+    price: str = ""
+    bedrooms: str = ""
+    neighborhood: str = ""
+
+
+@dataclass(frozen=True)
+class RentSearchResult:
+    listings: list = None  # list[ApartmentListing]
+
+
+def rent_search(page: Page, request: RentSearchRequest) -> RentSearchResult:

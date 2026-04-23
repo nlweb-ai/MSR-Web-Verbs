@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class GitHubDiscussionsRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class DiscussionItem:
+    title: str
+    repo: str
+    author: str
+    answers: str
+    posted_time: str
+
+@dataclass
+class GitHubDiscussionsResult:
+    query: str
+    items: List[DiscussionItem]
+
+# Searches GitHub Discussions for topics matching the query and returns
+# up to max_results discussions with title, repository, author, posted time, and answer count.
+def search_github_discussions(page: Page, request: GitHubDiscussionsRequest) -> GitHubDiscussionsResult:

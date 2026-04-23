@@ -1,0 +1,18 @@
+# overstock_search — Search for products on Overstock.com homepage and extract details.
+
+@dataclass(frozen=True)
+class OverstockSearchRequest:
+    query: str = "sectional sofa"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class OverstockProduct:
+    product_name: str = ""
+    price: str = ""
+    original_price: str = ""
+
+@dataclass(frozen=True)
+class OverstockSearchResult:
+    products: list = None  # list[OverstockProduct]
+
+def overstock_search(page: Page, request: OverstockSearchRequest) -> OverstockSearchResult:

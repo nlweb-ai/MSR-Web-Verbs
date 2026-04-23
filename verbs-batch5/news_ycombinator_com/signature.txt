@@ -1,0 +1,21 @@
+# Extracts top stories from Hacker News. For each story, extracts the title,
+# URL, points, author, number of comments, and time posted.
+
+@dataclass(frozen=True)
+class HackerNewsRequest:
+    max_results: int = 10
+
+@dataclass(frozen=True)
+class HNStory:
+    title: str = ""
+    url: str = ""
+    points: str = ""
+    author: str = ""
+    num_comments: str = ""
+    time_posted: str = ""
+
+@dataclass(frozen=True)
+class HackerNewsResult:
+    stories: list = None  # list[HNStory]
+
+def hackernews_top(page: Page, request: HackerNewsRequest) -> HackerNewsResult:

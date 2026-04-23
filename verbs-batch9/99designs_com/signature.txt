@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class DesignSearchRequest:
+    category: str = "website design"
+    max_results: int = 5
+
+
+@dataclass
+class DesignerItem:
+    designer_name: str
+
+
+@dataclass
+class DesignSearchResult:
+    category: str = ""
+    items: List[DesignerItem] = field(default_factory=list)
+
+
+# Searches 99designs for designers in a given design category and extracts
+# designer names.
+def search_99designs(page: Page, request: DesignSearchRequest) -> DesignSearchResult:

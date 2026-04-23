@@ -1,0 +1,18 @@
+# Searches Weather Underground for weather forecasts matching a query. For each
+# result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ForecastRequest:
+    query: str = "weather forecast Seattle"
+    max_results: int = 5
+
+@dataclass
+class Forecast:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ForecastResult:
+    items: List[Forecast] = field(default_factory=list)
+
+def wunderground_search(page: Page, request: ForecastRequest) -> ForecastResult:

@@ -1,0 +1,25 @@
+# Extracts top speedrun leaderboard entries from Speedrun.com for a given game.
+# Retrieves rank, runner name, completion time, date, and platform for each run.
+
+@dataclass(frozen=True)
+class LeaderboardRequest:
+    game_slug: str = "sm64"
+    game_name: str = "Super Mario 64"
+    max_results: int = 5
+
+@dataclass
+class RunResult:
+    rank: int = 0
+    runner: str = ""
+    time: str = ""
+    date: str = ""
+    platform: str = ""
+
+@dataclass
+class LeaderboardResult:
+    runs: list[RunResult]
+
+def speedrun_leaderboard(
+    page: Page,
+    request: LeaderboardRequest,
+) -> LeaderboardResult:

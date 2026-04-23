@@ -1,0 +1,20 @@
+@dataclass
+class SimplyHiredRequest:
+    query: str
+    location: str
+    max_results: int
+
+@dataclass
+class JobItem:
+    title: str
+    company: str
+    location: str
+    salary: str
+
+@dataclass
+class SimplyHiredResult:
+    jobs: List[JobItem]
+
+# Searches SimplyHired for jobs and extracts title, company,
+# location, and salary.
+def search_simplyhired(page: Page, request: SimplyHiredRequest) -> SimplyHiredResult

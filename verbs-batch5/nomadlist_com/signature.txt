@@ -1,0 +1,21 @@
+# Extracts top cities from NomadList. For each city, extracts the name,
+# country, overall score, internet speed, cost per month, and temperature.
+
+@dataclass(frozen=True)
+class NomadListRequest:
+    max_results: int = 10
+
+@dataclass(frozen=True)
+class NomadCity:
+    city_name: str = ""
+    country: str = ""
+    overall_score: str = ""
+    internet_speed: str = ""
+    cost_per_month: str = ""
+    temperature: str = ""
+
+@dataclass(frozen=True)
+class NomadListResult:
+    cities: list = None  # list[NomadCity]
+
+def nomadlist_top(page: Page, request: NomadListRequest) -> NomadListResult:

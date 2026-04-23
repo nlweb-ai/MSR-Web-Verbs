@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class HistorySearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    category: str
+    description: str
+    read_time: str
+    summary: str
+
+@dataclass
+class HistorySearchResult:
+    query: str
+    items: List[ArticleItem]
+
+# Searches History.com for articles matching the query and returns
+# up to max_results articles with title, author, publish date, category, and summary.
+def search_history(page: Page, request: HistorySearchRequest) -> HistorySearchResult:

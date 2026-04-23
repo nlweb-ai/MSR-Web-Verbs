@@ -1,0 +1,14 @@
+# investopedia_term — Search for a financial term on Investopedia and extract details.
+
+@dataclass(frozen=True)
+class InvestopediaTermRequest:
+    query: str = "compound interest"
+
+@dataclass(frozen=True)
+class InvestopediaTermResult:
+    term_name: str = ""
+    definition: str = ""
+    key_takeaways: list = None  # list[str]
+    example: str = ""
+
+def investopedia_term(page: Page, request: InvestopediaTermRequest) -> InvestopediaTermResult:

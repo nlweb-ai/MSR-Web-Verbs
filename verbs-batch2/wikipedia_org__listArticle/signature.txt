@@ -1,0 +1,20 @@
+# Extracts entries from a Wikipedia list article, returning
+# up to max_results entries with name, year created, and paradigm.
+
+@dataclass(frozen=True)
+class WikipediaListRequest:
+    article: str
+    max_results: int
+
+@dataclass(frozen=True)
+class WikipediaListEntry:
+    name: str
+    year_created: str
+    paradigm: str
+
+@dataclass(frozen=True)
+class WikipediaListResult:
+    article: str
+    entries: list[WikipediaListEntry]
+
+def extract_wikipedia_list(page: Page, request: WikipediaListRequest) -> WikipediaListResult

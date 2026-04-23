@@ -1,0 +1,18 @@
+# Searches ProPublica for investigative journalism articles matching a query.
+# For each article, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "government spending investigation"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    items: List[Article] = field(default_factory=list)
+
+def propublica_search(page: Page, request: ArticleRequest) -> ArticleResult:

@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class OverleafArchiveProjectRequest:
+    search_query: str
+
+
+@dataclass(frozen=True)
+class OverleafArchiveProjectResult:
+    success: bool
+    error: str
+
+
+# Searches for a project by name on the Overleaf dashboard,
+# selects it, clicks the archive button, and confirms.
+def overleaf_archive_project(
+    page: Page,
+    request: OverleafArchiveProjectRequest,
+) -> OverleafArchiveProjectResult:

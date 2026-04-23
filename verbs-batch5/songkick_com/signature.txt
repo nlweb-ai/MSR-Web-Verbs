@@ -1,0 +1,20 @@
+# Searches Songkick for upcoming concerts in a city. For each event, extracts
+# the artist, venue, city, and date.
+
+@dataclass(frozen=True)
+class SongkickRequest:
+    city: str = "Los Angeles"
+    max_events: int = 5
+
+@dataclass
+class ConcertEvent:
+    artist: str = ""
+    venue: str = ""
+    city: str = ""
+    date: str = ""
+
+@dataclass
+class SongkickResult:
+    events: list = field(default_factory=list)
+
+def songkick_concerts(page: Page, request: SongkickRequest) -> SongkickResult:

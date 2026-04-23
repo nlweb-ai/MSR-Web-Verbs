@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class KiplingerRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    category: str
+    summary: str
+
+@dataclass
+class KiplingerResult:
+    query: str
+    items: List[ArticleItem]
+
+# Searches Kiplinger for articles matching the query and returns
+# up to max_results articles with title, category, and summary.
+def search_kiplinger_articles(page: Page, request: KiplingerRequest) -> KiplingerResult:

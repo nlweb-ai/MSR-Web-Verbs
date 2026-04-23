@@ -1,0 +1,21 @@
+# Searches Menards for products matching a query. For each product, extracts
+# the name, brand, price, rating, and URL.
+
+@dataclass(frozen=True)
+class ProductRequest:
+    query: str = "cordless drill"
+    max_results: int = 5
+
+@dataclass
+class Product:
+    name: str = ""
+    brand: str = ""
+    price: str = ""
+    rating: str = ""
+    url: str = ""
+
+@dataclass
+class ProductResult:
+    products: List[Product] = field(default_factory=list)
+
+def menards_search(page: Page, request: ProductRequest) -> ProductResult:

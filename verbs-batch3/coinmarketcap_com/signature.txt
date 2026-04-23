@@ -1,0 +1,16 @@
+# Looks up a cryptocurrency on CoinMarketCap and returns its current price,
+# 24h change, market cap, and 24h trading volume.
+
+@dataclass(frozen=True)
+class CoinmarketcapRequest:
+    query: str
+
+@dataclass(frozen=True)
+class CoinmarketcapResult:
+    name: str
+    price: str
+    change_24h: str
+    market_cap: str
+    volume_24h: str
+
+def lookup_coinmarketcap(page: Page, request: CoinmarketcapRequest) -> CoinmarketcapResult

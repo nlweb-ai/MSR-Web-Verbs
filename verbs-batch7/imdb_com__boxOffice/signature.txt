@@ -1,0 +1,22 @@
+# Extracts the current top box office movies from IMDb (imdb.com/chart/boxoffice).
+# For each movie, retrieves title, weekend gross, total gross, and weeks released.
+
+@dataclass(frozen=True)
+class BoxOfficeRequest:
+    max_results: int = 10
+
+@dataclass
+class Movie:
+    title: str = ""
+    weekend_gross: str = ""
+    total_gross: str = ""
+    weeks_released: str = ""
+
+@dataclass
+class BoxOfficeResult:
+    movies: list[Movie]
+
+def box_office(
+    page: Page,
+    request: BoxOfficeRequest,
+) -> BoxOfficeResult:

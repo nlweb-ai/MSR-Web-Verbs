@@ -1,0 +1,20 @@
+# Searches The Spruce (thespruce.com) for home and garden articles by keyword.
+# Extracts article title for each search result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "best indoor plants low light"
+    max_results: int = 5
+
+@dataclass
+class ArticleResult:
+    title: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[ArticleResult]
+
+def thespruce_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

@@ -1,0 +1,27 @@
+# Searches Hipcamp (hipcamp.com) for camping and glamping sites by location.
+# Extracts name, price, site type, rating, reviews, and location for each campsite.
+
+@dataclass(frozen=True)
+class CampsiteSearchRequest:
+    location: str = "Joshua Tree, CA"
+    lat: str = "34.1347"
+    lng: str = "-116.3131"
+    max_results: int = 5
+
+@dataclass
+class Campsite:
+    name: str = ""
+    price: str = ""
+    site_type: str = ""
+    rating: str = ""
+    reviews: str = ""
+    location: str = ""
+
+@dataclass
+class CampsiteSearchResult:
+    campsites: list[Campsite]
+
+def campsite_search(
+    page: Page,
+    request: CampsiteSearchRequest,
+) -> CampsiteSearchResult:

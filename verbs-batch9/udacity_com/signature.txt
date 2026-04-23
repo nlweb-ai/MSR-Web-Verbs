@@ -1,0 +1,20 @@
+@dataclass
+class UdacityRequest:
+    topic: str
+    max_results: int
+
+@dataclass
+class ProgramItem:
+    name: str
+    program_type: str
+    rating: str
+    level: str
+    duration: str
+
+@dataclass
+class UdacityResult:
+    programs: List[ProgramItem]
+
+# Browses Udacity catalog and extracts name, program type,
+# rating, level, and duration.
+def search_udacity(page: Page, request: UdacityRequest) -> UdacityResult

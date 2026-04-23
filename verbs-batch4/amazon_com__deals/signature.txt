@@ -1,0 +1,20 @@
+# Navigate to Amazon's Today's Deals page and extract deal listings including
+# product name, deal price, original price, discount percentage, and deal type.
+
+@dataclass(frozen=True)
+class AmazonDealsRequest:
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class AmazonDeal:
+    product_name: str = ""
+    deal_price: str = ""
+    original_price: str = ""
+    discount_percent: str = ""
+    deal_type: str = ""
+
+@dataclass(frozen=True)
+class AmazonDealsResult:
+    deals: list = None  # list[AmazonDeal]
+
+def amazon_deals(page: Page, request: AmazonDealsRequest) -> AmazonDealsResult:

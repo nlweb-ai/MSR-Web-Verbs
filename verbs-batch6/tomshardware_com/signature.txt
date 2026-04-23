@@ -1,0 +1,18 @@
+# Searches Tom's Hardware for hardware reviews matching a query. For each
+# review, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ReviewRequest:
+    query: str = "best gaming motherboard 2024"
+    max_results: int = 5
+
+@dataclass
+class Review:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ReviewResult:
+    items: List[Review] = field(default_factory=list)
+
+def tomshardware_search(page: Page, request: ReviewRequest) -> ReviewResult:

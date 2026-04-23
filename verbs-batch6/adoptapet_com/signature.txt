@@ -1,0 +1,22 @@
+# Searches Adopt-a-Pet for adoptable pets by type and location. For each pet,
+# extracts the name, breed, age, gender, and shelter.
+
+@dataclass(frozen=True)
+class PetSearchRequest:
+    pet_type: str = "dogs"
+    location: str = "Portland, OR"
+    max_results: int = 5
+
+@dataclass
+class Pet:
+    name: str = ""
+    breed: str = ""
+    age: str = ""
+    gender: str = ""
+    shelter: str = ""
+
+@dataclass
+class PetSearchResult:
+    pets: list = field(default_factory=list)
+
+def adoptapet_search(page: Page, request: PetSearchRequest) -> PetSearchResult:

@@ -1,0 +1,17 @@
+@dataclass
+class WomensHealthRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    date: str
+
+@dataclass
+class WomensHealthResult:
+    articles: List[ArticleItem]
+
+# Browses Women's Health category page and extracts article
+# title and publish date.
+def search_womenshealth(page: Page, request: WomensHealthRequest) -> WomensHealthResult

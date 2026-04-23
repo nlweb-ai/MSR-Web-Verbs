@@ -1,0 +1,23 @@
+# Searches Runner's World (runnersworld.com) for running/fitness articles by keyword.
+# Extracts title, author, date, and summary for each article.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "marathon training plan"
+    max_articles: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[Article]
+
+def runnersworld_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

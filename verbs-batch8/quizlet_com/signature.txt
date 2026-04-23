@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class QuizletSearchRequest:
+    search_query: str = "biology"
+    max_results: int = 5
+
+
+@dataclass
+class QuizletSetItem:
+    set_title: str = ""
+    creator: str = ""
+    num_terms: str = ""
+    num_learners: str = ""
+    rating: str = ""
+    subject: str = ""
+
+
+@dataclass
+class QuizletSearchResult:
+    items: List[QuizletSetItem] = field(default_factory=list)
+
+
+# Search for study sets on Quizlet by keyword.
+def quizlet_search(page: Page, request: QuizletSearchRequest) -> QuizletSearchResult:

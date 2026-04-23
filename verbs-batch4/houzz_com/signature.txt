@@ -1,0 +1,19 @@
+# houzz_search — Search for home renovation ideas on Houzz and extract details.
+
+@dataclass(frozen=True)
+class HouzzSearchRequest:
+    query: str = "modern kitchen remodel"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class HouzzProject:
+    title: str = ""
+    style: str = ""
+    saves: str = ""
+    description: str = ""
+
+@dataclass(frozen=True)
+class HouzzSearchResult:
+    projects: list = None  # list[HouzzProject]
+
+def houzz_search(page: Page, request: HouzzSearchRequest) -> HouzzSearchResult:

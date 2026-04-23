@@ -1,0 +1,23 @@
+# Searches Car and Driver (caranddriver.com) for automotive articles and reviews.
+# Extracts article title, URL, description, and publication date for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "best SUV 2025"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+    description: str = ""
+    date: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[Article]
+
+def caranddriver_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

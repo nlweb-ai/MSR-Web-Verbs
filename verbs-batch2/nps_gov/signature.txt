@@ -1,0 +1,16 @@
+# Looks up a national park on NPS.gov and extracts
+# the description, operating hours, entrance fees, and location.
+
+@dataclass(frozen=True)
+class NpsParkRequest:
+    park_name: str
+
+@dataclass(frozen=True)
+class NpsParkResult:
+    park_name: str
+    description: str
+    hours: str
+    fees: str
+    location: str
+
+def lookup_nps_park(page: Page, request: NpsParkRequest) -> NpsParkResult

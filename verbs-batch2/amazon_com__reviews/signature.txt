@@ -1,0 +1,22 @@
+# Searches Amazon for a product query, clicks the first result, scrolls to the
+# reviews section, and extracts up to max_results reviews with star rating, title,
+# and review text.
+
+@dataclass(frozen=True)
+class AmazonReviewsRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class AmazonReview:
+    star_rating: str
+    title: str
+    review_text: str
+
+@dataclass(frozen=True)
+class AmazonReviewsResult:
+    query: str
+    product_name: str
+    reviews: list[AmazonReview]
+
+def search_amazon_reviews(page: Page, request: AmazonReviewsRequest) -> AmazonReviewsResult

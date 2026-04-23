@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class EspnStandingsSearchRequest:
+    sport: str = "nba"
+    max_results: int = 15
+
+
+@dataclass
+class EspnStandingsItem:
+    team_name: str = ""
+    wins: str = ""
+    losses: str = ""
+    ties: str = ""
+    win_percentage: str = ""
+    games_behind: str = ""
+    division: str = ""
+    conference: str = ""
+
+
+@dataclass
+class EspnStandingsSearchResult:
+    items: List[EspnStandingsItem] = field(default_factory=list)
+
+
+# Get current league standings from ESPN.
+def espn_standings_search(page: Page, request: EspnStandingsSearchRequest) -> EspnStandingsSearchResult:

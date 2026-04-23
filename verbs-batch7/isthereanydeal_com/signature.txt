@@ -1,0 +1,27 @@
+# Searches IsThereAnyDeal (isthereanydeal.com) for video game pricing across stores.
+# Extracts game name, best current/all-time-low prices, and per-store pricing.
+
+@dataclass(frozen=True)
+class DealSearchRequest:
+    query: str = "Baldur's Gate 3"
+
+@dataclass
+class StorePrice:
+    store: str = ""
+    store_low: str = ""
+    current_price: str = ""
+    regular_price: str = ""
+
+@dataclass
+class DealSearchResult:
+    game_name: str = ""
+    current_best_price: str = ""
+    current_best_store: str = ""
+    all_time_low: str = ""
+    all_time_low_store: str = ""
+    store_prices: list[StorePrice]
+
+def deal_search(
+    page: Page,
+    request: DealSearchRequest,
+) -> DealSearchResult:

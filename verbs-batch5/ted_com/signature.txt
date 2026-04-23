@@ -1,0 +1,19 @@
+# Searches TED for talks matching a query. For each talk, extracts the title,
+# speaker, and duration.
+
+@dataclass(frozen=True)
+class TEDRequest:
+    query: str = "artificial intelligence"
+    max_talks: int = 5
+
+@dataclass
+class TEDTalk:
+    title: str = ""
+    speaker: str = ""
+    duration: str = ""
+
+@dataclass
+class TEDResult:
+    talks: list = field(default_factory=list)
+
+def ted_search(page: Page, request: TEDRequest) -> TEDResult:

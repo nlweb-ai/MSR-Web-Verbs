@@ -1,0 +1,18 @@
+# Searches Porch for home service professionals matching a query. For each
+# service listing, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ServiceRequest:
+    query: str = "plumber near me reviews"
+    max_results: int = 5
+
+@dataclass
+class Service:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ServiceResult:
+    items: List[Service] = field(default_factory=list)
+
+def porch_search(page: Page, request: ServiceRequest) -> ServiceResult:

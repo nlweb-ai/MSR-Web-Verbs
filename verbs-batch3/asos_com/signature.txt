@@ -1,0 +1,20 @@
+# Searches ASOS for products matching the given query and returns up to max_results
+# products with name, price, and brand.
+
+@dataclass(frozen=True)
+class AsosSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class AsosProduct:
+    name: str
+    price: str
+    brand: str
+
+@dataclass(frozen=True)
+class AsosSearchResult:
+    query: str
+    products: list[AsosProduct]
+
+def search_asos_products(page: Page, request: AsosSearchRequest) -> AsosSearchResult

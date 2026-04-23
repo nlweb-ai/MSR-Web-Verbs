@@ -1,0 +1,22 @@
+# Searches Uniqlo US for products matching a query and extracts product name,
+# price, and available color count from the search results page.
+
+@dataclass(frozen=True)
+class UniqloSearchRequest:
+    query: str
+    max_results: int
+
+
+@dataclass(frozen=True)
+class UniqloProduct:
+    name: str
+    price: str
+    colors: str
+
+
+@dataclass(frozen=True)
+class UniqloSearchResult:
+    products: list  # list[UniqloProduct]
+
+
+def uniqlo_search(page: Page, request: UniqloSearchRequest) -> UniqloSearchResult:

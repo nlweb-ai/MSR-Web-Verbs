@@ -1,0 +1,23 @@
+# Searches Bob Vila (bobvila.com) for home improvement articles by query.
+# Extracts article title, author, summary, and URL for each result.
+
+@dataclass(frozen=True)
+class ArticleSearchRequest:
+    search_query: str = "bathroom renovation ideas"
+    max_articles: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleSearchResult:
+    articles: list[Article]
+
+def bobvila_search(
+    page: Page,
+    request: ArticleSearchRequest,
+) -> ArticleSearchResult:

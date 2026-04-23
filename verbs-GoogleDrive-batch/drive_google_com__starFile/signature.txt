@@ -1,0 +1,16 @@
+@dataclass(frozen=True)
+class GoogleDriveStarFileRequest:
+    file_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveStarFileResult:
+    success: bool
+    error: str
+
+
+# Stars a file in Google Drive.
+def google_drive_star_file(
+    page: Page,
+    request: GoogleDriveStarFileRequest,
+) -> GoogleDriveStarFileResult:

@@ -1,0 +1,22 @@
+# Search for meetup groups on meetup.com by keyword and location.
+# Extracts group name, member count, rating, and location for up to max_results groups.
+
+@dataclass(frozen=True)
+class MeetupSearchRequest:
+    query: str = "hiking"
+    location: str = "us--co--Denver"
+    location_label: str = "Denver, CO"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class MeetupGroup:
+    name: str = ""
+    members: str = ""
+    rating: str = "N/A"
+    location: str = "N/A"
+
+@dataclass(frozen=True)
+class MeetupSearchResult:
+    groups: tuple = ()
+
+def meetup_search(page: Page, request: MeetupSearchRequest) -> MeetupSearchResult:

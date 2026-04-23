@@ -1,0 +1,20 @@
+# Searches Allrecipes.com for recipes matching a query, then extracts
+# up to max_results recipes with name, rating, and total cook time.
+
+@dataclass(frozen=True)
+class AllrecipesSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class AllrecipesRecipe:
+    name: str
+    rating: str
+    cook_time: str
+
+@dataclass(frozen=True)
+class AllrecipesSearchResult:
+    query: str
+    recipes: list[AllrecipesRecipe]
+
+def search_allrecipes(page: Page, request: AllrecipesSearchRequest) -> AllrecipesSearchResult

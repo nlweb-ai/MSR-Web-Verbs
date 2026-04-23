@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDocsRenameDocumentRequest:
+    document_url: str
+    new_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDocsRenameDocumentResult:
+    success: bool
+    new_title: str
+    error: str
+
+
+# Opens a Google Doc by URL and renames it.
+def google_docs_rename_document(
+    page: Page,
+    request: GoogleDocsRenameDocumentRequest,
+) -> GoogleDocsRenameDocumentResult:

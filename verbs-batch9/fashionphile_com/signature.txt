@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class FashionphileSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class LuxuryItem:
+    name: str
+    condition: str
+    price: str
+    retail_price: str
+    savings: str
+
+@dataclass
+class FashionphileSearchResult:
+    query: str
+    items: List[LuxuryItem]
+
+# Searches Fashionphile.com for pre-owned luxury items matching the query and returns
+# up to max_results listings with name, condition, price, retail price, and savings.
+def search_fashionphile(page: Page, request: FashionphileSearchRequest) -> FashionphileSearchResult:

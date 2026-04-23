@@ -1,0 +1,18 @@
+# Scrapes Bankrate's best high-yield savings accounts page and returns up to max_results
+# offers with bank name, APY, and minimum deposit.
+
+@dataclass(frozen=True)
+class BankrateSavingsRequest:
+    max_results: int
+
+@dataclass(frozen=True)
+class BankrateSavingsOffer:
+    bank_name: str
+    apy: str
+    min_deposit: str
+
+@dataclass(frozen=True)
+class BankrateSavingsResult:
+    offers: list[BankrateSavingsOffer]
+
+def get_bankrate_savings(page: Page, request: BankrateSavingsRequest) -> BankrateSavingsResult

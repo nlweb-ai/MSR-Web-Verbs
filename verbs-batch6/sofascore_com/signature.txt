@@ -1,0 +1,18 @@
+# Searches Sofascore for sports scores and standings matching a query. For each
+# result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ScoreRequest:
+    query: str = "Premier League standings 2024"
+    max_results: int = 5
+
+@dataclass
+class Score:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ScoreResult:
+    items: List[Score] = field(default_factory=list)
+
+def sofascore_search(page: Page, request: ScoreRequest) -> ScoreResult:

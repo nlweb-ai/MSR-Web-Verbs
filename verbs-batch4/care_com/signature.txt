@@ -1,0 +1,20 @@
+# Search for babysitters on Care.com in a given location and extract caregiver
+# profiles including name, years of experience, hourly rate, and rating/reviews.
+
+@dataclass(frozen=True)
+class CareBabysittersRequest:
+    location: str = "Austin, TX"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class CaregiverProfile:
+    name: str = ""
+    years_of_experience: str = ""
+    hourly_rate: str = ""
+    rating_or_reviews: str = ""
+
+@dataclass(frozen=True)
+class CareBabysittersResult:
+    profiles: list = None  # list[CaregiverProfile]
+
+def care_babysitters(page: Page, request: CareBabysittersRequest) -> CareBabysittersResult:

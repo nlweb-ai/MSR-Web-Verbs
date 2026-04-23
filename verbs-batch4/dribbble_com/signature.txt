@@ -1,0 +1,20 @@
+# Search for design shots on Dribbble matching a query and extract shot listings
+# including title, designer name, number of likes, and number of views.
+
+@dataclass(frozen=True)
+class DribbbleShotsRequest:
+    search_query: str = "mobile app UI"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class DribbbleShot:
+    title: str = ""
+    designer_name: str = ""
+    likes: str = ""
+    views: str = ""
+
+@dataclass(frozen=True)
+class DribbbleShotsResult:
+    shots: list = None  # list[DribbbleShot]
+
+def dribbble_shots(page: Page, request: DribbbleShotsRequest) -> DribbbleShotsResult:

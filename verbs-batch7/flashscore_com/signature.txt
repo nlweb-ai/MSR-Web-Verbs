@@ -1,0 +1,23 @@
+# Extracts today's soccer match scores from Flashscore (flashscore.com).
+# For each match, retrieves home/away teams, score, league, and match status.
+
+@dataclass(frozen=True)
+class MatchRequest:
+    max_results: int = 5
+
+@dataclass
+class Match:
+    home_team: str = ""
+    away_team: str = ""
+    score: str = ""
+    league: str = ""
+    status: str = ""
+
+@dataclass
+class MatchResult:
+    matches: list[Match]
+
+def flashscore_matches(
+    page: Page,
+    request: MatchRequest,
+) -> MatchResult:

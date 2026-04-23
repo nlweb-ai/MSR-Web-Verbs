@@ -1,0 +1,19 @@
+@dataclass
+class RubyGemsRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class GemItem:
+    name: str
+    version: str
+    downloads: str
+    description: str
+
+@dataclass
+class RubyGemsResult:
+    gems: List[GemItem]
+
+# Searches RubyGems for gems and extracts name, version,
+# downloads, and description.
+def search_rubygems(page: Page, request: RubyGemsRequest) -> RubyGemsResult

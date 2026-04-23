@@ -1,0 +1,24 @@
+# Gets transit directions from Google Maps (maps.google.com) between two locations.
+# Extracts route duration, departure/arrival times, transit lines used, and fare.
+
+@dataclass(frozen=True)
+class TransitDirectionsRequest:
+    origin: str = "Union Station, Los Angeles"
+    destination: str = "Santa Monica Pier"
+
+@dataclass
+class Route:
+    duration: str = ""
+    departure_time: str = ""
+    arrival_time: str = ""
+    transit_lines: list[str]
+    fare: str = ""
+
+@dataclass
+class TransitDirectionsResult:
+    routes: list[Route]
+
+def transit_directions(
+    page: Page,
+    request: TransitDirectionsRequest,
+) -> TransitDirectionsResult:

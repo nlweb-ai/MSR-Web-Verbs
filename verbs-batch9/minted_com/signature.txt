@@ -1,0 +1,17 @@
+@dataclass
+class MintedRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class DesignItem:
+    name: str
+    artist: str
+
+@dataclass
+class MintedResult:
+    designs: List[DesignItem]
+
+# Searches Minted for wedding invitation designs and extracts
+# design name and artist.
+def search_minted(page: Page, request: MintedRequest) -> MintedResult

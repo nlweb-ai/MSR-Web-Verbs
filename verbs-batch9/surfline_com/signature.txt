@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class SurflineSearchRequest:
+    search_query: str = "Malibu"
+    max_results: int = 5
+
+
+@dataclass
+class SurflineSpotItem:
+    spot_name: str
+    location: str
+
+
+@dataclass
+class SurflineSearchResult:
+    items: List[SurflineSpotItem] = field(default_factory=list)
+
+
+# Search for surf forecasts on Surfline by keyword.
+def surfline_search(page: Page, request: SurflineSearchRequest) -> SurflineSearchResult:

@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class DefillamaSearchRequest:
+    max_results: int = 10
+
+
+@dataclass
+class DefillamaProtocolItem:
+    rank: str = ""
+    protocol_name: str = ""
+    chain: str = ""
+    tvl: str = ""
+    change_1d: str = ""
+    change_7d: str = ""
+    mcap_tvl_ratio: str = ""
+    category: str = ""
+
+
+@dataclass
+class DefillamaSearchResult:
+    items: List[DefillamaProtocolItem] = field(default_factory=list)
+
+
+# Browse top DeFi protocols by total value locked on DefiLlama.
+def defillama_search(page: Page, request: DefillamaSearchRequest) -> DefillamaSearchResult:

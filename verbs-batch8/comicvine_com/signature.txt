@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class ComicvineSearchRequest:
+    search_query: str = "Spider-Man"
+    max_results: int = 5
+
+
+@dataclass
+class ComicvineCharacterItem:
+    character_name: str = ""
+    real_name: str = ""
+    publisher: str = ""
+    first_appearance: str = ""
+    description: str = ""
+    num_appearances: str = ""
+
+
+@dataclass
+class ComicvineSearchResult:
+    items: List[ComicvineCharacterItem] = field(default_factory=list)
+
+
+# Search for comic book characters on Comic Vine by keyword.
+def comicvine_search(page: Page, request: ComicvineSearchRequest) -> ComicvineSearchResult:

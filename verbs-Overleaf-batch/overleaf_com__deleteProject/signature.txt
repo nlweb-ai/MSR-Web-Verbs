@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class OverleafDeleteProjectRequest:
+    search_query: str
+
+
+@dataclass(frozen=True)
+class OverleafDeleteProjectResult:
+    success: bool
+    error: str
+
+
+# Searches for a project by name on the Overleaf dashboard,
+# selects it, clicks the trash button, and confirms deletion.
+def overleaf_delete_project(
+    page: Page,
+    request: OverleafDeleteProjectRequest,
+) -> OverleafDeleteProjectResult:

@@ -1,0 +1,23 @@
+# Searches Podchaser (podchaser.com) for podcasts by keyword.
+# Extracts total results count, and for each podcast: name, description, and categories.
+
+@dataclass(frozen=True)
+class Request:
+    Query: str = "true crime"
+    num_results: int = 5
+
+@dataclass
+class Podcast:
+    name: str = ""
+    description: str = ""
+    categories: str = ""
+
+@dataclass
+class Result:
+    total_results: str = ""
+    podcasts: list[Podcast]
+
+def podcast_search(
+    page: Page,
+    request: Request,
+) -> Result:

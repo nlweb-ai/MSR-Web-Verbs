@@ -1,0 +1,20 @@
+# Navigates to the ESPN standings page for a given league and extracts
+# up to max_results teams with team name, wins, and losses.
+
+@dataclass(frozen=True)
+class EspnStandingsRequest:
+    league: str
+    max_results: int
+
+@dataclass(frozen=True)
+class EspnTeamStanding:
+    team_name: str
+    wins: str
+    losses: str
+
+@dataclass(frozen=True)
+class EspnStandingsResult:
+    league: str
+    teams: list[EspnTeamStanding]
+
+def get_espn_standings(page: Page, request: EspnStandingsRequest) -> EspnStandingsResult

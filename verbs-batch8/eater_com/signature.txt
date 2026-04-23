@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class EaterSearchRequest:
+    search_query: str = "best pizza"
+    max_results: int = 5
+
+
+@dataclass
+class EaterArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+
+
+@dataclass
+class EaterSearchResult:
+    items: List[EaterArticleItem] = field(default_factory=list)
+
+
+# Search for restaurant reviews and food articles on Eater by keyword.
+def eater_search(page: Page, request: EaterSearchRequest) -> EaterSearchResult:

@@ -1,0 +1,19 @@
+# Searches OpenStax for free textbooks matching a query. For each book,
+# extracts the title, subject, and URL.
+
+@dataclass(frozen=True)
+class BookRequest:
+    query: str = "calculus"
+    max_results: int = 5
+
+@dataclass
+class Book:
+    title: str = ""
+    subject: str = ""
+    url: str = ""
+
+@dataclass
+class BookResult:
+    books: List[Book] = field(default_factory=list)
+
+def openstax_search(page: Page, request: BookRequest) -> BookResult:

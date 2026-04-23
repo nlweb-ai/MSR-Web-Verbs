@@ -1,0 +1,21 @@
+# Search for products on potterybarn.com by query and extract listings with name, price, and available colors.
+
+@dataclass(frozen=True)
+class PotteryBarnSearchRequest:
+    query: str = "sofa"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class PotteryBarnProduct:
+    name: str = ""
+    price: str = ""
+    colors: str = ""
+
+
+@dataclass(frozen=True)
+class PotteryBarnSearchResult:
+    products: tuple = ()
+
+
+def potterybarn_search(page: Page, request: PotteryBarnSearchRequest) -> PotteryBarnSearchResult:

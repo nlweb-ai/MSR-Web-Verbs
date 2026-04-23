@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class BundlephobiaSearchRequest:
+    package_name: str = "react"
+
+
+@dataclass
+class BundlephobiaItem:
+    package_name: str = ""
+    version: str = ""
+    minified_size: str = ""
+    gzipped_size: str = ""
+    download_time_3g: str = ""
+    download_time_4g: str = ""
+    num_dependencies: str = ""
+    tree_shakeable: str = ""
+
+
+@dataclass
+class BundlephobiaSearchResult:
+    items: List[BundlephobiaItem] = field(default_factory=list)
+
+
+# Look up npm package bundle size information on Bundlephobia.
+def bundlephobia_search(page: Page, request: BundlephobiaSearchRequest) -> BundlephobiaSearchResult:

@@ -1,0 +1,17 @@
+@dataclass
+class MediumRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    summary: str
+
+@dataclass
+class MediumResult:
+    articles: List[ArticleItem]
+
+# Searches Medium for articles and extracts title, author, and summary.
+def search_medium(page: Page, request: MediumRequest) -> MediumResult

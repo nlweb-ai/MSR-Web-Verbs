@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class LibroRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class AudiobookItem:
+    title: str
+    author: str
+
+@dataclass
+class LibroResult:
+    query: str
+    items: List[AudiobookItem]
+
+# Searches Libro.fm for audiobooks matching the query and returns
+# up to max_results audiobooks with title and author.
+def search_libro_audiobooks(page: Page, request: LibroRequest) -> LibroResult:

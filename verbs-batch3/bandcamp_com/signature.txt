@@ -1,0 +1,21 @@
+# Searches Bandcamp for albums matching the given query and returns up to max_results
+# albums with title, artist, price, and genre tags.
+
+@dataclass(frozen=True)
+class BandcampSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class BandcampAlbum:
+    title: str
+    artist: str
+    price: str
+    tags: str
+
+@dataclass(frozen=True)
+class BandcampSearchResult:
+    query: str
+    albums: list[BandcampAlbum]
+
+def search_bandcamp_albums(page: Page, request: BandcampSearchRequest) -> BandcampSearchResult

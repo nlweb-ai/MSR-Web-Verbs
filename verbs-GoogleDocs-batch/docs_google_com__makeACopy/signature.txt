@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class GoogleDocsMakeACopyRequest:
+    document_url: str
+    copy_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDocsMakeACopyResult:
+    success: bool
+    new_document_url: str
+    new_document_title: str
+    error: str
+
+
+# Opens a Google Doc and makes a copy via File > Make a copy.
+def google_docs_make_a_copy(
+    page: Page,
+    request: GoogleDocsMakeACopyRequest,
+) -> GoogleDocsMakeACopyResult:

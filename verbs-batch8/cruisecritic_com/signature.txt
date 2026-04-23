@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class CruisecriticSearchRequest:
+    search_query: str = "Caribbean"
+    max_results: int = 5
+
+
+@dataclass
+class CruisecriticDealItem:
+    cruise_line: str = ""
+    ship_name: str = ""
+    destination: str = ""
+    duration: str = ""
+    departure_date: str = ""
+    price_from: str = ""
+    rating: str = ""
+
+
+@dataclass
+class CruisecriticSearchResult:
+    items: List[CruisecriticDealItem] = field(default_factory=list)
+
+
+# Search for cruise deals on Cruise Critic by keyword.
+def cruisecritic_search(page: Page, request: CruisecriticSearchRequest) -> CruisecriticSearchResult:

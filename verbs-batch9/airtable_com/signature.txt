@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class AirtableTemplateSearchRequest:
+    search_query: str = "content calendar"
+    max_results: int = 5
+
+
+@dataclass
+class TemplateItem:
+    template_name: str
+
+
+@dataclass
+class AirtableTemplateSearchResult:
+    query: str
+    items: List[TemplateItem]
+
+
+# Searches Airtable templates and extracts template names.
+def search_airtable_templates(page: Page, request: AirtableTemplateSearchRequest) -> AirtableTemplateSearchResult:

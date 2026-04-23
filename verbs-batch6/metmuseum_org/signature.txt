@@ -1,0 +1,21 @@
+# Searches the Met Museum collection for artworks matching a query. For each
+# artwork, extracts the title, artist, date, medium, and image URL.
+
+@dataclass(frozen=True)
+class ArtRequest:
+    query: str = "impressionism"
+    max_results: int = 5
+
+@dataclass
+class Artwork:
+    title: str = ""
+    artist: str = ""
+    date: str = ""
+    medium: str = ""
+    image_url: str = ""
+
+@dataclass
+class ArtResult:
+    artworks: List[Artwork] = field(default_factory=list)
+
+def metmuseum_search(page: Page, request: ArtRequest) -> ArtResult:

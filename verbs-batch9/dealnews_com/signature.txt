@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class DealNewsBrowseRequest:
+    category: str = "electronics"
+    max_results: int = 5
+
+
+@dataclass
+class DealItem:
+    product_name: str = ""
+    store: str = ""
+    sale_price: str = ""
+    original_price: str = ""
+    popularity: str = ""
+
+
+@dataclass
+class DealNewsBrowseResult:
+    category: str = ""
+    items: List[DealItem] = field(default_factory=list)
+
+
+# Browse DealNews for deals by category.
+def browse_dealnews(page: Page, request: DealNewsBrowseRequest) -> DealNewsBrowseResult:

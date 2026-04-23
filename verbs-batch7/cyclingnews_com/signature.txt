@@ -1,0 +1,22 @@
+# Extracts the latest cycling news headlines from CyclingNews (cyclingnews.com).
+# For each article, retrieves the title, author, date, and summary.
+
+@dataclass(frozen=True)
+class HeadlinesRequest:
+    max_articles: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class HeadlinesResult:
+    articles: list[Article]
+
+def cyclingnews_headlines(
+    page: Page,
+    request: HeadlinesRequest,
+) -> HeadlinesResult:

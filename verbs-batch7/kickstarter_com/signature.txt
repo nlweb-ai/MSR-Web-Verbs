@@ -1,0 +1,25 @@
+# Searches Kickstarter (kickstarter.com) for crowdfunding projects by keyword.
+# Extracts project name, creator, days left, percent funded, description, and category.
+
+@dataclass(frozen=True)
+class ProjectSearchRequest:
+    query: str = "board game"
+    max_results: int = 5
+
+@dataclass
+class Project:
+    name: str = ""
+    creator: str = ""
+    days_left: str = ""
+    percent_funded: str = ""
+    description: str = ""
+    category: str = ""
+
+@dataclass
+class ProjectSearchResult:
+    projects: list[Project]
+
+def project_search(
+    page: Page,
+    request: ProjectSearchRequest,
+) -> ProjectSearchResult:

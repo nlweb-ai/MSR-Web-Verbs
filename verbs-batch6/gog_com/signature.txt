@@ -1,0 +1,21 @@
+# Searches GOG.com for games matching a query. For each game, extracts the
+# title, price, discount, rating, and URL.
+
+@dataclass(frozen=True)
+class GameRequest:
+    query: str = "roguelike"
+    max_results: int = 5
+
+@dataclass
+class Game:
+    title: str = ""
+    price: str = ""
+    discount: str = ""
+    rating: str = ""
+    url: str = ""
+
+@dataclass
+class GameResult:
+    games: list = field(default_factory=list)
+
+def gog_search(page: Page, request: GameRequest) -> GameResult:

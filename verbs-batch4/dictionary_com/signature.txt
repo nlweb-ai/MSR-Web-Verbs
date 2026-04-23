@@ -1,0 +1,17 @@
+# Search for a word on Dictionary.com and extract its pronunciation, part of speech,
+# primary definition, example sentence, and up to 3 synonyms.
+
+@dataclass(frozen=True)
+class DictionaryLookupRequest:
+    word: str = "ephemeral"
+
+@dataclass(frozen=True)
+class DictionaryLookupResult:
+    word: str = ""
+    pronunciation: str = ""
+    part_of_speech: str = ""
+    primary_definition: str = ""
+    example_sentence: str = ""
+    synonyms: list = None  # list[str]
+
+def dictionary_lookup(page: Page, request: DictionaryLookupRequest) -> DictionaryLookupResult:

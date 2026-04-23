@@ -1,0 +1,18 @@
+# Searches RTINGS for product reviews matching a query. For each review,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ReviewRequest:
+    query: str = "best 4K TV 2024"
+    max_results: int = 5
+
+@dataclass
+class Review:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ReviewResult:
+    items: List[Review] = field(default_factory=list)
+
+def rtings_search(page: Page, request: ReviewRequest) -> ReviewResult:

@@ -1,0 +1,22 @@
+# Use the Starbucks store locator to find stores near a location.
+# Type the location into the search field and press Enter.
+# Extract up to max_results stores with name, address, hours, distance, and features.
+
+@dataclass(frozen=True)
+class StarbucksStoreLocatorRequest:
+    location: str = "Manhattan, NY"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class StarbucksStoreInfo:
+    name: str = ""
+    address: str = ""
+    hours: str = ""
+    distance: str = ""
+    features: str = ""
+
+@dataclass(frozen=True)
+class StarbucksStoreLocatorResult:
+    stores: list = ()  # list[StarbucksStoreInfo]
+
+def starbucks_store_locator(page: Page, request: StarbucksStoreLocatorRequest) -> StarbucksStoreLocatorResult:

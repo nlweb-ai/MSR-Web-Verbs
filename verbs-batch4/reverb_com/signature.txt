@@ -1,0 +1,21 @@
+# Search Reverb.com for musical instruments matching a search term
+# and extract item title, condition, price, URL, and image URL.
+
+@dataclass(frozen=True)
+class ReverbSearchRequest:
+    search_term: str = "Fender Stratocaster"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ReverbListing:
+    item_title: str = ""
+    condition: str = ""
+    price: str = ""
+    url: str = ""
+    image_url: str = ""
+
+@dataclass(frozen=True)
+class ReverbSearchResult:
+    listings: list = None  # list[ReverbListing]
+
+def reverb_search(page: Page, request: ReverbSearchRequest) -> ReverbSearchResult:

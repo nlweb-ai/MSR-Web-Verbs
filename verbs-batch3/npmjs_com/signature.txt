@@ -1,0 +1,20 @@
+# Search for npm packages by query on npmjs.com and extract package name,
+# description, version, and weekly downloads for up to max_results packages.
+
+@dataclass(frozen=True)
+class NpmjsSearchRequest:
+    query: str = "state management"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class NpmPackageInfo:
+    name: str = ""
+    description: str = ""
+    version: str = ""
+    downloads: str = ""
+
+@dataclass(frozen=True)
+class NpmjsSearchResult:
+    packages: list = None
+
+def npmjs_search(page: Page, request: NpmjsSearchRequest) -> NpmjsSearchResult:

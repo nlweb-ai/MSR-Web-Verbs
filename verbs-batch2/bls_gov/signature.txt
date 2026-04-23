@@ -1,0 +1,15 @@
+# Searches the BLS Occupational Outlook Handbook for a given occupation
+# and extracts the median pay, job outlook, and entry-level education.
+
+@dataclass(frozen=True)
+class BlsOohRequest:
+    occupation: str
+
+@dataclass(frozen=True)
+class BlsOohResult:
+    occupation: str
+    median_pay: str
+    job_outlook: str
+    entry_level_education: str
+
+def lookup_bls_ooh(page: Page, request: BlsOohRequest) -> BlsOohResult

@@ -1,0 +1,18 @@
+# Searches Swappa for used tech listings matching a query. For each listing,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ListingRequest:
+    query: str = "iPhone 15 Pro Max"
+    max_results: int = 5
+
+@dataclass
+class Listing:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ListingResult:
+    items: List[Listing] = field(default_factory=list)
+
+def swappa_search(page: Page, request: ListingRequest) -> ListingResult:

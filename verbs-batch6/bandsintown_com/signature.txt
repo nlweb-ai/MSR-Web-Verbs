@@ -1,0 +1,20 @@
+# Searches Bandsintown for upcoming concerts by an artist. For each concert,
+# extracts the venue, city, date, and ticket URL.
+
+@dataclass(frozen=True)
+class ConcertRequest:
+    artist: str = "Beyonce"
+    max_events: int = 5
+
+@dataclass
+class Concert:
+    venue: str = ""
+    city: str = ""
+    date: str = ""
+    ticket_url: str = ""
+
+@dataclass
+class ConcertResult:
+    events: list = field(default_factory=list)
+
+def bandsintown_search(page: Page, request: ConcertRequest) -> ConcertResult:

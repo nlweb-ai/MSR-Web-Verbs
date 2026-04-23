@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDocsShareDocumentRequest:
+    document_url: str
+    email: str
+    permission: str  # "Editor", "Viewer", or "Commenter"
+
+
+@dataclass(frozen=True)
+class GoogleDocsShareDocumentResult:
+    success: bool
+    error: str
+
+
+# Opens a Google Doc and shares it with the given email and permission.
+def google_docs_share_document(
+    page: Page,
+    request: GoogleDocsShareDocumentRequest,
+) -> GoogleDocsShareDocumentResult:

@@ -1,0 +1,25 @@
+# Searches OpenSecrets (opensecrets.org) for federal lobbying data by issue area/topic.
+# Extracts issue area name, total clients, total reports, and top lobbying clients with details.
+
+@dataclass(frozen=True)
+class Request:
+    Topic: str = "technology"
+    num_results: int = 5
+
+@dataclass
+class LobbyingClient:
+    name: str = ""
+    subsidiary: str = ""
+    num_reports: str = ""
+
+@dataclass
+class Result:
+    issue_area: str = ""
+    total_clients: str = ""
+    total_reports: str = ""
+    clients: list[LobbyingClient]
+
+def lobbying_search(
+    page: Page,
+    request: Request,
+) -> Result:

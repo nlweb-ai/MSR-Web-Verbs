@@ -1,0 +1,21 @@
+# Searches Ranker for lists and extracts top items. Returns the list title,
+# total voters, and ranked items with rank, name, and votes.
+
+@dataclass(frozen=True)
+class RankerRequest:
+    query: str = "best sci-fi movies"
+    max_items: int = 10
+
+@dataclass(frozen=True)
+class RankedItem:
+    rank: str = ""
+    item_name: str = ""
+    votes: str = ""
+
+@dataclass(frozen=True)
+class RankerResult:
+    list_title: str = ""
+    total_voters: str = ""
+    items: list = None  # list[RankedItem]
+
+def ranker_search(page: Page, request: RankerRequest) -> RankerResult:

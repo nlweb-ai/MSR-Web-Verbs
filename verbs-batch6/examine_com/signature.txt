@@ -1,0 +1,16 @@
+# Looks up supplement information on Examine.com. Extracts the name, benefits,
+# evidence grade, dosage, and key findings.
+
+@dataclass(frozen=True)
+class SupplementRequest:
+    supplement: str = "creatine"
+
+@dataclass
+class SupplementResult:
+    name: str = ""
+    benefits: str = ""
+    evidence_grade: str = ""
+    dosage: str = ""
+    findings: str = ""
+
+def examine_search(page: Page, request: SupplementRequest) -> SupplementResult:

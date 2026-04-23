@@ -1,0 +1,19 @@
+# Search for news stories on apnews.com matching a query and extract article
+# headlines, publication dates, and summaries or first paragraphs.
+
+@dataclass(frozen=True)
+class ApnewsSearchRequest:
+    query: str = "space exploration"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ApnewsSearchItem:
+    headline: str = ""
+    publication_date: str = ""
+    summary: str = ""
+
+@dataclass(frozen=True)
+class ApnewsSearchResult:
+    articles: list = None  # list[ApnewsSearchItem]
+
+def apnews_search(page: Page, request: ApnewsSearchRequest) -> ApnewsSearchResult:

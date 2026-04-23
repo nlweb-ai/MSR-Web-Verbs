@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class DelishSearchRequest:
+    search_query: str = "slow cooker"
+    max_results: int = 5
+
+
+@dataclass
+class RecipeItem:
+    name: str = ""
+    total_time: str = ""
+    description: str = ""
+
+
+@dataclass
+class DelishSearchResult:
+    query: str = ""
+    items: List[RecipeItem] = field(default_factory=list)
+
+
+# Search Delish for recipes.
+def search_delish(page: Page, request: DelishSearchRequest) -> DelishSearchResult:

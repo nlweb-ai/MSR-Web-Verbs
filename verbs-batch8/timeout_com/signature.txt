@@ -1,0 +1,16 @@
+timeout_search(search_query: str = "restaurants New York", max_results: int = 5) -> list[dict]
+
+Search for things to do in a city on Time Out.
+
+Parameters:
+  search_query (str): The search query to look up on Time Out. Default: "restaurants New York"
+  max_results (int): Maximum number of results to return. Default: 5
+
+Returns:
+  list[dict]: A list of dictionaries, each containing:
+    - title (str): The listing title
+    - venue_name (str): The venue name
+    - category (str): The listing category
+    - location (str): The venue location
+    - summary (str): A brief summary or description
+    - rating (str): The venue rating if available

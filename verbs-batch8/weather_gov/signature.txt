@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class WeatherGovSearchRequest:
+    latitude: str = "41.8781"
+    longitude: str = "-87.6298"
+    max_results: int = 7
+
+
+@dataclass
+class WeatherGovForecastItem:
+    period: str = ""
+    temperature: str = ""
+    wind_speed: str = ""
+    wind_direction: str = ""
+    forecast_summary: str = ""
+    icon_description: str = ""
+
+
+@dataclass
+class WeatherGovSearchResult:
+    items: List[WeatherGovForecastItem] = field(default_factory=list)
+
+
+# Get weather forecast from the National Weather Service.
+def weather_gov_search(page: Page, request: WeatherGovSearchRequest) -> WeatherGovSearchResult:

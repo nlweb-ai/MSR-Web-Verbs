@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class InfoQRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    publish_date: str
+    topic: str
+    summary: str
+
+@dataclass
+class InfoQResult:
+    query: str
+    items: List[ArticleItem]
+
+# Searches InfoQ for articles matching the query and returns
+# up to max_results articles with title, publish date, topic, and summary.
+def search_infoq(page: Page, request: InfoQRequest) -> InfoQResult:

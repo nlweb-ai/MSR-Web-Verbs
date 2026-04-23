@@ -1,0 +1,21 @@
+# Searches Class Central for online courses matching a query. For each course,
+# extracts the title, provider, institution, rating, and number of reviews.
+
+@dataclass(frozen=True)
+class CourseRequest:
+    query: str = "data science"
+    max_courses: int = 5
+
+@dataclass
+class Course:
+    title: str = ""
+    provider: str = ""
+    institution: str = ""
+    rating: str = ""
+    reviews: str = ""
+
+@dataclass
+class CourseResult:
+    courses: list = field(default_factory=list)
+
+def classcentral_search(page: Page, request: CourseRequest) -> CourseResult:

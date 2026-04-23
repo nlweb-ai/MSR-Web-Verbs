@@ -1,0 +1,15 @@
+# Looks up word etymology on Etymonline. Extracts the word, origin language,
+# earliest attested date, and etymology description.
+
+@dataclass(frozen=True)
+class EtymologyRequest:
+    word: str = "algorithm"
+
+@dataclass
+class EtymologyResult:
+    word: str = ""
+    origin_language: str = ""
+    earliest_date: str = ""
+    description: str = ""
+
+def etymonline_search(page: Page, request: EtymologyRequest) -> EtymologyResult:

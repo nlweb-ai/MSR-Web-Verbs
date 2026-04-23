@@ -1,0 +1,18 @@
+# Searches Regulations.gov for federal regulations matching a query. For each
+# regulation, extracts the title and URL.
+
+@dataclass(frozen=True)
+class RegulationRequest:
+    query: str = "environmental protection clean water"
+    max_results: int = 5
+
+@dataclass
+class Regulation:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class RegulationResult:
+    items: List[Regulation] = field(default_factory=list)
+
+def regulations_search(page: Page, request: RegulationRequest) -> RegulationResult:

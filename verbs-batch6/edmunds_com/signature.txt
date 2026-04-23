@@ -1,0 +1,18 @@
+# Searches Edmunds for car reviews. Extracts the model, rating, MSRP, MPG,
+# pros, and cons.
+# NOTE: Edmunds.com has heavy bot detection (403 Access Denied).
+
+@dataclass(frozen=True)
+class CarRequest:
+    car: str = "2024 Honda Civic"
+
+@dataclass
+class CarResult:
+    model: str = ""
+    rating: str = ""
+    msrp: str = ""
+    mpg: str = ""
+    pros: str = ""
+    cons: str = ""
+
+def edmunds_search(page: Page, request: CarRequest) -> CarResult:

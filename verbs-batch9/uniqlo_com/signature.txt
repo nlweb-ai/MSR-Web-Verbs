@@ -1,0 +1,19 @@
+@dataclass
+class UniqloRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    price: str
+    rating: str
+    num_reviews: str
+
+@dataclass
+class UniqloResult:
+    products: List[ProductItem]
+
+# Searches UNIQLO for products and extracts name, price,
+# rating, and number of reviews.
+def search_uniqlo(page: Page, request: UniqloRequest) -> UniqloResult

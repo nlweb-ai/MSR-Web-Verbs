@@ -1,0 +1,21 @@
+# imdb_actor — Search for an actor on IMDB and extract profile details.
+
+@dataclass(frozen=True)
+class ImdbActorRequest:
+    query: str = "Meryl Streep"
+    max_films: int = 5
+
+@dataclass(frozen=True)
+class ImdbFilm:
+    film_title: str = ""
+    year: str = ""
+    role: str = ""
+
+@dataclass(frozen=True)
+class ImdbActorResult:
+    actor_name: str = ""
+    birth_date: str = ""
+    biography: str = ""
+    films: list = None  # list[ImdbFilm]
+
+def imdb_actor(page: Page, request: ImdbActorRequest) -> ImdbActorResult:

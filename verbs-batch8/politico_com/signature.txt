@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class PoliticoSearchRequest:
+    search_query: str = "congress"
+    max_results: int = 5
+
+
+@dataclass
+class PoliticoArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    section: str = ""
+    summary: str = ""
+
+
+@dataclass
+class PoliticoSearchResult:
+    items: List[PoliticoArticleItem] = field(default_factory=list)
+
+
+# Search for political news articles on Politico by keyword.
+def politico_search(page: Page, request: PoliticoSearchRequest) -> PoliticoSearchResult:

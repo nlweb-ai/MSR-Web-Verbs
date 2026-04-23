@@ -1,0 +1,20 @@
+# Searches 500px for photos matching a query. For each photo, extracts the
+# title, photographer name, likes count, and photo URL.
+
+@dataclass(frozen=True)
+class PhotoSearchRequest:
+    query: str = "street photography"
+    max_results: int = 5
+
+@dataclass
+class Photo:
+    title: str = ""
+    photographer: str = ""
+    likes: str = ""
+    photo_url: str = ""
+
+@dataclass
+class PhotoSearchResult:
+    photos: list = field(default_factory=list)
+
+def photo_search_500px(page: Page, request: PhotoSearchRequest) -> PhotoSearchResult:

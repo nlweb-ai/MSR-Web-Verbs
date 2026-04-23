@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class MyfontsSearchRequest:
+    search_query: str = "serif"
+    max_results: int = 5
+
+@dataclass
+class MyfontsSearchItem:
+    font_name: str = ""
+    foundry: str = ""
+    price: str = ""
+
+@dataclass
+class MyfontsSearchResult:
+    items: List[MyfontsSearchItem] = field(default_factory=list)
+    query: str = ""
+    result_count: int = 0
+
+def myfonts_search(request: MyfontsSearchRequest) -> MyfontsSearchResult:
+    ...

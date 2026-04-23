@@ -1,0 +1,26 @@
+# Compares cost of living between two cities on Numbeo. Extracts index
+# comparisons by category and individual city cost-of-living indices.
+
+@dataclass(frozen=True)
+class NumbeoRequest:
+    city1: str = "New York, NY"
+    country1: str = "United States"
+    city2: str = "London"
+    country2: str = "United Kingdom"
+
+@dataclass(frozen=True)
+class IndexComparison:
+    category: str = ""
+    difference: str = ""
+
+@dataclass(frozen=True)
+class CityIndex:
+    city: str = ""
+    cost_of_living_index: str = ""
+
+@dataclass(frozen=True)
+class NumbeoResult:
+    indices: list = None       # list[IndexComparison]
+    city_indices: list = None  # list[CityIndex]
+
+def numbeo_compare(page: Page, request: NumbeoRequest) -> NumbeoResult:

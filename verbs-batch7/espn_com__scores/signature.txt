@@ -1,0 +1,24 @@
+# Extracts NBA game scores from the ESPN scoreboard (espn.com/nba/scoreboard).
+# For each game, retrieves away/home teams, scores, game status, and series info.
+
+@dataclass(frozen=True)
+class ScoreboardRequest:
+    max_games: int = 5
+
+@dataclass
+class Game:
+    away_team: str = ""
+    home_team: str = ""
+    away_score: str = ""
+    home_score: str = ""
+    status: str = ""
+    series_info: str = ""
+
+@dataclass
+class ScoreboardResult:
+    games: list[Game]
+
+def espn_nba_scores(
+    page: Page,
+    request: ScoreboardRequest,
+) -> ScoreboardResult:

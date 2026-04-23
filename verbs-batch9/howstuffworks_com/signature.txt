@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class HowStuffWorksRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    summary: str
+
+@dataclass
+class HowStuffWorksResult:
+    query: str
+    items: List[ArticleItem]
+
+# Searches HowStuffWorks for articles matching the query and returns
+# up to max_results articles with title and summary.
+def search_howstuffworks(page: Page, request: HowStuffWorksRequest) -> HowStuffWorksResult:

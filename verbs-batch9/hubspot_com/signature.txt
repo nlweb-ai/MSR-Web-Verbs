@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class HubSpotSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    publish_date: str
+    category: str
+    read_time: str
+
+@dataclass
+class HubSpotSearchResult:
+    query: str
+    items: List[ArticleItem]
+
+# Searches HubSpot blog for articles matching the query and returns
+# up to max_results articles with title, author, publish date, category, and read time.
+def search_hubspot_blog(page: Page, request: HubSpotSearchRequest) -> HubSpotSearchResult:

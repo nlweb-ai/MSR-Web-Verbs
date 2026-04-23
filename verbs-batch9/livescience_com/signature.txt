@@ -1,0 +1,20 @@
+@dataclass
+class LiveScienceRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    date: str
+    summary: str
+
+@dataclass
+class LiveScienceResult:
+    query: str
+    articles: List[ArticleItem]
+
+# Searches Live Science for articles matching the query and returns
+# up to max_results articles with title, author, date, and summary.
+def search_livescience_articles(page: Page, request: LiveScienceRequest) -> LiveScienceResult

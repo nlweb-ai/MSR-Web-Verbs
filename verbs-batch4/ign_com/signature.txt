@@ -1,0 +1,19 @@
+# ign_reviews — Search for game reviews on IGN and extract details.
+
+@dataclass(frozen=True)
+class IgnReviewsRequest:
+    query: str = "Zelda"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class IgnReview:
+    game_title: str = ""
+    platform: str = ""
+    score: str = ""
+    summary: str = ""
+
+@dataclass(frozen=True)
+class IgnReviewsResult:
+    reviews: list = None  # list[IgnReview]
+
+def ign_reviews(page: Page, request: IgnReviewsRequest) -> IgnReviewsResult:

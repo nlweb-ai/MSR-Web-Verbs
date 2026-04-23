@@ -1,0 +1,22 @@
+# Search for service professionals on Thumbtack by service type and location.
+# Navigates to the category/location URL, extracts professional names, ratings,
+# review counts, and prices from the listing page.
+
+@dataclass(frozen=True)
+class ThumbtackSearchRequest:
+    service: str       # e.g. "house cleaning"
+    location: str      # e.g. "Portland, OR"
+    max_results: int   # e.g. 5
+
+@dataclass(frozen=True)
+class ThumbtackProfessional:
+    name: str       # professional's name
+    rating: str     # e.g. "4.9"
+    reviews: str    # number of reviews or "N/A"
+    price: str      # starting price or "N/A"
+
+@dataclass(frozen=True)
+class ThumbtackSearchResult:
+    professionals: list  # list[ThumbtackProfessional]
+
+def thumbtack_search(page: Page, request: ThumbtackSearchRequest) -> ThumbtackSearchResult:

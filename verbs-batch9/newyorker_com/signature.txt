@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class NewyorkerSearchRequest:
+    search_query: str = "technology"
+    max_results: int = 5
+
+@dataclass
+class NewyorkerSearchItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    section: str = ""
+    summary: str = ""
+
+@dataclass
+class NewyorkerSearchResult:
+    items: List[NewyorkerSearchItem] = field(default_factory=list)
+
+def newyorker_search(request: NewyorkerSearchRequest) -> NewyorkerSearchResult:
+    ...

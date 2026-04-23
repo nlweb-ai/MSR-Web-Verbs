@@ -1,0 +1,23 @@
+# Searches PBS (pbs.org) for shows and video content by keyword.
+# Extracts show name, episode title, description, and URL for each result.
+
+@dataclass(frozen=True)
+class Request:
+    Query: str = "nature documentary"
+    num_results: int = 5
+
+@dataclass
+class VideoResult:
+    show_name: str = ""
+    episode_title: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class Result:
+    results: list[VideoResult]
+
+def show_search(
+    page: Page,
+    request: Request,
+) -> Result:

@@ -1,0 +1,20 @@
+# Searches OfferUp for listings matching a query. For each listing, extracts
+# the title, price, location, and URL.
+
+@dataclass(frozen=True)
+class ListingRequest:
+    query: str = "used bicycle"
+    max_results: int = 5
+
+@dataclass
+class Listing:
+    title: str = ""
+    price: str = ""
+    location: str = ""
+    url: str = ""
+
+@dataclass
+class ListingResult:
+    listings: List[Listing] = field(default_factory=list)
+
+def offerup_search(page: Page, request: ListingRequest) -> ListingResult:

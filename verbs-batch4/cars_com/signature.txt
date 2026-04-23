@@ -1,0 +1,24 @@
+# Search for used cars on Cars.com by make, model, and zip code,
+# then extract listings with title, price, mileage, dealer name, and location.
+
+@dataclass(frozen=True)
+class CarsSearchRequest:
+    make: str = "Toyota"
+    model: str = "Camry"
+    zip_code: str = "60601"
+    distance: int = 50
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class CarListing:
+    title: str = ""
+    price: str = ""
+    mileage: str = ""
+    dealer_name: str = ""
+    location: str = ""
+
+@dataclass(frozen=True)
+class CarsSearchResult:
+    listings: list = None  # list[CarListing]
+
+def cars_search(page: Page, request: CarsSearchRequest) -> CarsSearchResult:

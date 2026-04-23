@@ -1,0 +1,18 @@
+# Searches adidas.com for products matching a search term. For each product,
+# extracts the product name and URL.
+
+@dataclass(frozen=True)
+class AdidasSearchRequest:
+    search_term: str = "running shoes"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class AdidasProduct:
+    product_name: str = ""
+    url: str = ""
+
+@dataclass(frozen=True)
+class AdidasSearchResult:
+    products: list = None  # list[AdidasProduct]
+
+def adidas_search(page: Page, request: AdidasSearchRequest) -> AdidasSearchResult:

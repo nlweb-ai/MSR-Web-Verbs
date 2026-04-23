@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class CoindeskSearchRequest:
+    search_query: str = "bitcoin"
+    max_results: int = 5
+
+
+@dataclass
+class CoindeskArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+
+
+@dataclass
+class CoindeskSearchResult:
+    items: List[CoindeskArticleItem] = field(default_factory=list)
+
+
+# Search for cryptocurrency news articles on CoinDesk by keyword.
+def coindesk_search(page: Page, request: CoindeskSearchRequest) -> CoindeskSearchResult:

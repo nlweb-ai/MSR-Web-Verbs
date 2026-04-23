@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class FindlawSearchRequest:
+    search_query: str = "tenant rights"
+    max_results: int = 5
+
+
+@dataclass
+class FindlawArticleItem:
+    title: str = ""
+    category: str = ""
+    summary: str = ""
+    url: str = ""
+
+
+@dataclass
+class FindlawSearchResult:
+    items: List[FindlawArticleItem] = field(default_factory=list)
+
+
+# Search for legal articles and information on FindLaw by keyword.
+def findlaw_search(page: Page, request: FindlawSearchRequest) -> FindlawSearchResult:

@@ -1,0 +1,20 @@
+# Searches edX.org for courses matching a query and extracts up to
+# max_results courses with title, institution, and duration.
+
+@dataclass(frozen=True)
+class EdxSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class EdxCourse:
+    title: str
+    institution: str
+    duration: str
+
+@dataclass(frozen=True)
+class EdxSearchResult:
+    query: str
+    courses: list[EdxCourse]
+
+def search_edx_courses(page: Page, request: EdxSearchRequest) -> EdxSearchResult

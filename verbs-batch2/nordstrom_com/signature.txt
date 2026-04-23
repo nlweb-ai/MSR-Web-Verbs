@@ -1,0 +1,19 @@
+# Searches Nordstrom for products matching a query, then extracts
+# up to max_results products with name and price.
+
+@dataclass(frozen=True)
+class NordstromSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class NordstromProduct:
+    name: str
+    price: str
+
+@dataclass(frozen=True)
+class NordstromSearchResult:
+    query: str
+    products: list[NordstromProduct]
+
+def search_nordstrom(page: Page, request: NordstromSearchRequest) -> NordstromSearchResult

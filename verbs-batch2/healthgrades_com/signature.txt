@@ -1,0 +1,22 @@
+# Searches Healthgrades for doctors by specialty near a location and extracts
+# up to max_results doctors with name, rating, and specialty.
+
+@dataclass(frozen=True)
+class HealthgradesSearchRequest:
+    specialty: str
+    location: str
+    max_results: int
+
+@dataclass(frozen=True)
+class HealthgradesDoctor:
+    name: str
+    rating: str
+    specialty: str
+
+@dataclass(frozen=True)
+class HealthgradesSearchResult:
+    specialty: str
+    location: str
+    doctors: list[HealthgradesDoctor]
+
+def search_healthgrades(page: Page, request: HealthgradesSearchRequest) -> HealthgradesSearchResult

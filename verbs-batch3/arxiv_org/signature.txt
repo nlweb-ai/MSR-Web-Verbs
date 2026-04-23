@@ -1,0 +1,21 @@
+# Searches arxiv.org for research papers matching a query, returning up to
+# max_results papers with title, authors, abstract snippet, and submission date.
+
+@dataclass(frozen=True)
+class ArxivSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class ArxivPaper:
+    title: str
+    authors: str
+    abstract: str
+    date: str
+
+@dataclass(frozen=True)
+class ArxivSearchResult:
+    query: str
+    papers: list[ArxivPaper]
+
+def search_arxiv_papers(page: Page, request: ArxivSearchRequest) -> ArxivSearchResult

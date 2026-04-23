@@ -1,0 +1,18 @@
+# Searches ThredUp for secondhand clothing listings matching a query. For each
+# listing, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ListingRequest:
+    query: str = "women dresses summer"
+    max_results: int = 5
+
+@dataclass
+class Listing:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ListingResult:
+    items: List[Listing] = field(default_factory=list)
+
+def thredup_search(page: Page, request: ListingRequest) -> ListingResult:

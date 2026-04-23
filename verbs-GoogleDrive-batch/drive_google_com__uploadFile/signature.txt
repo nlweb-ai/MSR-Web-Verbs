@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class GoogleDriveUploadFileRequest:
+    file_path: str  # local path to the file to upload
+
+
+@dataclass(frozen=True)
+class GoogleDriveUploadFileResult:
+    success: bool
+    uploaded_file_name: str
+    error: str
+
+
+# Uploads a file to Google Drive via the UI.
+def google_drive_upload_file(
+    page: Page,
+    request: GoogleDriveUploadFileRequest,
+) -> GoogleDriveUploadFileResult:

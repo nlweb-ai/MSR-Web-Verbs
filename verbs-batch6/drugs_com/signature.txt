@@ -1,0 +1,17 @@
+# Searches Drugs.com for information about a given drug. Extracts the name,
+# generic name, drug class, common uses, side effects, and dosage.
+
+@dataclass(frozen=True)
+class DrugRequest:
+    drug: str = "ibuprofen"
+
+@dataclass
+class DrugResult:
+    name: str = ""
+    generic_name: str = ""
+    drug_class: str = ""
+    common_uses: str = ""
+    side_effects: str = ""
+    dosage: str = ""
+
+def drugs_search(page: Page, request: DrugRequest) -> DrugResult:

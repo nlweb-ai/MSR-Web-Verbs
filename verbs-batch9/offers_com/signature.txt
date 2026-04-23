@@ -1,0 +1,16 @@
+@dataclass
+class OffersRequest:
+    store: str
+    max_results: int
+
+@dataclass
+class OfferItem:
+    description: str
+    discount: str
+
+@dataclass
+class OffersResult:
+    offers: List[OfferItem]
+
+# Searches Offers.com for coupons and extracts offer description and discount.
+def search_offers(page: Page, request: OffersRequest) -> OffersResult

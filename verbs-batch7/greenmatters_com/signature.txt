@@ -1,0 +1,23 @@
+# Browses Green Matters (greenmatters.com) topic pages for environmental articles.
+# Extracts title, author, date, and summary for each article.
+
+@dataclass(frozen=True)
+class ArticleSearchRequest:
+    topic: str = "what-is-sustainable-living"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class ArticleSearchResult:
+    articles: list[Article]
+
+def article_search(
+    page: Page,
+    request: ArticleSearchRequest,
+) -> ArticleSearchResult:

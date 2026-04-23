@@ -1,0 +1,24 @@
+# Search for a game on Metacritic by slug and extract the Metascore, user score,
+# platform, release date, and critic review summary from the game's page.
+
+@dataclass(frozen=True)
+class MetacriticGameRequest:
+    game_slug: str
+    game_title: str
+
+
+@dataclass(frozen=True)
+class MetacriticGameResult:
+    game: str
+    release_date: str | None
+    metascore: str | None
+    meta_label: str | None
+    meta_reviews: str | None
+    user_score: str | None
+    user_label: str | None
+    user_ratings: str | None
+    platform: str | None
+    critic_summary: str | None
+
+
+def metacritic_game(page: Page, request: MetacriticGameRequest) -> MetacriticGameResult:

@@ -1,0 +1,18 @@
+# Searches WordReference for translations and dictionary entries matching a query.
+# For each result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class TranslationRequest:
+    query: str = "translate hello Spanish"
+    max_results: int = 5
+
+@dataclass
+class Translation:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class TranslationResult:
+    items: List[Translation] = field(default_factory=list)
+
+def wordreference_search(page: Page, request: TranslationRequest) -> TranslationResult:

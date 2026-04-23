@@ -1,0 +1,19 @@
+# Searches NOAA for weather and climate articles matching a query. For each
+# article, extracts the title, description, and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "hurricane season forecast 2024"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def noaa_search(page: Page, request: ArticleRequest) -> ArticleResult:

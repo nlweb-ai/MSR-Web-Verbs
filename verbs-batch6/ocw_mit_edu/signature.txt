@@ -1,0 +1,20 @@
+# Searches MIT OpenCourseWare for courses matching a query. For each course,
+# extracts the title, course number, instructor, and URL.
+
+@dataclass(frozen=True)
+class CourseRequest:
+    query: str = "machine learning"
+    max_results: int = 5
+
+@dataclass
+class Course:
+    title: str = ""
+    number: str = ""
+    instructor: str = ""
+    url: str = ""
+
+@dataclass
+class CourseResult:
+    courses: List[Course] = field(default_factory=list)
+
+def ocw_search(page: Page, request: CourseRequest) -> CourseResult:

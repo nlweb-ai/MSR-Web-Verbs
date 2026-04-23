@@ -1,0 +1,18 @@
+# Searches Google Scholar for academic papers matching a query. For each paper,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class PaperRequest:
+    query: str = "deep learning neural networks"
+    max_results: int = 5
+
+@dataclass
+class Paper:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class PaperResult:
+    items: List[Paper] = field(default_factory=list)
+
+def scholar_search(page: Page, request: PaperRequest) -> PaperResult:

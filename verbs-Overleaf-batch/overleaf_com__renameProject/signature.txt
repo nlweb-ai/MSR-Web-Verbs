@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class OverleafRenameProjectRequest:
+    search_query: str
+    new_name: str
+
+
+@dataclass(frozen=True)
+class OverleafRenameProjectResult:
+    success: bool
+    project_url: str
+    error: str
+
+
+# Searches for a project on the dashboard, opens it, and renames it.
+def overleaf_rename_project(
+    page: Page,
+    request: OverleafRenameProjectRequest,
+) -> OverleafRenameProjectResult:

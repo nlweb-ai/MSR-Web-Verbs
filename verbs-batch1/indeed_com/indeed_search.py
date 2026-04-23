@@ -1,0 +1,249 @@
+"""
+Indeed – Search "Data Analyst" jobs in "Remote", sort by Date
+Extract top 5 job postings with title, company, salary, posted date.
+Pure Playwright – no AI.
+"""
+from datetime import date, timedelta
+import re, os, sys, traceback, shutil, tempfile
+from playwright.sync_api import Page, sync_playwright
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
+
+from dataclasses import dataclass
+import subprocess
+import json
+import time
+from urllib.request import urlopen
+
+
+@dataclass(frozen=True)
+class IndeedSearchRequest:
+    job_title: str
+    location: str
+    max_results: int
+
+
+@dataclass(frozen=True)
+class IndeedJob:
+    title: str
+    company: str
+    salary: str
+    posted: str
+
+
+@dataclass(frozen=True)
+class IndeedSearchResult:
+    job_title: str
+    location: str
+    jobs: list[IndeedJob]
+
+
+# Searches Indeed for job postings matching a title and location, returning up to max_results results.
+def search_indeed_jobs(
+    page: Page,
+    request: IndeedSearchRequest,
+) -> IndeedSearchResult:
+    job_title = request.job_title
+    location = request.location
+    max_results = request.max_results
+    raw_results = []
+    jobs = []
+    try:
+        print("STEP 1: Search Indeed for Data Analyst Remote jobs, sorted by date...")
+        # sort=date for newest first, l=Remote
+        checkpoint("Navigate to Indeed job search results page")
+        page.goto(
+            "https://www.indeed.com/jobs?q=Data+Analyst&l=Remote&sort=date",
+            wait_until="domcontentloaded", timeout=30000,
+        )
+        page.wait_for_timeout(5000)
+
+        # Dismiss popups
+        for sel in [
+            "button:has-text('Accept')",
+            "button:has-text('Accept all')",
+            "#onetrust-accept-btn-handler",
+            "[aria-label='close']",
+            "button.icl-CloseButton",
+        ]:
+            try:
+                loc = page.locator(sel).first
+                if loc.is_visible(timeout=800):
+                    checkpoint("Click dismiss popup button")
+                    loc.evaluate("el => el.click()")
+                    page.wait_for_timeout(500)
+            except Exception:
+                pass
+
+        # Scroll to load
+        for _ in range(3):
+            checkpoint("Scroll page to load more job listings")
+            page.evaluate("window.scrollBy(0, 600)")
+            page.wait_for_timeout(600)
+
+        print("STEP 2: Extract job postings...")
+
+        # Strategy 1: job card elements
+        cards = page.locator(".resultContent").all()
+        if not cards:
+            cards = page.locator(".job_seen_beacon").all()
+        if not cards:
+            cards = page.locator("[data-jk]").all()
+        print(f"   Found {len(cards)} job card elements")
+
+        seen_titles = set()
+        for card in cards:
+            if len(jobs) >= request.max_results:
+                break
+            try:
+                txt = card.inner_text(timeout=3000)
+                lines = [l.strip() for l in txt.splitlines() if l.strip()]
+                if not lines:
+                    continue
+
+                title = ""
+                company = ""
+                salary = "N/A"
+                posted = "N/A"
+
+                # Title is typically the first line or inside h2/a
+                try:
+                    title = card.locator("h2 a span, h2 span, .jobTitle span").first.inner_text(timeout=1500).strip()
+                except Exception:
+                    title = lines[0] if lines else ""
+
+                if not title or len(title) < 4:
+                    continue
+                if title.lower() in seen_titles:
+                    continue
+                seen_titles.add(title.lower())
+
+                # Company name
+                try:
+                    company = card.locator("[data-testid='company-name'], .companyName, .company").first.inner_text(timeout=1500).strip()
+                except Exception:
+                    for ln in lines[1:4]:
+                        if len(ln) > 2 and not ln.startswith("$") and not re.match(r'^\d', ln):
+                            company = ln
+                            break
+
+                # Salary
+                for ln in lines:
+                    if "$" in ln and re.search(r'\$[\d,]+', ln):
+                        salary = ln[:80]
+                        break
+
+                # Posted date — look for "Posted X days ago", "Just posted", "Active X days"
+                try:
+                    date_el = card.locator("[data-testid='myJobsStateDate'], .date, .result-footer .visually-hidden").first
+                    posted = date_el.inner_text(timeout=1000).strip()[:40]
+                except Exception:
+                    for ln in lines:
+                        if re.search(r'(just posted|posted\s+\d|today|\d+\s*day|active\s+\d|ago)', ln, re.IGNORECASE):
+                            posted = ln[:40]
+                            break
+
+                if title and len(title) > 3:
+                    jobs.append({
+                        "title": title,
+                        "company": company or "N/A",
+                        "salary": salary,
+                        "posted": posted,
+                    })
+            except Exception:
+                continue
+
+        # Strategy 2: body text fallback
+        if not jobs:
+            print("   Strategy 1 found 0 — trying body text...")
+            body = page.inner_text("body")
+            lines = [l.strip() for l in body.splitlines() if l.strip()]
+            i = 0
+            while i < len(lines) and len(jobs) < request.max_results:
+                ln = lines[i]
+                # Job titles often have "Analyst" or "Data" in them
+                if ("analyst" in ln.lower() or "data" in ln.lower()) and 5 < len(ln) < 100:
+                    company = lines[i + 1] if i + 1 < len(lines) and len(lines[i + 1]) < 60 else "N/A"
+                    salary = "N/A"
+                    posted = "N/A"
+                    for j in range(i + 1, min(i + 8, len(lines))):
+                        if "$" in lines[j] and salary == "N/A":
+                            salary = lines[j][:80]
+                        if re.search(r'(just posted|today|\d+\s*day|ago)', lines[j], re.IGNORECASE) and posted == "N/A":
+                            posted = lines[j][:40]
+                    jobs.append({"title": ln, "company": company, "salary": salary, "posted": posted})
+                    i += 5
+                    continue
+                i += 1
+
+        if not jobs:
+            print("❌ ERROR: Extraction failed — no jobs found from the page.")
+
+        print(f"\nDONE – Top {len(jobs)} Data Analyst Jobs (Remote, by Date):")
+        for i, j in enumerate(jobs, 1):
+            print(f"  {i}. {j['title']} | {j['company']} | Salary: {j['salary']} | Posted: {j['posted']}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        traceback.print_exc()
+    return IndeedSearchResult(
+        job_title=request.job_title,
+        location=request.location,
+        jobs=[IndeedJob(title=j['title'], company=j['company'],
+                        salary=j['salary'], posted=j['posted']) for j in jobs],
+    )
+
+
+def test_indeed_jobs() -> None:
+    from playwright.sync_api import sync_playwright
+    request = IndeedSearchRequest(job_title="Data Analyst", location="Remote", max_results=5)
+    port = get_free_port()
+    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
+    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
+    chrome_proc = subprocess.Popen(
+        [
+            chrome,
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={profile_dir}",
+            "--remote-allow-origins=*",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1280,987",
+            "about:blank",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    ws_url = None
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        try:
+            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
+            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
+            if ws_url:
+                break
+        except Exception:
+            pass
+        time.sleep(0.4)
+    if not ws_url:
+        raise TimeoutError("Chrome CDP not ready")
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.connect_over_cdp(ws_url)
+        context = browser.contexts[0]
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = search_indeed_jobs(page, request)
+        finally:
+            chrome_proc.terminate()
+            shutil.rmtree(profile_dir, ignore_errors=True)
+    assert result.job_title == request.job_title
+    assert len(result.jobs) <= request.max_results
+    print(f"\nTotal jobs found: {len(result.jobs)}")
+
+
+if __name__ == "__main__":
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_indeed_jobs)

@@ -1,0 +1,16 @@
+# Tracks a UPS package by tracking number and extracts
+# the status, location, delivery date, and received-by information.
+
+@dataclass(frozen=True)
+class UpsTrackingRequest:
+    tracking_number: str
+
+@dataclass(frozen=True)
+class UpsTrackingResult:
+    tracking_number: str
+    status: str
+    location: str
+    delivery_date: str
+    received_by: str
+
+def track_ups_package(page: Page, request: UpsTrackingRequest) -> UpsTrackingResult

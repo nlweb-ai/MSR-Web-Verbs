@@ -1,0 +1,24 @@
+# Searches Vimeo (vimeo.com) for videos by keyword.
+# Extracts title, creator, duration, views, and likes for each video result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "short film documentary"
+    max_results: int = 5
+
+@dataclass
+class VideoResult:
+    title: str = ""
+    creator: str = ""
+    duration: str = ""
+    views: str = ""
+    likes: str = ""
+
+@dataclass
+class SearchResult:
+    videos: list[VideoResult]
+
+def vimeo_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

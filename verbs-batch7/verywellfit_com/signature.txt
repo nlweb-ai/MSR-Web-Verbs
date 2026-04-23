@@ -1,0 +1,21 @@
+# Searches Verywell Fit (verywellfit.com) for fitness and exercise articles.
+# Extracts title and summary for each article result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "squat exercise guide"
+    max_results: int = 3
+
+@dataclass
+class ArticleResult:
+    title: str = ""
+    summary: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[ArticleResult]
+
+def verywellfit_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

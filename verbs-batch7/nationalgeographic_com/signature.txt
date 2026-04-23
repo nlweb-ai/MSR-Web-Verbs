@@ -1,0 +1,23 @@
+# Searches National Geographic (nationalgeographic.com) for articles by keyword.
+# Extracts title, date, summary, and URL for each article result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "coral reef"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    date: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[Article]
+
+def natgeo_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

@@ -1,0 +1,19 @@
+# goodrx_search — Search for a prescription drug on GoodRx and extract pharmacy prices.
+
+@dataclass(frozen=True)
+class GoodRxSearchRequest:
+    drug: str = "metformin"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class PharmacyPrice:
+    pharmacy_name: str = ""
+    price: str = ""
+
+@dataclass(frozen=True)
+class GoodRxSearchResult:
+    drug_name: str = ""
+    dosage: str = ""
+    prices: list = None  # list[PharmacyPrice]
+
+def goodrx_search(page: Page, request: GoodRxSearchRequest) -> GoodRxSearchResult:

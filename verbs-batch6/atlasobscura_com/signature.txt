@@ -1,0 +1,20 @@
+# Searches Atlas Obscura for unusual places matching a query. For each place,
+# extracts the name, location, description, and URL.
+
+@dataclass(frozen=True)
+class PlaceRequest:
+    query: str = "underground caves"
+    max_places: int = 5
+
+@dataclass
+class Place:
+    name: str = ""
+    location: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class PlaceResult:
+    places: list = field(default_factory=list)
+
+def atlasobscura_search(page: Page, request: PlaceRequest) -> PlaceResult:

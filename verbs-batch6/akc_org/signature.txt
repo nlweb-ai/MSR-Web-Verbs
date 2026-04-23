@@ -1,0 +1,17 @@
+# Looks up dog breed information on AKC.org. Extracts the breed name, breed group,
+# size, life expectancy, temperament, and popularity rank.
+
+@dataclass(frozen=True)
+class BreedRequest:
+    breed: str = "Golden Retriever"
+
+@dataclass
+class BreedResult:
+    breed_name: str = ""
+    breed_group: str = ""
+    size: str = ""
+    life_expectancy: str = ""
+    temperament: str = ""
+    popularity_rank: str = ""
+
+def akc_breed_info(page: Page, request: BreedRequest) -> BreedResult:

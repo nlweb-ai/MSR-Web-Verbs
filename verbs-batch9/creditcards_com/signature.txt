@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class CreditCardsSearchRequest:
+    category: str = "balance transfer"
+    max_results: int = 5
+
+
+@dataclass
+class CreditCardItem:
+    name: str = ""
+    rating: str = ""
+    intro_apr: str = ""
+    intro_period: str = ""
+    regular_apr: str = ""
+
+
+@dataclass
+class CreditCardsSearchResult:
+    category: str = ""
+    items: List[CreditCardItem] = field(default_factory=list)
+
+
+# Search CreditCards.com for credit cards by category.
+def search_creditcards(page: Page, request: CreditCardsSearchRequest) -> CreditCardsSearchResult:

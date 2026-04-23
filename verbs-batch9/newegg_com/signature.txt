@@ -1,0 +1,16 @@
+@dataclass
+class NeweggRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    price: str
+
+@dataclass
+class NeweggResult:
+    products: List[ProductItem]
+
+# Searches Newegg for products and extracts name and price.
+def search_newegg(page: Page, request: NeweggRequest) -> NeweggResult

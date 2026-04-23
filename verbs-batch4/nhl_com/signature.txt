@@ -1,0 +1,23 @@
+# Navigate to the NHL standings page and extract standings for the specified
+# conference with team name, wins, losses, OT losses, and points for up to
+# max_teams teams.
+
+@dataclass(frozen=True)
+class NhlStandingsRequest:
+    conference: str = "Eastern"
+    max_teams: int = 10
+
+@dataclass(frozen=True)
+class NhlTeamStanding:
+    team_name: str
+    wins: int
+    losses: int
+    ot_losses: int
+    points: int
+
+@dataclass(frozen=True)
+class NhlStandingsResult:
+    conference: str
+    teams: list  # list[NhlTeamStanding]
+
+def nhl_standings(page: Page, request: NhlStandingsRequest) -> NhlStandingsResult:

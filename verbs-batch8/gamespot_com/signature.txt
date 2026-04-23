@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class GamespotSearchRequest:
+    search_query: str = "zelda"
+    max_results: int = 5
+
+
+@dataclass
+class GamespotResultItem:
+    game_title: str = ""
+    platform: str = ""
+    score: str = ""
+    review_date: str = ""
+    reviewer: str = ""
+    summary: str = ""
+
+
+@dataclass
+class GamespotSearchResult:
+    items: List[GamespotResultItem] = field(default_factory=list)
+
+
+# Search for video game reviews on GameSpot by keyword.
+def gamespot_search(page: Page, request: GamespotSearchRequest) -> GamespotSearchResult:

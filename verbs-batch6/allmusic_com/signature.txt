@@ -1,0 +1,24 @@
+# Searches AllMusic for an artist and extracts their info and top albums.
+# Extracts artist name, active years, genres, bio summary, and album details
+# (name, year, rating).
+
+@dataclass(frozen=True)
+class ArtistRequest:
+    artist: str = "Miles Davis"
+    max_albums: int = 5
+
+@dataclass
+class Album:
+    name: str = ""
+    year: str = ""
+    rating: str = ""
+
+@dataclass
+class ArtistResult:
+    artist_name: str = ""
+    active_years: str = ""
+    genres: str = ""
+    bio_summary: str = ""
+    albums: list = field(default_factory=list)
+
+def allmusic_artist(page: Page, request: ArtistRequest) -> ArtistResult:

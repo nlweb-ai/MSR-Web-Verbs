@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class SleepfoundationSearchRequest:
+    search_query: str = "insomnia"
+    max_results: int = 5
+
+
+@dataclass
+class SleepfoundationArticleItem:
+    title: str = ""
+    author: str = ""
+    reviewed_by: str = ""
+    publish_date: str = ""
+    summary: str = ""
+
+
+@dataclass
+class SleepfoundationSearchResult:
+    items: List[SleepfoundationArticleItem] = field(default_factory=list)
+
+
+# Search for sleep health articles on Sleep Foundation by keyword.
+def sleepfoundation_search(page: Page, request: SleepfoundationSearchRequest) -> SleepfoundationSearchResult:

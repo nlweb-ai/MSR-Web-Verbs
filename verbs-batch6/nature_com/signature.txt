@@ -1,0 +1,21 @@
+# Searches Nature.com for scientific articles matching a query. For each article,
+# extracts the title, authors, journal, date, and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "CRISPR gene editing"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    authors: str = ""
+    journal: str = ""
+    date: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def nature_search(page: Page, request: ArticleRequest) -> ArticleResult:

@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class AutoTraderSearchRequest:
+    make_model: str = "Honda Civic"
+    max_price: int = 25000
+    zip_code: str = "60601"
+    radius: int = 50
+    max_results: int = 5
+
+
+@dataclass
+class CarItem:
+    title: str
+    mileage: str
+    price: str
+    dealer_name: str
+
+
+@dataclass
+class AutoTraderSearchResult:
+    query: str = ""
+    items: List[CarItem] = field(default_factory=list)
+
+
+# Search AutoTrader for used cars.
+def search_autotrader(page: Page, request: AutoTraderSearchRequest) -> AutoTraderSearchResult:

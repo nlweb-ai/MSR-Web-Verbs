@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class ChessLeaderboardRequest:
+    category: str = "blitz"
+    max_results: int = 10
+
+
+@dataclass
+class PlayerItem:
+    rank: str = ""
+    username: str = ""
+    rating: str = ""
+    title: str = ""
+    won: str = ""
+    draw: str = ""
+    lost: str = ""
+
+
+@dataclass
+class ChessLeaderboardResult:
+    category: str = ""
+    items: List[PlayerItem] = field(default_factory=list)
+
+
+# Get Chess.com leaderboard for a category.
+def get_chess_leaderboard(page: Page, request: ChessLeaderboardRequest) -> ChessLeaderboardResult:

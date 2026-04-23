@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class HackerNoonRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    description: str
+
+@dataclass
+class HackerNoonResult:
+    query: str
+    items: List[ArticleItem]
+
+# Searches HackerNoon for articles matching the query and returns
+# up to max_results articles with title, author, and description.
+def search_hackernoon(page: Page, request: HackerNoonRequest) -> HackerNoonResult:

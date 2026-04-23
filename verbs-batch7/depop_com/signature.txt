@@ -1,0 +1,24 @@
+# Searches Depop (depop.com) for secondhand fashion items by query.
+# Extracts item name, brand, price, size, and seller for each listing.
+
+@dataclass(frozen=True)
+class ItemSearchRequest:
+    query: str = "vintage denim jacket"
+    max_results: int = 5
+
+@dataclass
+class Listing:
+    item_name: str = ""
+    brand: str = ""
+    price: str = ""
+    size: str = ""
+    seller: str = ""
+
+@dataclass
+class ItemSearchResult:
+    listings: list[Listing]
+
+def depop_search(
+    page: Page,
+    request: ItemSearchRequest,
+) -> ItemSearchResult:

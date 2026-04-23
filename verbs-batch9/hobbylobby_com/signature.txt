@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class HobbyLobbyRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    price: str
+    original_price: str
+    reviews: str
+
+@dataclass
+class HobbyLobbyResult:
+    query: str
+    items: List[ProductItem]
+
+# Searches Hobby Lobby for products matching the query and returns
+# up to max_results items with name, price, original_price, and reviews.
+def search_hobbylobby(page: Page, request: HobbyLobbyRequest) -> HobbyLobbyResult:

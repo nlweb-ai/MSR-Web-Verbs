@@ -1,0 +1,21 @@
+# Search Congress.gov for legislation matching a query and extract bill details
+# including bill number, title, sponsor, date introduced, and current status.
+
+@dataclass(frozen=True)
+class CongressLegislationRequest:
+    query: str = "infrastructure bill"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class CongressBill:
+    bill_number: str = ""
+    title: str = ""
+    sponsor: str = ""
+    date_introduced: str = ""
+    status: str = ""
+
+@dataclass(frozen=True)
+class CongressLegislationResult:
+    bills: list = None  # list[CongressBill]
+
+def congress_legislation(page: Page, request: CongressLegislationRequest) -> CongressLegislationResult:

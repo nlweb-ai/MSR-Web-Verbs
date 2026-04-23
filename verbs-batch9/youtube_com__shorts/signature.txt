@@ -1,0 +1,17 @@
+@dataclass
+class YouTubeShortsRequest:
+    max_results: int
+
+@dataclass
+class ShortItem:
+    title: str
+    channel: str
+    views: str
+
+@dataclass
+class YouTubeShortsResult:
+    shorts: List[ShortItem]
+
+# Browses YouTube Shorts trending feed and extracts title,
+# channel name, and view count.
+def get_youtube_shorts(page: Page, request: YouTubeShortsRequest) -> YouTubeShortsResult

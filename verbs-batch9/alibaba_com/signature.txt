@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class AlibabaSearchRequest:
+    search_query: str = "LED strip lights"
+    max_results: int = 5
+
+
+@dataclass
+class ProductItem:
+    product_name: str = ""
+    supplier: str = ""
+    price_range: str = ""
+    min_order_qty: str = ""
+    supplier_rating: str = ""
+
+
+@dataclass
+class AlibabaSearchResult:
+    query: str = ""
+    items: List[ProductItem] = field(default_factory=list)
+
+
+# Searches Alibaba for wholesale products and extracts listing details.
+def search_alibaba(page: Page, request: AlibabaSearchRequest) -> AlibabaSearchResult:

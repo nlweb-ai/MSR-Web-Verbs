@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class EbayTrendingSearchRequest:
+    max_results: int = 10
+
+
+@dataclass
+class EbayTrendingItem:
+    product_name: str = ""
+    price: str = ""
+    num_sold: str = ""
+    trending_rank: str = ""
+    category: str = ""
+
+
+@dataclass
+class EbayTrendingSearchResult:
+    items: List[EbayTrendingItem] = field(default_factory=list)
+
+
+# Browse trending products on eBay.
+def ebay_trending_search(page: Page, request: EbayTrendingSearchRequest) -> EbayTrendingSearchResult:

@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class SparknotesSearchRequest:
+    search_query: str = "hamlet"
+    max_results: int = 5
+
+
+@dataclass
+class SparknotesGuideItem:
+    title: str = ""
+    author: str = ""
+    type: str = ""
+    summary: str = ""
+    url: str = ""
+
+
+@dataclass
+class SparknotesSearchResult:
+    items: List[SparknotesGuideItem] = field(default_factory=list)
+
+
+# Search for study guides on SparkNotes by keyword.
+def sparknotes_search(page: Page, request: SparknotesSearchRequest) -> SparknotesSearchResult:

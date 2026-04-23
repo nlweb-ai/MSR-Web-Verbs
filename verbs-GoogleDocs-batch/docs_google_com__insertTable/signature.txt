@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDocsInsertTableRequest:
+    document_url: str
+    rows: int
+    cols: int
+
+
+@dataclass(frozen=True)
+class GoogleDocsInsertTableResult:
+    success: bool
+    error: str
+
+
+# Opens a Google Doc and inserts a table of the given size.
+def google_docs_insert_table(
+    page: Page,
+    request: GoogleDocsInsertTableRequest,
+) -> GoogleDocsInsertTableResult:

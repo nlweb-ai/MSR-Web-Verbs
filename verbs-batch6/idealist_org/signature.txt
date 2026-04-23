@@ -1,0 +1,21 @@
+# Searches Idealist for non-profit jobs matching a query and location. For each
+# job, extracts the title, organization, location, and job type.
+
+@dataclass(frozen=True)
+class JobRequest:
+    query: str = "environmental policy"
+    location: str = "Washington, DC"
+    max_results: int = 5
+
+@dataclass
+class Job:
+    title: str = ""
+    organization: str = ""
+    location: str = ""
+    job_type: str = ""
+
+@dataclass
+class JobResult:
+    jobs: List[Job] = field(default_factory=list)
+
+def idealist_search(page: Page, request: JobRequest) -> JobResult:

@@ -1,0 +1,18 @@
+# Searches Wikitravel for travel guides matching a query. For each guide,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class GuideRequest:
+    query: str = "travel guide Tokyo Japan"
+    max_results: int = 5
+
+@dataclass
+class Guide:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class GuideResult:
+    items: List[Guide] = field(default_factory=list)
+
+def wikitravel_search(page: Page, request: GuideRequest) -> GuideResult:

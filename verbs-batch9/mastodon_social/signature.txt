@@ -1,0 +1,18 @@
+@dataclass
+class MastodonRequest:
+    max_results: int
+
+@dataclass
+class PostItem:
+    author: str
+    content: str
+    boosts: str
+    favorites: str
+
+@dataclass
+class MastodonResult:
+    posts: List[PostItem]
+
+# Browses Mastodon trending posts and extracts author,
+# content, boost count, and favorite count.
+def browse_mastodon_trending(page: Page, request: MastodonRequest) -> MastodonResult

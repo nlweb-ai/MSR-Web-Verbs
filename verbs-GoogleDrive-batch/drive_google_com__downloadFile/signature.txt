@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class GoogleDriveDownloadFileRequest:
+    file_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveDownloadFileResult:
+    success: bool
+    downloaded_path: str
+    error: str
+
+
+# Downloads a file from Google Drive.
+def google_drive_download_file(
+    page: Page,
+    request: GoogleDriveDownloadFileRequest,
+) -> GoogleDriveDownloadFileResult:

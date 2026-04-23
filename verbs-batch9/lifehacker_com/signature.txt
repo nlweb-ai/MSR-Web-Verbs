@@ -1,0 +1,18 @@
+@dataclass
+class LifehackerRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    date: str
+
+@dataclass
+class LifehackerResult:
+    query: str
+    articles: List[ArticleItem]
+
+# Browses Lifehacker homepage and extracts recent articles
+# with title and publish date.
+def search_lifehacker_articles(page: Page, request: LifehackerRequest) -> LifehackerResult

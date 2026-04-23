@@ -1,0 +1,20 @@
+# Search Steam Store for PC games matching a search term
+# and extract title, price, release date, and review summary.
+
+@dataclass(frozen=True)
+class SteamSearchRequest:
+    search_term: str = "open world RPG"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class SteamGame:
+    title: str = ""
+    price: str = ""
+    release_date: str = ""
+    review_summary: str = ""
+
+@dataclass(frozen=True)
+class SteamSearchResult:
+    games: list = None  # list[SteamGame]
+
+def steam_search(page: Page, request: SteamSearchRequest) -> SteamSearchResult:

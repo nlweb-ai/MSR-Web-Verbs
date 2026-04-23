@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class DatausaSearchRequest:
+    search_query: str = "Chicago"
+    max_results: int = 5
+
+
+@dataclass
+class DatausaLocationItem:
+    location_name: str = ""
+    population: str = ""
+    median_income: str = ""
+    poverty_rate: str = ""
+    median_age: str = ""
+    employment_rate: str = ""
+
+
+@dataclass
+class DatausaSearchResult:
+    items: List[DatausaLocationItem] = field(default_factory=list)
+
+
+# Look up demographic and economic data for a US location on DataUSA.
+def datausa_search(page: Page, request: DatausaSearchRequest) -> DatausaSearchResult:

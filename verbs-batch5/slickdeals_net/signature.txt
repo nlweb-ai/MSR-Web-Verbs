@@ -1,0 +1,21 @@
+# Searches Slickdeals for deals matching a query. For each deal, extracts
+# the title, price, original price, store, and thumbs up count.
+
+@dataclass(frozen=True)
+class SlickdealsRequest:
+    query: str = "headphones"
+    max_deals: int = 5
+
+@dataclass
+class Deal:
+    title: str = ""
+    price: str = ""
+    original_price: str = ""
+    store: str = ""
+    thumbs_up: str = ""
+
+@dataclass
+class SlickdealsResult:
+    deals: list = field(default_factory=list)
+
+def slickdeals_search(page: Page, request: SlickdealsRequest) -> SlickdealsResult:

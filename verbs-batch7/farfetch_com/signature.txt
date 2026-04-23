@@ -1,0 +1,23 @@
+# Searches Farfetch (farfetch.com) for luxury fashion products by query.
+# Extracts brand, product name, price, and URL for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "Gucci bags"
+    max_results: int = 5
+
+@dataclass
+class Product:
+    brand: str = ""
+    product_name: str = ""
+    price: str = ""
+    url: str = ""
+
+@dataclass
+class SearchResult:
+    products: list[Product]
+
+def farfetch_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

@@ -1,0 +1,16 @@
+@dataclass(frozen=True)
+class GoogleDocsDeleteDocumentRequest:
+    document_url: str
+
+
+@dataclass(frozen=True)
+class GoogleDocsDeleteDocumentResult:
+    success: bool
+    error: str
+
+
+# Opens a Google Doc and moves it to trash.
+def google_docs_delete_document(
+    page: Page,
+    request: GoogleDocsDeleteDocumentRequest,
+) -> GoogleDocsDeleteDocumentResult:

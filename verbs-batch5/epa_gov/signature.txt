@@ -1,0 +1,19 @@
+# Searches EPA.gov for environmental information matching a query. For each
+# result, extracts the page title, summary, and URL.
+
+@dataclass(frozen=True)
+class EPASearchRequest:
+    search_query: str = "air quality standards"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class EPAResult:
+    page_title: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass(frozen=True)
+class EPASearchResult:
+    results: list = None  # list[EPAResult]
+
+def epa_search(page: Page, request: EPASearchRequest) -> EPASearchResult:

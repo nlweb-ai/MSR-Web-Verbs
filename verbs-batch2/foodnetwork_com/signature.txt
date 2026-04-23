@@ -1,0 +1,20 @@
+# Searches Food Network for recipes matching a query and extracts up to
+# max_results recipes with name, rating, and total time.
+
+@dataclass(frozen=True)
+class FoodNetworkSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class FoodNetworkRecipe:
+    name: str
+    rating: str
+    total_time: str
+
+@dataclass(frozen=True)
+class FoodNetworkSearchResult:
+    query: str
+    recipes: list[FoodNetworkRecipe]
+
+def search_foodnetwork_recipes(page: Page, request: FoodNetworkSearchRequest) -> FoodNetworkSearchResult

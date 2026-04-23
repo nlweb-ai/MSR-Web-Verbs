@@ -1,0 +1,20 @@
+# Searches Medium for articles matching a query, then extracts
+# up to max_results articles with title, author, and date.
+
+@dataclass(frozen=True)
+class MediumSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class MediumArticle:
+    title: str
+    author: str
+    date: str
+
+@dataclass(frozen=True)
+class MediumSearchResult:
+    query: str
+    articles: list[MediumArticle]
+
+def search_medium(page: Page, request: MediumSearchRequest) -> MediumSearchResult

@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class EbayMotorsSearchRequest:
+    search_query: str = "Toyota Camry"
+    max_price: int = 20000
+    max_results: int = 5
+
+
+@dataclass
+class VehicleListingItem:
+    title: str = ""
+    price: str = ""
+    mileage: str = ""
+    year: str = ""
+    location: str = ""
+    listing_type: str = ""
+
+
+@dataclass
+class EbayMotorsSearchResult:
+    query: str = ""
+    items: List[VehicleListingItem] = field(default_factory=list)
+
+
+# Search eBay Motors for vehicles.
+def search_ebay_motors(page: Page, request: EbayMotorsSearchRequest) -> EbayMotorsSearchResult:

@@ -1,0 +1,20 @@
+# Searches USA.gov for government information matching the given query.
+# Navigates to the search results page, waits for results to load,
+# and extracts up to max_results items with title, description, and URL.
+
+@dataclass(frozen=True)
+class UsaGovSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class UsaGovSearchItem:
+    title: str
+    description: str
+    url: str
+
+@dataclass(frozen=True)
+class UsaGovSearchResult:
+    items: list  # list[UsaGovSearchItem]
+
+def usa_gov_search(page: Page, request: UsaGovSearchRequest) -> UsaGovSearchResult:

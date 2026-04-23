@@ -1,0 +1,23 @@
+# Browses SCOTUSblog (scotusblog.com) for Supreme Court cases by term.
+# Extracts case name, docket number, issue, and status for each case.
+
+@dataclass(frozen=True)
+class CaseRequest:
+    term: str = "ot2025"
+    max_cases: int = 5
+
+@dataclass
+class Case:
+    case_name: str = ""
+    docket_number: str = ""
+    issue: str = ""
+    status: str = ""
+
+@dataclass
+class CaseResult:
+    cases: list[Case]
+
+def scotusblog_cases(
+    page: Page,
+    request: CaseRequest,
+) -> CaseResult:

@@ -1,0 +1,18 @@
+@dataclass
+class YouTubeChannelsRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ChannelItem:
+    name: str
+    subscribers: str
+    description: str
+
+@dataclass
+class YouTubeChannelsResult:
+    channels: List[ChannelItem]
+
+# Searches YouTube for channels and extracts channel name,
+# subscriber count, and description.
+def search_youtube_channels(page: Page, request: YouTubeChannelsRequest) -> YouTubeChannelsResult

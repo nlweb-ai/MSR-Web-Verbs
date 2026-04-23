@@ -1,0 +1,25 @@
+# Search VRBO for vacation rental properties at a given destination, date range,
+# and guest count. Returns up to max_results properties with name, nightly price,
+# bedrooms, bathrooms, and rating.
+
+@dataclass(frozen=True)
+class VrboSearchRequest:
+    destination: str
+    guests: int
+    checkin: str
+    checkout: str
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class VrboProperty:
+    name: str
+    nightly_price: str
+    bedrooms: str
+    bathrooms: str
+    rating: str
+
+@dataclass(frozen=True)
+class VrboSearchResult:
+    properties: list[VrboProperty]
+
+def vrbo_search(page: Page, request: VrboSearchRequest) -> VrboSearchResult:

@@ -1,0 +1,19 @@
+# gasbuddy_search — Search for gas prices near a location and extract station details.
+
+@dataclass(frozen=True)
+class GasBuddySearchRequest:
+    location: str = "Denver, CO"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class GasStation:
+    station_name: str = ""
+    address: str = ""
+    regular_price: str = ""
+    last_updated: str = ""
+
+@dataclass(frozen=True)
+class GasBuddySearchResult:
+    stations: list = None  # list[GasStation]
+
+def gasbuddy_search(page: Page, request: GasBuddySearchRequest) -> GasBuddySearchResult:

@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class FandangoSearchRequest:
+    zip_code: str
+    max_results: int
+
+@dataclass
+class MovieItem:
+    title: str
+    rating: str
+    runtime: str
+    showtime: str
+
+@dataclass
+class FandangoSearchResult:
+    zip_code: str
+    items: List[MovieItem]
+
+# Searches Fandango.com for movies playing near the given zip code and returns
+# up to max_results movies with title, rating, runtime, and showtime.
+def search_fandango_movies(page: Page, request: FandangoSearchRequest) -> FandangoSearchResult:

@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class CaniuseSearchRequest:
+    feature_query: str = "flexbox"
+
+
+@dataclass
+class CaniuseFeatureItem:
+    feature_name: str = ""
+    description: str = ""
+    usage_percentage: str = ""
+
+
+@dataclass
+class CaniuseSearchResult:
+    items: List[CaniuseFeatureItem] = field(default_factory=list)
+
+
+# Search browser compatibility data on Can I Use.
+def caniuse_search(page: Page, request: CaniuseSearchRequest) -> CaniuseSearchResult:

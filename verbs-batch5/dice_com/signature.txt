@@ -1,0 +1,21 @@
+# Searches Dice.com for tech jobs matching a query. For each job, extracts
+# the title, company name, location, posted date, and salary range.
+
+@dataclass(frozen=True)
+class DiceSearchRequest:
+    search_query: str = "machine learning engineer"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class DiceJob:
+    job_title: str = ""
+    company_name: str = ""
+    location: str = ""
+    posted_date: str = ""
+    salary_range: str = ""
+
+@dataclass(frozen=True)
+class DiceSearchResult:
+    jobs: list = None  # list[DiceJob]
+
+def dice_search(page: Page, request: DiceSearchRequest) -> DiceSearchResult:

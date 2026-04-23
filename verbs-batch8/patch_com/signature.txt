@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class PatchSearchRequest:
+    search_query: str = "community events"
+    max_results: int = 5
+
+@dataclass
+class PatchSearchItem:
+    title: str = ""
+    location: str = ""
+    publish_date: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass
+class PatchSearchResult:
+    items: List[PatchSearchItem] = field(default_factory=list)
+
+def patch_search(request: PatchSearchRequest) -> PatchSearchResult:
+    ...

@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class CourseHeroSearchRequest:
+    query: str = "organic chemistry"
+    max_results: int = 5
+
+
+@dataclass
+class ResourceItem:
+    title: str = ""
+    course_code: str = ""
+    school: str = ""
+    resource_type: str = ""
+    num_views: str = ""
+
+
+@dataclass
+class CourseHeroSearchResult:
+    query: str = ""
+    items: List[ResourceItem] = field(default_factory=list)
+
+
+# Search Course Hero for study resources.
+def search_coursehero(page: Page, request: CourseHeroSearchRequest) -> CourseHeroSearchResult:

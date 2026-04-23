@@ -1,0 +1,18 @@
+# Searches The Atlantic for articles matching a query. For each article,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "artificial intelligence future society"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    items: List[Article] = field(default_factory=list)
+
+def theatlantic_search(page: Page, request: ArticleRequest) -> ArticleResult:

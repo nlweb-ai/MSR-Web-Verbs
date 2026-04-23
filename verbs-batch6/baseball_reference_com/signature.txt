@@ -1,0 +1,17 @@
+# Searches Baseball Reference for a player's career stats. Extracts the player
+# name, batting average, home runs, RBIs, hits, and games played.
+
+@dataclass(frozen=True)
+class PlayerRequest:
+    player: str = "Shohei Ohtani"
+
+@dataclass
+class PlayerStats:
+    player_name: str = ""
+    batting_avg: str = ""
+    home_runs: str = ""
+    rbis: str = ""
+    hits: str = ""
+    games_played: str = ""
+
+def baseball_ref_search(page: Page, request: PlayerRequest) -> PlayerStats:

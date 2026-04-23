@@ -1,0 +1,16 @@
+@dataclass
+class WestElmRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    price: str
+
+@dataclass
+class WestElmResult:
+    products: List[ProductItem]
+
+# Searches West Elm for products and extracts name and price.
+def search_westelm(page: Page, request: WestElmRequest) -> WestElmResult

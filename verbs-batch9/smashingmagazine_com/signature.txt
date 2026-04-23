@@ -1,0 +1,19 @@
+@dataclass
+class SmashingRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    publish_date: str
+    summary: str
+
+@dataclass
+class SmashingResult:
+    articles: List[ArticleItem]
+
+# Searches Smashing Magazine for articles and extracts title,
+# author, publish date, and summary.
+def search_smashing(page: Page, request: SmashingRequest) -> SmashingResult

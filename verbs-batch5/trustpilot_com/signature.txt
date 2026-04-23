@@ -1,0 +1,23 @@
+# Searches Trustpilot for company reviews. Extracts the company name, trust
+# score, total reviews, and individual reviews with reviewer name, rating,
+# and review text.
+
+@dataclass(frozen=True)
+class TrustpilotRequest:
+    company: str = "Airbnb"
+    max_reviews: int = 5
+
+@dataclass
+class Review:
+    reviewer_name: str = ""
+    rating: str = ""
+    review_text: str = ""
+
+@dataclass
+class TrustpilotResult:
+    company_name: str = ""
+    trust_score: str = ""
+    total_reviews: str = ""
+    reviews: list = field(default_factory=list)
+
+def trustpilot_search(page: Page, request: TrustpilotRequest) -> TrustpilotResult:

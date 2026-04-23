@@ -1,0 +1,18 @@
+# Looks up a planting guide on The Old Farmer's Almanac for a given plant.
+# Extracts plant name, planting season, sun/soil requirements, days to maturity,
+# and spacing.
+
+@dataclass(frozen=True)
+class PlantRequest:
+    plant: str = "tomatoes"
+
+@dataclass
+class PlantResult:
+    plant_name: str = ""
+    planting_season: str = ""
+    sun_requirements: str = ""
+    soil_requirements: str = ""
+    days_to_maturity: str = ""
+    spacing: str = ""
+
+def almanac_planting(page: Page, request: PlantRequest) -> PlantResult:

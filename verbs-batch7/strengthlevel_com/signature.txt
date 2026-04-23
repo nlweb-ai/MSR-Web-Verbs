@@ -1,0 +1,20 @@
+# Looks up strength standards on StrengthLevel (strengthlevel.com) for a given exercise and bodyweight.
+# Extracts beginner, novice, intermediate, advanced, and elite weight thresholds.
+
+@dataclass(frozen=True)
+class StandardsRequest:
+    exercise_slug: str = "bench-press"
+    bodyweight: int = 180
+
+@dataclass
+class StandardsResult:
+    beginner: str = ""
+    novice: str = ""
+    intermediate: str = ""
+    advanced: str = ""
+    elite: str = ""
+
+def strengthlevel_standards(
+    page: Page,
+    request: StandardsRequest,
+) -> StandardsResult:

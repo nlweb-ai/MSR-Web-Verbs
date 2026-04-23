@@ -1,0 +1,25 @@
+# Gets the weather forecast from AccuWeather for a given location. Extracts the
+# current temperature, condition, high/low, humidity, wind, and multi-day forecast.
+
+@dataclass(frozen=True)
+class WeatherRequest:
+    location: str = "San Francisco, CA"
+
+@dataclass
+class DayForecast:
+    day: str = ""
+    high: str = ""
+    low: str = ""
+    condition: str = ""
+
+@dataclass
+class WeatherResult:
+    current_temp: str = ""
+    condition: str = ""
+    high: str = ""
+    low: str = ""
+    humidity: str = ""
+    wind: str = ""
+    forecast: list = field(default_factory=list)
+
+def accuweather_forecast(page: Page, request: WeatherRequest) -> WeatherResult:

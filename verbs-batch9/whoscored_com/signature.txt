@@ -1,0 +1,19 @@
+@dataclass
+class WhoScoredRequest:
+    max_results: int
+
+@dataclass
+class PlayerItem:
+    name: str
+    team: str
+    age: str
+    position: str
+    rating: str
+
+@dataclass
+class WhoScoredResult:
+    players: List[PlayerItem]
+
+# Browses WhoScored for top-rated players and extracts
+# name, team, age, position, and rating.
+def get_whoscored_rankings(page: Page, request: WhoScoredRequest) -> WhoScoredResult

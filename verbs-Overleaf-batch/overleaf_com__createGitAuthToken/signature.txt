@@ -1,0 +1,16 @@
+overleaf_create_git_auth_token(page)
+
+Navigates to the Overleaf account settings page, generates a new Git authentication token, retrieves the token string from the popup dialog, and closes the dialog.
+
+Parameters:
+  page: Page (Playwright Page object)
+
+Returns: OverleafCreateGitAuthTokenResult
+  - success (bool): Whether the token was generated successfully
+  - token (str): The generated Git authentication token (e.g., "olp_0zYRgeNrW2rQzv2hBooBxbmZXXGkUX2CaRZQ")
+  - error (str): Error message if failed
+
+Example:
+  result = overleaf_create_git_auth_token(page)
+  # result.success = True
+  # result.token = "olp_0zYRgeNrW2rQzv2hBooBxbmZXXGkUX2CaRZQ"

@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class GoogleDocsCreateFromTemplateRequest:
+    template_name: str
+    document_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDocsCreateFromTemplateResult:
+    success: bool
+    document_url: str
+    document_title: str
+    error: str
+
+
+# Opens the template gallery, picks a template by name, and renames the document.
+def google_docs_create_from_template(
+    page: Page,
+    request: GoogleDocsCreateFromTemplateRequest,
+) -> GoogleDocsCreateFromTemplateResult:

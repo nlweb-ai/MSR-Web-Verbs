@@ -1,0 +1,19 @@
+# Searches Better Homes & Gardens for articles matching a query. For each article,
+# extracts the title, description, and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "small bathroom remodel"
+    max_articles: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: list = field(default_factory=list)
+
+def bhg_search(page: Page, request: ArticleRequest) -> ArticleResult:

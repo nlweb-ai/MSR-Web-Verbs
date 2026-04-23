@@ -1,0 +1,20 @@
+@dataclass
+class NBARequest:
+    conference: str
+
+@dataclass
+class TeamStanding:
+    team: str
+    wins: str
+    losses: str
+    win_pct: str
+    games_behind: str
+    streak: str
+
+@dataclass
+class NBAResult:
+    teams: List[TeamStanding]
+
+# Browses NBA standings and extracts team name, wins, losses,
+# win percentage, games behind, and streak.
+def get_nba_standings(page: Page, request: NBARequest) -> NBAResult

@@ -1,0 +1,16 @@
+@dataclass(frozen=True)
+class OverleafAddTagRequest:
+    tag_name: str
+
+
+@dataclass(frozen=True)
+class OverleafAddTagResult:
+    success: bool
+    error: str
+
+
+# Creates a new tag on the Overleaf dashboard.
+def overleaf_add_tag(
+    page: Page,
+    request: OverleafAddTagRequest,
+) -> OverleafAddTagResult:

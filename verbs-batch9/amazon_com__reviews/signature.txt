@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class AmazonReviewsRequest:
+    search_query: str = "kindle paperwhite"
+    max_results: int = 5
+
+
+@dataclass
+class ReviewItem:
+    reviewer_name: str = ""
+    star_rating: str = ""
+    review_title: str = ""
+    review_date: str = ""
+    review_text: str = ""
+
+
+@dataclass
+class AmazonReviewsResult:
+    product_name: str = ""
+    items: List[ReviewItem] = field(default_factory=list)
+
+
+# Searches Amazon for a product, navigates to reviews, and extracts customer reviews.
+def get_amazon_reviews(page: Page, request: AmazonReviewsRequest) -> AmazonReviewsResult:

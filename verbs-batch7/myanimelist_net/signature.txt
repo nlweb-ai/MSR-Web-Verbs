@@ -1,0 +1,21 @@
+# Searches MyAnimeList (myanimelist.net) for an anime and extracts details from the top result.
+# Retrieves title, score, rank, episodes, air dates, synopsis, and genres.
+
+@dataclass(frozen=True)
+class Request:
+    query: str = "Steins;Gate"
+
+@dataclass
+class Result:
+    title: str = ""
+    score: str = ""
+    rank: str = ""
+    episodes: str = ""
+    aired: str = ""
+    synopsis: str = ""
+    genres: list[str]
+
+def anime_search(
+    page: Page,
+    request: Request,
+) -> Result:

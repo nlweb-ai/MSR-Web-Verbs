@@ -1,0 +1,20 @@
+@dataclass
+class WeddingWireRequest:
+    location: str
+    max_results: int
+
+@dataclass
+class PhotographerItem:
+    name: str
+    rating: str
+    num_reviews: str
+    location: str
+    price: str
+
+@dataclass
+class WeddingWireResult:
+    photographers: List[PhotographerItem]
+
+# Searches WeddingWire for vendors and extracts name,
+# rating, number of reviews, location, and starting price.
+def search_weddingwire(page: Page, request: WeddingWireRequest) -> WeddingWireResult

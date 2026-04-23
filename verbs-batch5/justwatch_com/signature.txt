@@ -1,0 +1,19 @@
+# Searches JustWatch for streaming availability of a movie. For each offer,
+# extracts the service name, availability type, and price.
+
+@dataclass(frozen=True)
+class JustWatchRequest:
+    movie_title: str = "Inception"
+    movie_slug: str = "inception"
+
+@dataclass(frozen=True)
+class StreamingOffer:
+    service_name: str = ""
+    availability_type: str = ""
+    price: str = ""
+
+@dataclass(frozen=True)
+class JustWatchResult:
+    offers: list = None  # list[StreamingOffer]
+
+def justwatch_search(page: Page, request: JustWatchRequest) -> JustWatchResult:

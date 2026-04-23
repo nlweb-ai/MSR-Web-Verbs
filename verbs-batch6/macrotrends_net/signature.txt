@@ -1,0 +1,20 @@
+# Looks up annual revenue history for a company on Macrotrends. For each year,
+# extracts the year and revenue amount.
+
+@dataclass(frozen=True)
+class RevenueRequest:
+    company: str = "Apple"
+    ticker: str = "AAPL"
+    max_years: int = 5
+
+@dataclass
+class RevenueYear:
+    year: str = ""
+    revenue: str = ""
+
+@dataclass
+class RevenueResult:
+    company: str = ""
+    years: List[RevenueYear] = field(default_factory=list)
+
+def macrotrends_revenue(page: Page, request: RevenueRequest) -> RevenueResult:

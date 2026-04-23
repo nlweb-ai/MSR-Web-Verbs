@@ -1,0 +1,21 @@
+# Searches AniList (anilist.co) for an anime by title and extracts its details.
+# Returns the title, average score, episode count, airing status, genres,
+# and description for the top matching anime.
+
+@dataclass(frozen=True)
+class AnimeSearchRequest:
+    anime_title: str = "Fullmetal Alchemist"
+
+@dataclass
+class AnimeSearchResult:
+    title: str = ""
+    avg_score: str = ""
+    episodes: str = ""
+    status: str = ""
+    genres: str = ""
+    description: str = ""
+
+def anilist_search(
+    page: Page,
+    request: AnimeSearchRequest,
+) -> AnimeSearchResult:

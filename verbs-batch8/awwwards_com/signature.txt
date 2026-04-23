@@ -1,0 +1,21 @@
+# Browses Awwwards for award-winning websites. For each site, extracts
+# the site name, agency, country, award type, score, and site URL.
+
+@dataclass(frozen=True)
+class AwwwardsRequest:
+    max_results: int = 5
+
+@dataclass
+class AwardedSite:
+    site_name: str = ""
+    agency: str = ""
+    country: str = ""
+    award_type: str = ""
+    score: str = ""
+    site_url: str = ""
+
+@dataclass
+class AwwwardsResult:
+    sites: list = field(default_factory=list)
+
+def awwwards_search(page: Page, request: AwwwardsRequest) -> AwwwardsResult:

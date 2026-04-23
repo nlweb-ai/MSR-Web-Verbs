@@ -1,0 +1,22 @@
+# Searches Substack (substack.com) for newsletters by keyword.
+# Extracts newsletter name, handle, and description for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "artificial intelligence"
+    max_results: int = 5
+
+@dataclass
+class NewsletterResult:
+    name: str = ""
+    handle: str = ""
+    description: str = ""
+
+@dataclass
+class SearchResult:
+    newsletters: list[NewsletterResult]
+
+def substack_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

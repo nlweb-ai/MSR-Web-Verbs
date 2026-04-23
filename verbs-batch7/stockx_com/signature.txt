@@ -1,0 +1,21 @@
+# Searches StockX (stockx.com) for sneakers by keyword.
+# Extracts shoe name and lowest ask price for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "Nike Air Jordan 1 Retro"
+    max_results: int = 5
+
+@dataclass
+class ShoeResult:
+    shoe_name: str = ""
+    lowest_ask: str = ""
+
+@dataclass
+class SearchResult:
+    shoes: list[ShoeResult]
+
+def stockx_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

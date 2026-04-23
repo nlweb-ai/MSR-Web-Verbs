@@ -1,0 +1,25 @@
+# Searches Untappd (untappd.com) for beers by keyword.
+# Extracts beer name, brewery, style, ABV, IBU, and rating for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "IPA"
+    max_results: int = 5
+
+@dataclass
+class BeerResult:
+    name: str = ""
+    brewery: str = ""
+    style: str = ""
+    abv: str = ""
+    ibu: str = ""
+    rating: str = ""
+
+@dataclass
+class SearchResult:
+    beers: list[BeerResult]
+
+def untappd_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

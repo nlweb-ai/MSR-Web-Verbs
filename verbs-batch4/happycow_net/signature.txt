@@ -1,0 +1,20 @@
+# happycow_search — Search for vegan/vegetarian restaurants on HappyCow and extract details.
+
+@dataclass(frozen=True)
+class HappyCowSearchRequest:
+    location: str = "Portland, OR"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class HappyCowRestaurant:
+    name: str = ""
+    cuisine_type: str = ""
+    rating: str = ""
+    address: str = ""
+    price_range: str = ""
+
+@dataclass(frozen=True)
+class HappyCowSearchResult:
+    restaurants: list = None  # list[HappyCowRestaurant]
+
+def happycow_search(page: Page, request: HappyCowSearchRequest) -> HappyCowSearchResult:

@@ -1,0 +1,21 @@
+# github_trending — Browse GitHub Trending repositories and extract details.
+
+@dataclass(frozen=True)
+class GithubTrendingRequest:
+    language: str = "python"
+    since: str = "weekly"
+    max_results: int = 10
+
+@dataclass(frozen=True)
+class TrendingRepo:
+    repo_name: str = ""
+    description: str = ""
+    language: str = ""
+    total_stars: str = ""
+    stars_this_week: str = ""
+
+@dataclass(frozen=True)
+class GithubTrendingResult:
+    repos: list = None  # list[TrendingRepo]
+
+def github_trending(page: Page, request: GithubTrendingRequest) -> GithubTrendingResult:

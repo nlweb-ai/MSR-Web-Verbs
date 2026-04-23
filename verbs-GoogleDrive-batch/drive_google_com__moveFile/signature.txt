@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDriveMoveFileRequest:
+    file_name: str
+    destination_folder: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveMoveFileResult:
+    success: bool
+    destination_folder: str
+    error: str
+
+
+# Moves a file to a different folder in Google Drive.
+def google_drive_move_file(
+    page: Page,
+    request: GoogleDriveMoveFileRequest,
+) -> GoogleDriveMoveFileResult:

@@ -1,0 +1,19 @@
+@dataclass
+class MailchimpRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ResourceItem:
+    title: str
+    type: str
+    summary: str
+
+@dataclass
+class MailchimpResult:
+    query: str
+    resources: List[ResourceItem]
+
+# Browses Mailchimp resources page and extracts resource titles,
+# types (guide, article, tutorial), and summaries.
+def search_mailchimp_resources(page: Page, request: MailchimpRequest) -> MailchimpResult

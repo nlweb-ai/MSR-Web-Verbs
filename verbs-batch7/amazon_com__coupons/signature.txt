@@ -1,0 +1,18 @@
+# Extracts coupon deals from the Amazon Coupons page (amazon.com/coupons).
+# For each coupon, retrieves the product name, discount amount, price, and category.
+
+@dataclass(frozen=True)
+class CouponRequest:
+    max_results: int = 5
+
+@dataclass
+class CouponResult:
+    product_name: str = ""
+    discount: str = ""
+    price: str = ""
+    category: str = ""
+
+def amazon_coupons(
+    page: Page,
+    request: CouponRequest,
+) -> list[CouponResult]:

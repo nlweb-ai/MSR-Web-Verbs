@@ -1,0 +1,18 @@
+# Searches Pexels for photos matching a query. For each photo, extracts
+# the title and URL.
+
+@dataclass(frozen=True)
+class PhotoRequest:
+    query: str = "mountain sunset"
+    max_results: int = 5
+
+@dataclass
+class Photo:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class PhotoResult:
+    photos: List[Photo] = field(default_factory=list)
+
+def pexels_search(page: Page, request: PhotoRequest) -> PhotoResult:

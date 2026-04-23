@@ -1,0 +1,22 @@
+# Browses Reelgood (reelgood.com) for movies by genre.
+# Extracts title, year, and URL for each movie listing.
+
+@dataclass(frozen=True)
+class Request:
+    genre: str = "thriller"
+    max_results: int = 5
+
+@dataclass
+class Movie:
+    title: str = ""
+    year: str = ""
+    url: str = ""
+
+@dataclass
+class Result:
+    movies: list[Movie]
+
+def genre_movies(
+    page: Page,
+    request: Request,
+) -> Result:

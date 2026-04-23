@@ -1,0 +1,17 @@
+# Search Transfermarkt for a soccer player by name
+# and extract profile details including club, market value, age, nationality, and position.
+
+@dataclass(frozen=True)
+class TransfermarktPlayerRequest:
+    player_name: str = "Kylian Mbappé"
+
+@dataclass(frozen=True)
+class TransfermarktPlayerResult:
+    player_name: str = ""
+    current_club: str = ""
+    market_value: str = ""
+    age: str = ""
+    nationality: str = ""
+    position: str = ""
+
+def transfermarkt_player(page: Page, request: TransfermarktPlayerRequest) -> TransfermarktPlayerResult:

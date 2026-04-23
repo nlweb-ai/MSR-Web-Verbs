@@ -1,0 +1,22 @@
+# Searches Our World in Data (ourworldindata.org) for data articles and charts by keyword.
+# Extracts title, description, and URL for each search result.
+
+@dataclass(frozen=True)
+class Request:
+    Query: str = "CO2 emissions by country"
+    num_results: int = 5
+
+@dataclass
+class SearchResult:
+    title: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class Result:
+    results: list[SearchResult]
+
+def data_search(
+    page: Page,
+    request: Request,
+) -> Result:

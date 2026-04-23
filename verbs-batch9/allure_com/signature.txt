@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class AllureSearchRequest:
+    search_query: str = "best sunscreens"
+    max_results: int = 5
+
+
+@dataclass
+class ArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    summary: str = ""
+
+
+@dataclass
+class AllureSearchResult:
+    query: str = ""
+    items: List[ArticleItem] = field(default_factory=list)
+
+
+# Searches Allure for beauty/lifestyle articles.
+def search_allure(page: Page, request: AllureSearchRequest) -> AllureSearchResult:

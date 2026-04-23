@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class GithubMarketplaceSearchRequest:
+    search_query: str = "code review"
+    max_results: int = 5
+
+
+@dataclass
+class GithubMarketplaceToolItem:
+    tool_name: str = ""
+    publisher: str = ""
+    category: str = ""
+    description: str = ""
+    pricing: str = ""
+    num_installs: str = ""
+    rating: str = ""
+
+
+@dataclass
+class GithubMarketplaceSearchResult:
+    items: List[GithubMarketplaceToolItem] = field(default_factory=list)
+
+
+# Search for tools and integrations on GitHub Marketplace by keyword.
+def github_marketplace_search(page: Page, request: GithubMarketplaceSearchRequest) -> GithubMarketplaceSearchResult:

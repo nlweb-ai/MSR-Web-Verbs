@@ -1,0 +1,17 @@
+# Lists NPR podcasts from the podcasts-and-shows page, extracting
+# up to max_results podcasts with name and description.
+
+@dataclass(frozen=True)
+class NprPodcastsRequest:
+    max_results: int
+
+@dataclass(frozen=True)
+class NprPodcast:
+    name: str
+    description: str
+
+@dataclass(frozen=True)
+class NprPodcastsResult:
+    podcasts: list[NprPodcast]
+
+def list_npr_podcasts(page: Page, request: NprPodcastsRequest) -> NprPodcastsResult

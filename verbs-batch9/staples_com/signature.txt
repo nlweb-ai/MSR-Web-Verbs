@@ -1,0 +1,19 @@
+@dataclass
+class StaplesRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    price: str
+    original_price: str
+    num_reviews: str
+
+@dataclass
+class StaplesResult:
+    products: List[ProductItem]
+
+# Searches Staples for products and extracts name, price,
+# original price, and review count.
+def search_staples(page: Page, request: StaplesRequest) -> StaplesResult

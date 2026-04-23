@@ -1,0 +1,23 @@
+# Searches Freepik (freepik.com) for design resources (vectors, photos, PSD, etc.).
+# Extracts title, URL, resource type, and premium status for each result.
+
+@dataclass(frozen=True)
+class FreepikRequest:
+    search_query: str = "business infographic template"
+    max_results: int = 5
+
+@dataclass
+class Resource:
+    title: str = ""
+    url: str = ""
+    resource_type: str = ""
+    is_premium: bool = False
+
+@dataclass
+class FreepikResult:
+    resources: list[Resource]
+
+def freepik_search(
+    page: Page,
+    request: FreepikRequest,
+) -> FreepikResult:

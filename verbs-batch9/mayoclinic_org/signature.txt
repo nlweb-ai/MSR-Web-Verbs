@@ -1,0 +1,20 @@
+@dataclass
+class MayoClinicRequest:
+    query: str
+
+@dataclass
+class ConditionInfo:
+    condition_name: str
+    definition: str
+    symptoms: str
+    causes: str
+    risk_factors: str
+    when_to_see_doctor: str
+
+@dataclass
+class MayoClinicResult:
+    info: ConditionInfo
+
+# Searches Mayo Clinic for a condition and extracts name, definition,
+# symptoms, causes, risk factors, and when to see a doctor.
+def search_mayoclinic(page: Page, request: MayoClinicRequest) -> MayoClinicResult

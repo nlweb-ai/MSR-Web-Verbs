@@ -1,0 +1,21 @@
+# Searches archive.org for items matching a query within a collection. For each
+# item, extracts the title, creator, date published, and views.
+
+@dataclass(frozen=True)
+class ArchiveSearchRequest:
+    search_query: str = "history of computing"
+    collection: str = "texts"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ArchiveResult:
+    title: str = ""
+    creator: str = ""
+    date_published: str = ""
+    views: str = ""
+
+@dataclass(frozen=True)
+class ArchiveSearchResult:
+    items: list = None  # list[ArchiveResult]
+
+def archive_search(page: Page, request: ArchiveSearchRequest) -> ArchiveSearchResult:

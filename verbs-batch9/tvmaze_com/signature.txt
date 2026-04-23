@@ -1,0 +1,19 @@
+@dataclass
+class TVMazeRequest:
+    show: str
+    max_results: int
+
+@dataclass
+class TVMazeItem:
+    name: str
+    network: str
+    years: str
+    last_episode: str
+
+@dataclass
+class TVMazeResult:
+    items: List[TVMazeItem]
+
+# Searches TVmaze for shows and extracts name, network,
+# years aired, and last episode from search results.
+def search_tvmaze(page: Page, request: TVMazeRequest) -> TVMazeResult

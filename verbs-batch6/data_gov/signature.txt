@@ -1,0 +1,20 @@
+# Searches Data.gov catalog for government datasets matching a query. For each
+# dataset, extracts the title, publisher, description, and URL.
+
+@dataclass(frozen=True)
+class DatasetRequest:
+    query: str = "air quality"
+    max_results: int = 5
+
+@dataclass
+class Dataset:
+    title: str = ""
+    publisher: str = ""
+    description: str = ""
+    url: str = ""
+
+@dataclass
+class DatasetResult:
+    datasets: list = field(default_factory=list)
+
+def datagov_search(page: Page, request: DatasetRequest) -> DatasetResult:

@@ -1,0 +1,18 @@
+# Searches Stock Analysis for stock information matching a query. For each
+# result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class StockRequest:
+    query: str = "AAPL stock analysis"
+    max_results: int = 5
+
+@dataclass
+class Stock:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class StockResult:
+    items: List[Stock] = field(default_factory=list)
+
+def stockanalysis_search(page: Page, request: StockRequest) -> StockResult:

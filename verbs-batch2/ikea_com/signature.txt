@@ -1,0 +1,20 @@
+# Searches IKEA for products matching a query, then extracts
+# up to max_results products with name, price, and dimensions.
+
+@dataclass(frozen=True)
+class IkeaSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class IkeaProduct:
+    name: str
+    price: str
+    dimensions: str
+
+@dataclass(frozen=True)
+class IkeaSearchResult:
+    query: str
+    products: list[IkeaProduct]
+
+def search_ikea(page: Page, request: IkeaSearchRequest) -> IkeaSearchResult

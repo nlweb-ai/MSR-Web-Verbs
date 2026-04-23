@@ -1,0 +1,24 @@
+# Searches BabyCenter (babycenter.com) for articles on a parenting topic.
+# Navigates to a topic page and extracts article titles, authors, summaries, and URLs.
+
+@dataclass(frozen=True)
+class ArticleSearchRequest:
+    search_topic: str = "baby sleep training"
+    topic_slug: str = "baby/sleep"
+    max_articles: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleSearchResult:
+    articles: list[Article]
+
+def babycenter_search(
+    page: Page,
+    request: ArticleSearchRequest,
+) -> ArticleSearchResult:

@@ -1,0 +1,17 @@
+# Searches BBB.org for a business by name, navigates to its profile,
+# and extracts BBB rating, accreditation status, customer review rating, and complaint count.
+
+@dataclass(frozen=True)
+class BbbSearchRequest:
+    query: str
+
+@dataclass(frozen=True)
+class BbbProfileResult:
+    business_name: str
+    bbb_rating: str
+    accreditation: str
+    customer_review_rating: str
+    review_count: str
+    total_complaints: str
+
+def search_bbb_profile(page: Page, request: BbbSearchRequest) -> BbbProfileResult

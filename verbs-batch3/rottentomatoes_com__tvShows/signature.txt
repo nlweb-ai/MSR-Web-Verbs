@@ -1,0 +1,19 @@
+# Look up a TV show on Rotten Tomatoes by slug and extract
+# Tomatometer score, audience score, number of seasons, and synopsis.
+
+@dataclass(frozen=True)
+class RottenTomatoesTvShowRequest:
+    slug: str
+    show: str
+
+
+@dataclass(frozen=True)
+class RottenTomatoesTvShowResult:
+    show: str
+    tomatometer: str
+    audience_score: str
+    seasons: str
+    synopsis: str
+
+
+def rottentomatoes_tv_show_lookup(page: Page, request: RottenTomatoesTvShowRequest) -> RottenTomatoesTvShowResult:

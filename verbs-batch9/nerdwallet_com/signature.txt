@@ -1,0 +1,18 @@
+@dataclass
+class NerdWalletRequest:
+    max_results: int
+
+@dataclass
+class CardItem:
+    name: str
+    annual_fee: str
+    rating: str
+    best_for: str
+
+@dataclass
+class NerdWalletResult:
+    cards: List[CardItem]
+
+# Browses NerdWallet travel credit cards and extracts card name,
+# annual fee, rating, and best-for description.
+def get_nerdwallet_cards(page: Page, request: NerdWalletRequest) -> NerdWalletResult

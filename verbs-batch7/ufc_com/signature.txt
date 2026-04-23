@@ -1,0 +1,29 @@
+# Looks up a UFC fighter profile on UFC.com by fighter slug.
+# Extracts name, nickname, record, weight class, height, reach, and recent fight history.
+
+@dataclass(frozen=True)
+class FighterRequest:
+    fighter_slug: str = "jon-jones"
+
+@dataclass
+class FightResult:
+    opponent: str = ""
+    date: str = ""
+    result: str = ""
+    method: str = ""
+    round: str = ""
+
+@dataclass
+class FighterProfile:
+    name: str = ""
+    nickname: str = ""
+    record: str = ""
+    weight_class: str = ""
+    height: str = ""
+    reach: str = ""
+    recent_fights: list[FightResult]
+
+def ufc_fighter(
+    page: Page,
+    request: FighterRequest,
+) -> FighterProfile:

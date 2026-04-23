@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class FoodNetworkSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class RecipeItem:
+    name: str
+    chef: str
+    reviews: str
+    total_time: str
+    reviews: str
+
+@dataclass
+class FoodNetworkSearchResult:
+    query: str
+    items: List[RecipeItem]
+
+# Searches FoodNetwork.com for recipes matching the query and returns
+# up to max_results recipes with name, chef, total time, and reviews.
+def search_foodnetwork_recipes(page: Page, request: FoodNetworkSearchRequest) -> FoodNetworkSearchResult:

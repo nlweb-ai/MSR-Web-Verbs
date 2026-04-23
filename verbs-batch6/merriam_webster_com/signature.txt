@@ -1,0 +1,17 @@
+# Looks up a word on Merriam-Webster. Extracts the word, pronunciation,
+# part of speech, definition, example, and first known use.
+
+@dataclass(frozen=True)
+class WordRequest:
+    word: str = "serendipity"
+
+@dataclass
+class WordResult:
+    word: str = ""
+    pronunciation: str = ""
+    part_of_speech: str = ""
+    definition: str = ""
+    example: str = ""
+    first_known_use: str = ""
+
+def mw_lookup(page: Page, request: WordRequest) -> WordResult:

@@ -1,0 +1,25 @@
+# Searches PlugShare (plugshare.com) directory for EV charging stations by city and state.
+# Extracts total station count, and for each station: name, address, checkins, and URL.
+
+@dataclass(frozen=True)
+class Request:
+    City: str = "San Francisco"
+    State: str = "California"
+    num_results: int = 5
+
+@dataclass
+class Station:
+    name: str = ""
+    address: str = ""
+    checkins: str = ""
+    url: str = ""
+
+@dataclass
+class Result:
+    total_stations: str = ""
+    stations: list[Station]
+
+def station_search(
+    page: Page,
+    request: Request,
+) -> Result:

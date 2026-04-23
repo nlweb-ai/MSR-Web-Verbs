@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class DogtimeSearchRequest:
+    search_query: str = "golden retriever"
+    max_results: int = 5
+
+
+@dataclass
+class DogtimeBreedItem:
+    breed_name: str = ""
+    size: str = ""
+    energy_level: str = ""
+    grooming_needs: str = ""
+    good_with_kids: str = ""
+    description: str = ""
+
+
+@dataclass
+class DogtimeSearchResult:
+    items: List[DogtimeBreedItem] = field(default_factory=list)
+
+
+# Search for dog breed information on DogTime.
+def dogtime_search(page: Page, request: DogtimeSearchRequest) -> DogtimeSearchResult:

@@ -1,0 +1,21 @@
+# Searches Epicurious for recipes matching a query. For each recipe, extracts
+# the name, rating, number of reviews, prep time, and cook time.
+
+@dataclass(frozen=True)
+class RecipeRequest:
+    query: str = "chicken tikka masala"
+    max_results: int = 5
+
+@dataclass
+class Recipe:
+    name: str = ""
+    rating: str = ""
+    reviews: str = ""
+    prep_time: str = ""
+    cook_time: str = ""
+
+@dataclass
+class RecipeResult:
+    recipes: list = field(default_factory=list)
+
+def epicurious_search(page: Page, request: RecipeRequest) -> RecipeResult:

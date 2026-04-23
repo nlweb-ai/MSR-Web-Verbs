@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class OpenlibrarySearchRequest:
+    search_query: str = "machine learning"
+    max_results: int = 5
+
+@dataclass
+class OpenlibrarySearchItem:
+    title: str = ""
+    author: str = ""
+    first_publish_year: str = ""
+    publisher: str = ""
+    num_editions: int = 0
+    isbn: str = ""
+    subjects: str = ""
+
+@dataclass
+class OpenlibrarySearchResult:
+    items: List[OpenlibrarySearchItem] = field(default_factory=list)
+
+def openlibrary_search(request: OpenlibrarySearchRequest) -> OpenlibrarySearchResult:
+    ...

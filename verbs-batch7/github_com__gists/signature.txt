@@ -1,0 +1,25 @@
+# Searches GitHub Gists (gist.github.com) for code snippets by keyword.
+# Extracts author, description, stars, forks, URL, and creation date for each gist.
+
+@dataclass(frozen=True)
+class GistSearchRequest:
+    search_query: str = "python web scraper"
+    max_results: int = 5
+
+@dataclass
+class Gist:
+    author: str = ""
+    description: str = ""
+    stars: str = "0"
+    forks: str = "0"
+    url: str = ""
+    created: str = ""
+
+@dataclass
+class GistSearchResult:
+    gists: list[Gist]
+
+def gist_search(
+    page: Page,
+    request: GistSearchRequest,
+) -> GistSearchResult:

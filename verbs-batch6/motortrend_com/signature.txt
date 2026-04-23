@@ -1,0 +1,19 @@
+# Searches MotorTrend for car comparison articles matching a query. For each
+# article, extracts the title, vehicles mentioned, and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "SUV comparison 2024"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    vehicles: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def motortrend_search(page: Page, request: ArticleRequest) -> ArticleResult:

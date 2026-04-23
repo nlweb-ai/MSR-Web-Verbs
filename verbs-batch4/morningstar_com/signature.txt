@@ -1,0 +1,16 @@
+# morningstar_fund — Look up a mutual fund on Morningstar and extract details.
+
+@dataclass(frozen=True)
+class MorningstarFundRequest:
+    ticker: str = "VFIAX"
+
+@dataclass(frozen=True)
+class MorningstarFundResult:
+    fund_name: str = ""
+    ticker: str = ""
+    nav_price: str = ""
+    morningstar_rating: str = ""
+    expense_ratio: str = ""
+    ytd_return: str = ""
+
+def morningstar_fund(page: Page, request: MorningstarFundRequest) -> MorningstarFundResult:

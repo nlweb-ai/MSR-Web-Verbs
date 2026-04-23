@@ -1,0 +1,15 @@
+# Looks up a YouTube channel and extracts subscriber count,
+# video count, and channel description.
+
+@dataclass(frozen=True)
+class YoutubeChannelRequest:
+    channel: str
+
+@dataclass(frozen=True)
+class YoutubeChannelResult:
+    channel: str
+    subscribers: str
+    video_count: str
+    description: str
+
+def lookup_youtube_channel(page: Page, request: YoutubeChannelRequest) -> YoutubeChannelResult

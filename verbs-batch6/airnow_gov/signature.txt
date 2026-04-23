@@ -1,0 +1,16 @@
+# Looks up the Air Quality Index (AQI) on AirNow.gov for a given zip code.
+# Extracts the location, AQI value, category, primary pollutant, and health recommendation.
+
+@dataclass(frozen=True)
+class AQIRequest:
+    zip_code: str = "90210"
+
+@dataclass
+class AQIResult:
+    location: str = ""
+    aqi_value: str = ""
+    aqi_category: str = ""
+    primary_pollutant: str = ""
+    health_recommendation: str = ""
+
+def airnow_aqi(page: Page, request: AQIRequest) -> AQIResult:

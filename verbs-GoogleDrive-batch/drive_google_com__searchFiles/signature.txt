@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class GoogleDriveSearchFilesRequest:
+    query: str
+    max_results: int = 10
+
+
+@dataclass(frozen=True)
+class SearchFileEntry:
+    name: str
+    url: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveSearchFilesResult:
+    success: bool
+    files: List[SearchFileEntry]
+    error: str
+
+
+# Searches for files in Google Drive.
+def google_drive_search_files(
+    page: Page,
+    request: GoogleDriveSearchFilesRequest,
+) -> GoogleDriveSearchFilesResult:

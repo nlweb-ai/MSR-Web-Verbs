@@ -1,0 +1,23 @@
+# Navigate to the NBA standings page and extract the top N teams
+# for the specified conference with team name, wins, losses,
+# win percentage, and games behind.
+
+@dataclass(frozen=True)
+class NbaStandingsRequest:
+    conference: str = "Eastern"
+    max_teams: int = 5
+
+@dataclass(frozen=True)
+class TeamStanding:
+    rank: int
+    name: str
+    wins: int
+    losses: int
+    pct: str
+    gb: str
+
+@dataclass(frozen=True)
+class NbaStandingsResult:
+    teams: list  # list[TeamStanding]
+
+def nba_standings(page: Page, request: NbaStandingsRequest) -> NbaStandingsResult:

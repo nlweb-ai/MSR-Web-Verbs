@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class KhanAcademyRequest:
+    domain: str
+    max_results: int
+
+@dataclass
+class CourseItem:
+    title: str
+    url: str
+
+@dataclass
+class KhanAcademyResult:
+    domain: str
+    items: List[CourseItem]
+
+# Browses Khan Academy courses in the specified domain and returns
+# up to max_results courses with title and url.
+def browse_khanacademy_courses(page: Page, request: KhanAcademyRequest) -> KhanAcademyResult:

@@ -1,0 +1,25 @@
+# Extracts live and recent cricket match scores from Cricbuzz (cricbuzz.com).
+# For each match, retrieves team names, scores, match status, venue, and match info.
+
+@dataclass(frozen=True)
+class MatchScoresRequest:
+    max_matches: int = 3
+
+@dataclass
+class Match:
+    team1: str = ""
+    team1_score: str = ""
+    team2: str = ""
+    team2_score: str = ""
+    status: str = ""
+    venue: str = ""
+    match_info: str = ""
+
+@dataclass
+class MatchScoresResult:
+    matches: list[Match]
+
+def cricbuzz_scores(
+    page: Page,
+    request: MatchScoresRequest,
+) -> MatchScoresResult:

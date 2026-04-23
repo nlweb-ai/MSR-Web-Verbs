@@ -1,0 +1,23 @@
+# Searches Avvo for lawyers matching the given specialty and location,
+# then returns up to max_results lawyers with name, rating, years of experience, and reviews.
+
+@dataclass(frozen=True)
+class AvvoSearchRequest:
+    specialty: str
+    location: str
+    max_results: int
+
+@dataclass(frozen=True)
+class AvvoLawyer:
+    name: str
+    rating: str
+    years_experience: str
+    num_reviews: str
+
+@dataclass(frozen=True)
+class AvvoSearchResult:
+    specialty: str
+    location: str
+    lawyers: list[AvvoLawyer]
+
+def search_avvo_lawyers(page: Page, request: AvvoSearchRequest) -> AvvoSearchResult

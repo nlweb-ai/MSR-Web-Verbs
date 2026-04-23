@@ -1,0 +1,20 @@
+# Searches H&M for clothing items matching a query. For each product, extracts
+# the name, price, color options, and product URL.
+
+@dataclass(frozen=True)
+class HMSearchRequest:
+    search_query: str = "winter jacket"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class HMProduct:
+    product_name: str = ""
+    price: str = ""
+    color_options: str = ""
+    product_url: str = ""
+
+@dataclass(frozen=True)
+class HMSearchResult:
+    products: list = None  # list[HMProduct]
+
+def hm_search(page: Page, request: HMSearchRequest) -> HMSearchResult:

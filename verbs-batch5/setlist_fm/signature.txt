@@ -1,0 +1,17 @@
+# Searches setlist.fm for an artist's most recent setlist. Extracts the venue,
+# city, date, tour, and list of songs.
+
+@dataclass(frozen=True)
+class SetlistRequest:
+    artist: str = "Taylor Swift"
+    max_songs: int = 10
+
+@dataclass(frozen=True)
+class SetlistResult:
+    venue: str = ""
+    city: str = ""
+    date: str = ""
+    tour: str = ""
+    songs: list = None  # list[str]
+
+def setlist_search(page: Page, request: SetlistRequest) -> SetlistResult:

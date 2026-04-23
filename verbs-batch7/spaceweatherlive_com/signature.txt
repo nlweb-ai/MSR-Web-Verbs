@@ -1,0 +1,17 @@
+# Extracts current space weather conditions from SpaceWeatherLive (spaceweatherlive.com).
+# Retrieves solar wind speed, Kp index, Bz value, density, Bt value, last X-flare, last geomagnetic storm, and sunspot number.
+
+@dataclass
+class SpaceWeatherResult:
+    solar_wind_speed: str = ""
+    kp_index: str = ""
+    bz_value: str = ""
+    density: str = ""
+    bt_value: str = ""
+    last_x_flare: str = ""
+    last_geomagnetic_storm: str = ""
+    sunspot_number: str = ""
+
+def spaceweather_conditions(
+    page: Page,
+) -> SpaceWeatherResult:

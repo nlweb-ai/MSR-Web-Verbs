@@ -1,0 +1,20 @@
+# Extracts trending papers from Papers With Code. For each paper, extracts
+# the title, authors, publication date, upvotes, and GitHub stars.
+
+@dataclass(frozen=True)
+class TrendingPapersRequest:
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class TrendingPaper:
+    title: str = ""
+    authors: str = ""
+    publication_date: str = ""
+    upvotes: str = ""
+    github_stars: str = ""
+
+@dataclass(frozen=True)
+class TrendingPapersResult:
+    papers: list = None  # list[TrendingPaper]
+
+def trending_papers(page: Page, request: TrendingPapersRequest) -> TrendingPapersResult:

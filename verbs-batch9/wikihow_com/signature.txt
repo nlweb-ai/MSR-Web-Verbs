@@ -1,0 +1,18 @@
+@dataclass
+class WikiHowRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    views: str
+    updated: str
+
+@dataclass
+class WikiHowResult:
+    articles: List[ArticleItem]
+
+# Searches wikiHow and extracts article title, views, and
+# last updated date from search results.
+def search_wikihow(page: Page, request: WikiHowRequest) -> WikiHowResult

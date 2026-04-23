@@ -1,0 +1,24 @@
+# Searches GovTrack (govtrack.us) for congressional bills by keyword.
+# Extracts bill number, title, sponsor, status, and introduction date.
+
+@dataclass(frozen=True)
+class BillSearchRequest:
+    search_query: str = "climate change"
+    max_results: int = 5
+
+@dataclass
+class Bill:
+    bill_number: str = ""
+    title: str = ""
+    sponsor: str = ""
+    status: str = ""
+    introduced_date: str = ""
+
+@dataclass
+class BillSearchResult:
+    bills: list[Bill]
+
+def bill_search(
+    page: Page,
+    request: BillSearchRequest,
+) -> BillSearchResult:

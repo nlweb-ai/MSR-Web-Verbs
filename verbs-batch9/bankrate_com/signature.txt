@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class BankrateSavingsRequest:
+    max_results: int = 5
+
+
+@dataclass
+class SavingsAccountItem:
+    bank_name: str = ""
+    apy: str = ""
+    min_deposit: str = ""
+    monthly_fee: str = ""
+
+
+@dataclass
+class BankrateSavingsResult:
+    items: List[SavingsAccountItem] = field(default_factory=list)
+
+
+# Look up high-yield savings account rates on Bankrate.
+def get_bankrate_savings(page: Page, request: BankrateSavingsRequest) -> BankrateSavingsResult:

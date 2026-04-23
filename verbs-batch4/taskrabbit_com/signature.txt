@@ -1,0 +1,21 @@
+# Search TaskRabbit for taskers offering a service in a given location
+# and extract name, tasks completed, rating, and hourly rate.
+
+@dataclass(frozen=True)
+class TaskRabbitSearchRequest:
+    service_type: str = "furniture assembly"
+    location: str = "San Francisco, CA"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class TaskRabbitTasker:
+    name: str = ""
+    tasks_completed: str = ""
+    rating: str = ""
+    hourly_rate: str = ""
+
+@dataclass(frozen=True)
+class TaskRabbitSearchResult:
+    taskers: list = None  # list[TaskRabbitTasker]
+
+def taskrabbit_search(page: Page, request: TaskRabbitSearchRequest) -> TaskRabbitSearchResult:

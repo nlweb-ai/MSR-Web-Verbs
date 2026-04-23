@@ -1,0 +1,22 @@
+# Searches IMDb for a TV show and extracts show rating, number of seasons,
+# and up to max_episodes top episodes with title, episode number, and rating.
+
+@dataclass(frozen=True)
+class ImdbTvShowRequest:
+    show_name: str
+    max_episodes: int
+
+@dataclass(frozen=True)
+class ImdbEpisode:
+    title: str
+    episode: str
+    rating: str
+
+@dataclass(frozen=True)
+class ImdbTvShowResult:
+    show_name: str
+    show_rating: str
+    num_seasons: str
+    top_episodes: list[ImdbEpisode]
+
+def search_imdb_tvshow(page: Page, request: ImdbTvShowRequest) -> ImdbTvShowResult

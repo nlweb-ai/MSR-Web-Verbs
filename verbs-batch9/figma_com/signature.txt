@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class FigmaCommunitySearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class FigmaFileItem:
+    name: str
+    creator: str
+    likes: str
+    duplicates: str
+
+@dataclass
+class FigmaCommunitySearchResult:
+    query: str
+    items: List[FigmaFileItem]
+
+# Searches Figma Community for design files matching the query and returns
+# up to max_results files with name, creator, likes, and duplicates count.
+def search_figma_community(page: Page, request: FigmaCommunitySearchRequest) -> FigmaCommunitySearchResult:

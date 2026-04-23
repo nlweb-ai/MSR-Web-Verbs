@@ -1,0 +1,20 @@
+# Searches Musixmatch for songs matching a query. For each song, extracts
+# the title, artist, album, and URL.
+
+@dataclass(frozen=True)
+class SongRequest:
+    query: str = "Bohemian Rhapsody"
+    max_results: int = 5
+
+@dataclass
+class Song:
+    title: str = ""
+    artist: str = ""
+    album: str = ""
+    url: str = ""
+
+@dataclass
+class SongResult:
+    songs: List[Song] = field(default_factory=list)
+
+def musixmatch_search(page: Page, request: SongRequest) -> SongResult:

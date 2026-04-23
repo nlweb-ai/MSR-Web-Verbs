@@ -1,0 +1,14 @@
+# howlongtobeat_search — Search for a game on HowLongToBeat and extract completion times.
+
+@dataclass(frozen=True)
+class HowLongToBeatRequest:
+    query: str = "Elden Ring"
+
+@dataclass(frozen=True)
+class HowLongToBeatResult:
+    game_title: str = ""
+    main_story_time: str = ""
+    main_extras_time: str = ""
+    completionist_time: str = ""
+
+def howlongtobeat_search(page: Page, request: HowLongToBeatRequest) -> HowLongToBeatResult

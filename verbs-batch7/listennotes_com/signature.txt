@@ -1,0 +1,24 @@
+# Searches Listen Notes (listennotes.com) for podcasts by keyword.
+# Extracts podcast name, publisher, description, total episodes, and latest episode date.
+
+@dataclass(frozen=True)
+class PodcastSearchRequest:
+    query: str = "machine learning"
+    max_results: int = 5
+
+@dataclass
+class Podcast:
+    name: str = ""
+    publisher: str = ""
+    description: str = ""
+    total_episodes: str = ""
+    latest_episode_date: str = ""
+
+@dataclass
+class PodcastSearchResult:
+    podcasts: list[Podcast]
+
+def podcast_search(
+    page: Page,
+    request: PodcastSearchRequest,
+) -> PodcastSearchResult:

@@ -1,0 +1,21 @@
+# Searches Kaggle for datasets matching a query. For each dataset, extracts
+# the title, author, file size, downloads, and usability rating.
+
+@dataclass(frozen=True)
+class KaggleRequest:
+    search_query: str = "climate change"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class KaggleDataset:
+    title: str = ""
+    author: str = ""
+    file_size: str = ""
+    downloads: str = ""
+    usability_rating: str = ""
+
+@dataclass(frozen=True)
+class KaggleResult:
+    datasets: list = None  # list[KaggleDataset]
+
+def kaggle_search(page: Page, request: KaggleRequest) -> KaggleResult:

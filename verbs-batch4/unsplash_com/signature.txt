@@ -1,0 +1,19 @@
+## unsplash_search
+Search Unsplash for photos and extract listings.
+
+@dataclass
+class UnsplashSearchRequest:
+    search_term: str    # e.g. "mountain landscape"
+    max_results: int    # number of photos to extract
+
+@dataclass
+class UnsplashPhoto:
+    photographer_name: str  # name of the photographer
+    description: str        # alt text or description of the photo
+    num_likes: str          # number of likes (as string, or "N/A")
+
+@dataclass
+class UnsplashSearchResult:
+    photos: list  # list of UnsplashPhoto
+
+def unsplash_search(page: Page, request: UnsplashSearchRequest) -> UnsplashSearchResult

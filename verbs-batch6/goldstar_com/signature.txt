@@ -1,0 +1,21 @@
+# Searches Goldstar for discount events in a given location. For each event,
+# extracts the name, venue, date, original price, and discount price.
+
+@dataclass(frozen=True)
+class EventRequest:
+    location: str = "New York"
+    max_results: int = 5
+
+@dataclass
+class Event:
+    name: str = ""
+    venue: str = ""
+    date: str = ""
+    original_price: str = ""
+    discount_price: str = ""
+
+@dataclass
+class EventResult:
+    events: list = field(default_factory=list)
+
+def goldstar_search(page: Page, request: EventRequest) -> EventResult:

@@ -1,0 +1,21 @@
+# Searches dev.to for articles matching a query. For each article, extracts
+# the title, author, publication date, reactions, and comments.
+
+@dataclass(frozen=True)
+class DevToSearchRequest:
+    search_query: str = "React hooks"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class DevToArticle:
+    title: str = ""
+    author: str = ""
+    publication_date: str = ""
+    reactions: str = ""
+    comments: str = ""
+
+@dataclass(frozen=True)
+class DevToSearchResult:
+    articles: list = None  # list[DevToArticle]
+
+def devto_search(page: Page, request: DevToSearchRequest) -> DevToSearchResult:

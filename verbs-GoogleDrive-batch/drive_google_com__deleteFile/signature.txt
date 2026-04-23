@@ -1,0 +1,16 @@
+@dataclass(frozen=True)
+class GoogleDriveDeleteFileRequest:
+    file_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveDeleteFileResult:
+    success: bool
+    error: str
+
+
+# Moves a file to trash in Google Drive.
+def google_drive_delete_file(
+    page: Page,
+    request: GoogleDriveDeleteFileRequest,
+) -> GoogleDriveDeleteFileResult:

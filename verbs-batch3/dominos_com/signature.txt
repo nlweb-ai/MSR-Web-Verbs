@@ -1,0 +1,22 @@
+# Navigates to the Domino's specialty pizza menu page, extracts pizza names/descriptions,
+# and fetches prices from the Domino's API for the nearest store to the given location.
+
+@dataclass(frozen=True)
+class DominosMenuRequest:
+    location: str
+    max_results: int
+
+@dataclass(frozen=True)
+class DominosPizza:
+    name: str
+    description: str
+    sizes: tuple[str, ...]
+    starting_price: str
+
+@dataclass(frozen=True)
+class DominosMenuResult:
+    location: str
+    store_id: str
+    pizzas: list[DominosPizza]
+
+def get_dominos_menu(page: Page, request: DominosMenuRequest) -> DominosMenuResult

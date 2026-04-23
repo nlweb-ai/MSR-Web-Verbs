@@ -1,0 +1,17 @@
+# Gets cryptocurrency information from CoinGecko for a given coin. Extracts the
+# name, price, 24h change, 24h volume, market cap, and all-time high.
+
+@dataclass(frozen=True)
+class CoinRequest:
+    coin: str = "ethereum"
+
+@dataclass
+class CoinResult:
+    name: str = ""
+    price: str = ""
+    change_24h: str = ""
+    volume_24h: str = ""
+    market_cap: str = ""
+    all_time_high: str = ""
+
+def coingecko_search(page: Page, request: CoinRequest) -> CoinResult:

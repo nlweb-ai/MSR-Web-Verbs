@@ -1,0 +1,20 @@
+# Extracts the top rated movies from the IMDb Top 250 list. For each movie,
+# extracts the rank, title, year, rating, and number of votes.
+
+@dataclass(frozen=True)
+class MovieRequest:
+    max_results: int = 10
+
+@dataclass
+class Movie:
+    rank: str = ""
+    title: str = ""
+    year: str = ""
+    rating: str = ""
+    votes: str = ""
+
+@dataclass
+class MovieResult:
+    movies: List[Movie] = field(default_factory=list)
+
+def imdb_top_rated(page: Page, request: MovieRequest) -> MovieResult:

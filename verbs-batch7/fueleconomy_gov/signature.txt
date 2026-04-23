@@ -1,0 +1,25 @@
+# Looks up vehicle fuel economy data from FuelEconomy.gov by year, make, and model.
+# Extracts trim, fuel type, city/highway/combined MPG for each vehicle trim.
+
+@dataclass(frozen=True)
+class FuelEconomyRequest:
+    year: int = 2025
+    make: str = "Toyota"
+    model: str = "Camry"
+
+@dataclass
+class VehicleTrim:
+    trim: str = ""
+    fuel_type: str = ""
+    city_mpg: int = 0
+    highway_mpg: int = 0
+    combined_mpg: int = 0
+
+@dataclass
+class FuelEconomyResult:
+    trims: list[VehicleTrim]
+
+def fueleconomy_lookup(
+    page: Page,
+    request: FuelEconomyRequest,
+) -> FuelEconomyResult:

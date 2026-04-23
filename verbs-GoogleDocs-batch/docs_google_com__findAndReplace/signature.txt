@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class GoogleDocsFindAndReplaceRequest:
+    document_url: str
+    find_text: str
+    replace_text: str
+
+
+@dataclass(frozen=True)
+class GoogleDocsFindAndReplaceResult:
+    success: bool
+    replacements_count: int
+    error: str
+
+
+# Opens a Google Doc and performs Find and Replace.
+def google_docs_find_and_replace(
+    page: Page,
+    request: GoogleDocsFindAndReplaceRequest,
+) -> GoogleDocsFindAndReplaceResult:

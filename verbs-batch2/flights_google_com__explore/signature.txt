@@ -1,0 +1,23 @@
+# Navigates to Google Flights Explore, sets a departure city, and extracts
+# up to max_results cheap destinations with city name and round-trip price.
+
+@dataclass(frozen=True)
+class FlightsExploreRequest:
+    departure_city: str
+    depart_date: date
+    return_date: date
+    max_results: int
+
+@dataclass(frozen=True)
+class FlightDestination:
+    city: str
+    price: str
+
+@dataclass(frozen=True)
+class FlightsExploreResult:
+    departure_city: str
+    depart_date: date
+    return_date: date
+    destinations: list[FlightDestination]
+
+def explore_flights(page: Page, request: FlightsExploreRequest) -> FlightsExploreResult

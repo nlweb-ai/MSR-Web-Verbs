@@ -1,0 +1,19 @@
+# Navigates to Yahoo Finance for a given stock symbol, waits for the page to load,
+# and extracts the current price, day change, volume, and market cap.
+
+@dataclass(frozen=True)
+class YahooFinanceQuoteRequest:
+    symbol: str
+
+@dataclass(frozen=True)
+class YahooFinanceQuoteResult:
+    name: str
+    price: str
+    change: str
+    volume: str
+    market_cap: str
+
+def yahoo_finance_quote(
+    page: Page,
+    request: YahooFinanceQuoteRequest,
+) -> YahooFinanceQuoteResult:

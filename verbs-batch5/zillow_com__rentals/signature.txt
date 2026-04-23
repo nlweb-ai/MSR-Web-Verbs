@@ -1,0 +1,22 @@
+# Searches Zillow for rental properties in a location with a max rent filter.
+# For each listing, extracts the address, monthly rent, bedrooms, and URL.
+
+@dataclass(frozen=True)
+class ZillowRequest:
+    location: str = "Austin, TX"
+    location_slug: str = "austin-tx"
+    max_rent: int = 2000
+    max_listings: int = 5
+
+@dataclass
+class RentalListing:
+    address: str = ""
+    monthly_rent: str = ""
+    bedrooms: str = ""
+    listing_url: str = ""
+
+@dataclass
+class ZillowResult:
+    listings: list = field(default_factory=list)
+
+def zillow_rentals(page: Page, request: ZillowRequest) -> ZillowResult:

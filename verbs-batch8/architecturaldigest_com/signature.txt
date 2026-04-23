@@ -1,0 +1,21 @@
+# Searches Architectural Digest for home tour articles matching a query.
+# For each article, extracts the title, author, publish date, location, and summary.
+
+@dataclass(frozen=True)
+class ArchitecturalDigestRequest:
+    search_query: str = "home tour"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    location: str = ""
+    summary: str = ""
+
+@dataclass
+class ArchitecturalDigestResult:
+    articles: list = field(default_factory=list)
+
+def architecturaldigest_search(page: Page, request: ArchitecturalDigestRequest) -> ArchitecturalDigestResult:

@@ -1,0 +1,18 @@
+## wikipedia_category
+Navigate to a Wikipedia category page and extract subcategories/pages.
+
+@dataclass
+class WikipediaCategoryRequest:
+    category: str       # e.g. "Category:Programming languages"
+    max_results: int    # number of items to extract
+
+@dataclass
+class WikipediaCategoryItem:
+    title: str  # subcategory or page name
+    type: str   # "subcategory" or "page"
+
+@dataclass
+class WikipediaCategoryResult:
+    items: list  # list of WikipediaCategoryItem
+
+def wikipedia_category(page: Page, request: WikipediaCategoryRequest) -> WikipediaCategoryResult

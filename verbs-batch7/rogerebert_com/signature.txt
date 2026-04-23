@@ -1,0 +1,19 @@
+# Extracts a movie review from RogerEbert.com by review slug.
+# Retrieves title, star rating, review date, author, and opening paragraph.
+
+@dataclass(frozen=True)
+class Request:
+    movie_slug: str = "parasite-movie-review-2019"
+
+@dataclass
+class Result:
+    title: str = ""
+    star_rating: str = ""
+    review_date: str = ""
+    author: str = ""
+    opening_paragraph: str = ""
+
+def movie_review(
+    page: Page,
+    request: Request,
+) -> Result:

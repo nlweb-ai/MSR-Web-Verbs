@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class AnthropologieSearchRequest:
+    query: str = "throw pillows"
+    max_results: int = 5
+
+
+@dataclass
+class ProductItem:
+    product_name: str
+    price: str
+
+
+@dataclass
+class AnthropologieSearchResult:
+    query: str = ""
+    items: List[ProductItem] = field(default_factory=list)
+
+
+# Search Anthropologie for products.
+def search_anthropologie(page: Page, request: AnthropologieSearchRequest) -> AnthropologieSearchResult:

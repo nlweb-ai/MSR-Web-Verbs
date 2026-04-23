@@ -1,0 +1,20 @@
+# Search TechCrunch for articles matching a search term
+# and extract headline, author, publication date, and summary.
+
+@dataclass(frozen=True)
+class TechCrunchSearchRequest:
+    search_term: str = "artificial intelligence startup"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class TechCrunchArticle:
+    headline: str = ""
+    author: str = ""
+    publication_date: str = ""
+    summary: str = ""
+
+@dataclass(frozen=True)
+class TechCrunchSearchResult:
+    articles: list = None  # list[TechCrunchArticle]
+
+def techcrunch_search(page: Page, request: TechCrunchSearchRequest) -> TechCrunchSearchResult:

@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class BookingAttractionsRequest:
+    location: str = "Paris, France"
+    max_results: int = 5
+
+
+@dataclass
+class AttractionItem:
+    name: str = ""
+    price: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+    duration: str = ""
+
+
+@dataclass
+class BookingAttractionsResult:
+    location: str = ""
+    items: List[AttractionItem] = field(default_factory=list)
+
+
+# Search Booking.com for attractions.
+def search_booking_attractions(page: Page, request: BookingAttractionsRequest) -> BookingAttractionsResult:

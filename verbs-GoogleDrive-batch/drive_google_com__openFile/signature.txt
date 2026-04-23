@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDriveOpenFileRequest:
+    query: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveOpenFileResult:
+    success: bool
+    file_name: str
+    file_url: str
+    error: str
+
+
+# Searches for a file in Google Drive and opens the first match.
+def google_drive_open_file(
+    page: Page,
+    request: GoogleDriveOpenFileRequest,
+) -> GoogleDriveOpenFileResult:

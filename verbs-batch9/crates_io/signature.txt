@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class CratesSearchRequest:
+    query: str = "async runtime"
+    max_results: int = 5
+
+
+@dataclass
+class CrateItem:
+    name: str = ""
+    version: str = ""
+    downloads: str = ""
+    description: str = ""
+    last_updated: str = ""
+
+
+@dataclass
+class CratesSearchResult:
+    query: str = ""
+    items: List[CrateItem] = field(default_factory=list)
+
+
+# Search crates.io for Rust crates.
+def search_crates(page: Page, request: CratesSearchRequest) -> CratesSearchResult:

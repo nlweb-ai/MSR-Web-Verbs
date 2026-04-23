@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class GAOSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ReportItem:
+    title: str
+    report_number: str
+    publish_date: str
+    summary: str
+
+@dataclass
+class GAOSearchResult:
+    query: str
+    items: List[ReportItem]
+
+# Searches GAO.gov for government reports matching the query and returns
+# up to max_results reports with title, report number, publish date, and summary.
+def search_gao_reports(page: Page, request: GAOSearchRequest) -> GAOSearchResult:

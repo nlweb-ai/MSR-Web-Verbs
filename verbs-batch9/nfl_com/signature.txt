@@ -1,0 +1,21 @@
+@dataclass
+class NFLRequest:
+    conference: str
+
+@dataclass
+class TeamStanding:
+    team: str
+    wins: str
+    losses: str
+    ties: str
+    win_pct: str
+    points_for: str
+    points_against: str
+
+@dataclass
+class NFLResult:
+    teams: List[TeamStanding]
+
+# Browses NFL standings and extracts team name, wins,
+# losses, ties, win percentage, and points for/against.
+def get_nfl_standings(page: Page, request: NFLRequest) -> NFLResult

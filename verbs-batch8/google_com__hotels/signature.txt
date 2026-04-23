@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class GoogleHotelsSearchRequest:
+    destination: str = "San Francisco"
+    max_results: int = 5
+
+
+@dataclass
+class GoogleHotelItem:
+    hotel_name: str = ""
+    price_per_night: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+    amenities: str = ""
+    distance_from_center: str = ""
+
+
+@dataclass
+class GoogleHotelsSearchResult:
+    items: List[GoogleHotelItem] = field(default_factory=list)
+
+
+# Search for hotel listings on Google Hotels.
+def google_hotels_search(page: Page, request: GoogleHotelsSearchRequest) -> GoogleHotelsSearchResult:

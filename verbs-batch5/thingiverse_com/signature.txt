@@ -1,0 +1,20 @@
+# Searches Thingiverse for 3D models matching a query. For each model, extracts
+# the name, creator, likes, and URL.
+
+@dataclass(frozen=True)
+class ThingiverseRequest:
+    query: str = "phone stand"
+    max_models: int = 5
+
+@dataclass
+class ThingiverseModel:
+    name: str = ""
+    creator: str = ""
+    likes: str = ""
+    url: str = ""
+
+@dataclass
+class ThingiverseResult:
+    models: list = field(default_factory=list)
+
+def thingiverse_search(page: Page, request: ThingiverseRequest) -> ThingiverseResult:

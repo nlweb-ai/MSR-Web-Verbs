@@ -1,0 +1,19 @@
+# Searches PCPartPicker for PC parts matching a query. For each part, extracts
+# the name, price, and URL.
+
+@dataclass(frozen=True)
+class PartRequest:
+    query: str = "RTX 4070 graphics card"
+    max_results: int = 5
+
+@dataclass
+class Part:
+    name: str = ""
+    price: str = ""
+    url: str = ""
+
+@dataclass
+class PartResult:
+    parts: List[Part] = field(default_factory=list)
+
+def pcpartpicker_search(page: Page, request: PartRequest) -> PartResult:

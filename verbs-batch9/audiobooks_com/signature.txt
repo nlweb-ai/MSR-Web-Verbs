@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class AudiobooksSearchRequest:
+    genre: str = "mystery"
+    max_results: int = 5
+
+
+@dataclass
+class AudiobookItem:
+    title: str
+    author: str
+    duration: str
+    price: str
+
+
+@dataclass
+class AudiobooksSearchResult:
+    genre: str = ""
+    items: List[AudiobookItem] = field(default_factory=list)
+
+
+# Browse audiobooks by genre.
+def search_audiobooks(page: Page, request: AudiobooksSearchRequest) -> AudiobooksSearchResult:

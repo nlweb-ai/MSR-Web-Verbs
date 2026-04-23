@@ -1,0 +1,20 @@
+# Lists Target weekly deals from the Circle deals page, extracting
+# up to max_results deals with name, original price, and sale price.
+
+@dataclass(frozen=True)
+class TargetDealsRequest:
+    section: str
+    max_results: int
+
+@dataclass(frozen=True)
+class TargetDeal:
+    name: str
+    original_price: str
+    sale_price: str
+
+@dataclass(frozen=True)
+class TargetDealsResult:
+    section: str
+    deals: list[TargetDeal]
+
+def list_target_deals(page: Page, request: TargetDealsRequest) -> TargetDealsResult

@@ -1,0 +1,22 @@
+# Searches Songsterr (songsterr.com) for guitar tabs by song/artist.
+# Extracts song title, artist, and tab variant for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "Stairway to Heaven Led Zeppelin"
+    max_results: int = 5
+
+@dataclass
+class TabResult:
+    song_title: str = ""
+    artist: str = ""
+    variant: str = ""
+
+@dataclass
+class SearchResult:
+    tabs: list[TabResult]
+
+def songsterr_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

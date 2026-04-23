@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class HunkerSearchRequest:
+    search_query: str = "kitchen remodel"
+    max_results: int = 5
+
+
+@dataclass
+class HunkerArticleItem:
+    title: str = ""
+    author: str = ""
+    category: str = ""
+    summary: str = ""
+    image_url: str = ""
+
+
+@dataclass
+class HunkerSearchResult:
+    items: List[HunkerArticleItem] = field(default_factory=list)
+
+
+# Search for home improvement articles on Hunker.
+def hunker_search(page: Page, request: HunkerSearchRequest) -> HunkerSearchResult:

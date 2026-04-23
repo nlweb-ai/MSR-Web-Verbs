@@ -1,0 +1,14 @@
+tvtropes_search(search_query: str = "plot twist", max_results: int = 5) -> list[dict]
+
+Search for tropes on TV Tropes.
+
+Parameters:
+  search_query (str): The search query to look up on TV Tropes. Default: "plot twist"
+  max_results (int): Maximum number of results to return. Default: 5
+
+Returns:
+  list[dict]: A list of dictionaries, each containing:
+    - trope_name (str): The name of the trope
+    - category (str): The trope category
+    - description (str): A description of the trope
+    - url (str): The URL of the trope page

@@ -1,0 +1,12 @@
+@dataclass(frozen=True)
+class TeamsMessageRequest:
+    recipient: str
+    message: str
+
+@dataclass(frozen=True)
+class TeamsMessageResult:
+    recipient: str
+    message: str
+    success: bool
+
+def send_teams_message(page: Page, request: TeamsMessageRequest) -> TeamsMessageResult

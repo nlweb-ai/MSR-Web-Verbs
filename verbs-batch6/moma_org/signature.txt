@@ -1,0 +1,21 @@
+# Searches MoMA's collection for artworks matching a query. For each artwork,
+# extracts the title, artist, date, medium, and URL.
+
+@dataclass(frozen=True)
+class ArtRequest:
+    query: str = "Andy Warhol"
+    max_results: int = 5
+
+@dataclass
+class Artwork:
+    title: str = ""
+    artist: str = ""
+    date: str = ""
+    medium: str = ""
+    url: str = ""
+
+@dataclass
+class ArtResult:
+    artworks: List[Artwork] = field(default_factory=list)
+
+def moma_search(page: Page, request: ArtRequest) -> ArtResult:

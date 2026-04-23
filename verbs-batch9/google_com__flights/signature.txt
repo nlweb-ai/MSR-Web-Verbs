@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class GoogleFlightsRequest:
+    origin: str
+    destination: str
+    date: str
+    max_results: int
+
+@dataclass
+class FlightItem:
+    airline: str
+    departure: str
+    arrival: str
+    duration: str
+    stops: str
+    price: str
+
+@dataclass
+class GoogleFlightsResult:
+    origin: str
+    destination: str
+    items: List[FlightItem]
+
+# Searches Google Flights for one-way flights and returns up to max_results
+# options with airline, departure/arrival times, duration, stops, and price.
+def search_google_flights(page: Page, request: GoogleFlightsRequest) -> GoogleFlightsResult:

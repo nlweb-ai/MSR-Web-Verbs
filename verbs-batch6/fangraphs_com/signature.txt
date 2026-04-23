@@ -1,0 +1,21 @@
+# Gets the top WAR leaders from the FanGraphs MLB leaderboard. For each player,
+# extracts the name, team, WAR, batting average, home runs, and RBI.
+
+@dataclass(frozen=True)
+class LeaderboardRequest:
+    max_results: int = 5
+
+@dataclass
+class Player:
+    name: str = ""
+    team: str = ""
+    war: str = ""
+    avg: str = ""
+    hr: str = ""
+    rbi: str = ""
+
+@dataclass
+class LeaderboardResult:
+    players: list = field(default_factory=list)
+
+def fangraphs_leaderboard(page: Page, request: LeaderboardRequest) -> LeaderboardResult:

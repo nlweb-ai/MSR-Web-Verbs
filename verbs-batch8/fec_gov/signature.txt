@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class FecSearchRequest:
+    search_query: str = "president"
+    max_results: int = 5
+
+
+@dataclass
+class FecCandidateItem:
+    candidate_name: str = ""
+    party: str = ""
+    office: str = ""
+    state: str = ""
+    total_receipts: str = ""
+    total_disbursements: str = ""
+    cash_on_hand: str = ""
+    election_year: str = ""
+
+
+@dataclass
+class FecSearchResult:
+    items: List[FecCandidateItem] = field(default_factory=list)
+
+
+# Search for campaign finance data on FEC.gov by candidate name or keyword.
+def fec_search(page: Page, request: FecSearchRequest) -> FecSearchResult:

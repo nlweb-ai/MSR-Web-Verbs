@@ -1,0 +1,23 @@
+# Searches Statista (statista.com) for statistics and data by keyword.
+# Extracts title, description, region, and time period for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "global smartphone market share"
+    max_results: int = 5
+
+@dataclass
+class StatResult:
+    title: str = ""
+    description: str = ""
+    region: str = ""
+    time_period: str = ""
+
+@dataclass
+class SearchResult:
+    stats: list[StatResult]
+
+def statista_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

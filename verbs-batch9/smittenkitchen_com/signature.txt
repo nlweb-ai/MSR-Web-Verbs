@@ -1,0 +1,17 @@
+@dataclass
+class SmittenKitchenRequest:
+    tag: str
+    max_results: int
+
+@dataclass
+class RecipeItem:
+    name: str
+    publish_date: str
+
+@dataclass
+class SmittenKitchenResult:
+    recipes: List[RecipeItem]
+
+# Searches Smitten Kitchen for recipes by tag and extracts name
+# and publish date.
+def search_smittenkitchen(page: Page, request: SmittenKitchenRequest) -> SmittenKitchenResult

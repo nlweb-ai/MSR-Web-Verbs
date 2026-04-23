@@ -1,0 +1,19 @@
+@dataclass
+class OddsSharkRequest:
+    sport: str
+    max_results: int
+
+@dataclass
+class GameOdds:
+    teams: str
+    spread: str
+    over_under: str
+    game_time: str
+
+@dataclass
+class OddsSharkResult:
+    games: List[GameOdds]
+
+# Browses OddsShark for game odds and extracts teams,
+# spread, over/under, and game time.
+def get_nfl_odds(page: Page, request: OddsSharkRequest) -> OddsSharkResult

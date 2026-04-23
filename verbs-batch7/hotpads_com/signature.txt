@@ -1,0 +1,25 @@
+# Searches HotPads (hotpads.com) for apartment rentals by city and max price.
+# Extracts name, price, bedrooms, location, and building type for each listing.
+
+@dataclass(frozen=True)
+class ApartmentSearchRequest:
+    city: str = "Chicago, IL"
+    max_price: int = 2000
+    max_results: int = 5
+
+@dataclass
+class Apartment:
+    name: str = ""
+    price: str = ""
+    bedrooms: str = ""
+    location: str = ""
+    building_type: str = ""
+
+@dataclass
+class ApartmentSearchResult:
+    apartments: list[Apartment]
+
+def apartment_search(
+    page: Page,
+    request: ApartmentSearchRequest,
+) -> ApartmentSearchResult:

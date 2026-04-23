@@ -1,0 +1,26 @@
+# Navigates to a Lonely Planet destination page by country and city,
+# extracts the destination overview, best time to visit, and top attractions
+# (up to max_attractions) with names and areas.
+
+@dataclass(frozen=True)
+class LonelyplanetDestinationRequest:
+    country: str = "japan"
+    destination: str = "tokyo"
+    max_attractions: int = 5
+
+
+@dataclass(frozen=True)
+class Attraction:
+    name: str
+    area: str
+
+
+@dataclass(frozen=True)
+class LonelyplanetDestinationResult:
+    destination: str
+    overview: Optional[str]
+    best_time: Optional[str]
+    attractions: tuple[Attraction, ...]
+
+
+def lonelyplanet_destination(page: Page, request: LonelyplanetDestinationRequest) -> LonelyplanetDestinationResult:

@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class OverleafShareProjectRequest:
+    project_id: str
+    collaborator_email: str
+    role: str  # "Editor", "Viewer", or "Reviewer"
+
+
+@dataclass(frozen=True)
+class OverleafShareProjectResult:
+    success: bool
+    error: str
+
+
+# Shares an Overleaf project with a collaborator by opening the project editor,
+# clicking the Share button, selecting the collaborator role from the dropdown,
+# entering the collaborator's email, and clicking Invite.
+def share_overleaf_project(
+    page: Page,
+    request: OverleafShareProjectRequest,
+) -> OverleafShareProjectResult:

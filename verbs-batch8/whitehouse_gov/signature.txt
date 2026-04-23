@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class WhitehouseSearchRequest:
+    search_query: str = "executive order"
+    max_results: int = 5
+
+
+@dataclass
+class WhitehouseBriefingItem:
+    title: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+    url: str = ""
+
+
+@dataclass
+class WhitehouseSearchResult:
+    items: List[WhitehouseBriefingItem] = field(default_factory=list)

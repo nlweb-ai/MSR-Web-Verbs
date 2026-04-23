@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class GoodreadsQuotesRequest:
+    tag: str
+    max_results: int
+
+@dataclass
+class QuoteItem:
+    text: str
+    author: str
+    book: str
+    likes: str
+
+@dataclass
+class GoodreadsQuotesResult:
+    tag: str
+    items: List[QuoteItem]
+
+# Browses Goodreads quotes by tag and returns up to max_results quotes
+# with text, author, book title, and number of likes.
+def browse_goodreads_quotes(page: Page, request: GoodreadsQuotesRequest) -> GoodreadsQuotesResult:

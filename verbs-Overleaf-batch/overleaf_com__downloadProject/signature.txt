@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class OverleafDownloadProjectRequest:
+    search_query: str
+    download_dir: str
+
+
+@dataclass(frozen=True)
+class OverleafDownloadProjectResult:
+    success: bool
+    file_path: str
+    error: str
+
+
+# Searches for a project by name on the Overleaf dashboard,
+# selects it, and downloads it as a source zip.
+def overleaf_download_project(
+    page: Page,
+    request: OverleafDownloadProjectRequest,
+) -> OverleafDownloadProjectResult:

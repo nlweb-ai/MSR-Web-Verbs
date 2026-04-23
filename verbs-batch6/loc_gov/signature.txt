@@ -1,0 +1,21 @@
+# Searches Library of Congress digital collections. For each item, extracts
+# the title, creator, date, collection, and URL.
+
+@dataclass(frozen=True)
+class LocRequest:
+    query: str = "civil war photographs"
+    max_results: int = 5
+
+@dataclass
+class LocItem:
+    title: str = ""
+    creator: str = ""
+    date: str = ""
+    collection: str = ""
+    url: str = ""
+
+@dataclass
+class LocResult:
+    items: List[LocItem] = field(default_factory=list)
+
+def loc_search(page: Page, request: LocRequest) -> LocResult:

@@ -1,0 +1,27 @@
+# Searches AutoTrader for used cars matching the given make, model, zip code, and radius,
+# then returns up to max_results listings with year/make/model, price, mileage, and dealer.
+
+@dataclass(frozen=True)
+class AutotraderSearchRequest:
+    make: str
+    model: str
+    zip_code: str
+    radius_miles: int
+    max_results: int
+
+@dataclass(frozen=True)
+class AutotraderListing:
+    year_make_model: str
+    price: str
+    mileage: str
+    dealer: str
+
+@dataclass(frozen=True)
+class AutotraderSearchResult:
+    make: str
+    model: str
+    zip_code: str
+    radius_miles: int
+    listings: list[AutotraderListing]
+
+def search_autotrader_listings(page: Page, request: AutotraderSearchRequest) -> AutotraderSearchResult

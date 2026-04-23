@@ -1,0 +1,16 @@
+@dataclass
+class TypeformRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class TemplateItem:
+    name: str
+    description: str
+
+@dataclass
+class TypeformResult:
+    templates: List[TemplateItem]
+
+# Searches Typeform templates and extracts name and description.
+def search_typeform(page: Page, request: TypeformRequest) -> TypeformResult

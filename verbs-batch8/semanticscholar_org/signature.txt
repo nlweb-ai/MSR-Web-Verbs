@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class SemanticscholarSearchRequest:
+    search_query: str = "transformer neural network"
+    max_results: int = 5
+
+
+@dataclass
+class SemanticscholarPaperItem:
+    title: str = ""
+    authors: str = ""
+    year: str = ""
+    venue: str = ""
+    citation_count: str = ""
+    abstract: str = ""
+    fields_of_study: str = ""
+
+
+@dataclass
+class SemanticscholarSearchResult:
+    items: List[SemanticscholarPaperItem] = field(default_factory=list)
+
+
+# Search for academic papers on Semantic Scholar.
+def semanticscholar_search(page: Page, request: SemanticscholarSearchRequest) -> SemanticscholarSearchResult:

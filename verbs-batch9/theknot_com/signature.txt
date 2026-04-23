@@ -1,0 +1,20 @@
+@dataclass
+class TheKnotRequest:
+    location: str
+    max_results: int
+
+@dataclass
+class VenueItem:
+    name: str
+    capacity: str
+    price_range: str
+    rating: str
+    num_reviews: str
+
+@dataclass
+class TheKnotResult:
+    venues: List[VenueItem]
+
+# Searches The Knot for wedding venues and extracts name,
+# capacity, price range, rating, and number of reviews.
+def search_theknot(page: Page, request: TheKnotRequest) -> TheKnotResult

@@ -1,0 +1,25 @@
+# Search Grants.gov for grants matching a query.
+# Navigates to the Grants.gov search page, waits for results to load,
+# parses grant entries from the page text, and returns up to max_results
+# grants with title, agency, funding amount, and close date.
+
+@dataclass(frozen=True)
+class GrantsSearchRequest:
+    query: str = "STEM education"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class GrantItem:
+    title: str
+    agency: str
+    funding: str
+    close_date: str
+
+
+@dataclass(frozen=True)
+class GrantsSearchResult:
+    grants: list  # list[GrantItem]
+
+
+def grants_search(page: Page, request: GrantsSearchRequest) -> GrantsSearchResult:

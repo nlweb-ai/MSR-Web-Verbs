@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDriveShareFileRequest:
+    file_name: str
+    email: str
+    permission: str  # "Editor", "Viewer", or "Commenter"
+
+
+@dataclass(frozen=True)
+class GoogleDriveShareFileResult:
+    success: bool
+    error: str
+
+
+# Shares a file in Google Drive with an email address.
+def google_drive_share_file(
+    page: Page,
+    request: GoogleDriveShareFileRequest,
+) -> GoogleDriveShareFileResult:

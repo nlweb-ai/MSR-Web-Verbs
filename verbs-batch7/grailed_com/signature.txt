@@ -1,0 +1,24 @@
+# Searches Grailed (grailed.com) for designer fashion listings by keyword.
+# Extracts item name, designer, size, price, and URL for each listing.
+
+@dataclass(frozen=True)
+class ListingSearchRequest:
+    search_query: str = "Rick Owens"
+    max_results: int = 5
+
+@dataclass
+class Listing:
+    name: str = ""
+    designer: str = ""
+    size: str = ""
+    price: str = ""
+    url: str = ""
+
+@dataclass
+class ListingSearchResult:
+    listings: list[Listing]
+
+def listing_search(
+    page: Page,
+    request: ListingSearchRequest,
+) -> ListingSearchResult:

@@ -1,0 +1,24 @@
+@dataclass
+class PremierLeagueRequest:
+    top_n: int
+
+@dataclass
+class TeamStanding:
+    position: str
+    team: str
+    played: str
+    won: str
+    drawn: str
+    lost: str
+    goals_for: str
+    goals_against: str
+    goal_diff: str
+    points: str
+
+@dataclass
+class PremierLeagueResult:
+    teams: List[TeamStanding]
+
+# Extracts Premier League standings with position, team, played,
+# won, drawn, lost, GF, GA, GD, and points.
+def get_pl_standings(page: Page, request: PremierLeagueRequest) -> PremierLeagueResult

@@ -1,0 +1,25 @@
+# Searches Compass (compass.com) for homes for sale in a given location.
+# Extracts address, neighborhood, price, bedrooms, bathrooms, and square footage.
+
+@dataclass(frozen=True)
+class ListingSearchRequest:
+    location: str = "brooklyn-ny"
+    max_listings: int = 5
+
+@dataclass
+class Listing:
+    address: str = ""
+    neighborhood: str = ""
+    price: str = ""
+    bedrooms: str = ""
+    bathrooms: str = ""
+    sqft: str = ""
+
+@dataclass
+class ListingSearchResult:
+    listings: list[Listing]
+
+def compass_search(
+    page: Page,
+    request: ListingSearchRequest,
+) -> ListingSearchResult:

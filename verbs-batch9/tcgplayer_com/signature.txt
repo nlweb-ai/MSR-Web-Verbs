@@ -1,0 +1,20 @@
+@dataclass
+class TCGPlayerRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class CardItem:
+    name: str
+    set_name: str
+    rarity: str
+    price: str
+    market_price: str
+
+@dataclass
+class TCGPlayerResult:
+    cards: List[CardItem]
+
+# Searches TCGPlayer for trading cards and extracts name,
+# set, rarity, price, and market price.
+def search_tcgplayer(page: Page, request: TCGPlayerRequest) -> TCGPlayerResult

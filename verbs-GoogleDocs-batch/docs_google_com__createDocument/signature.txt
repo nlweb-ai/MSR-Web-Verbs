@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class GoogleDocsCreateDocumentRequest:
+    document_name: str
+    sample_text: str
+
+
+@dataclass(frozen=True)
+class GoogleDocsCreateDocumentResult:
+    success: bool
+    document_url: str
+    document_title: str
+    error: str
+
+
+# Creates a new blank Google Doc, renames it, and types sample text.
+def google_docs_create_document(
+    page: Page,
+    request: GoogleDocsCreateDocumentRequest,
+) -> GoogleDocsCreateDocumentResult:

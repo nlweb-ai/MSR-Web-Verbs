@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class AxiosSearchRequest:
+    search_query: str = "artificial intelligence"
+    max_results: int = 5
+
+
+@dataclass
+class AxiosArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+
+
+@dataclass
+class AxiosSearchResult:
+    items: List[AxiosArticleItem] = field(default_factory=list)
+
+
+# Search for news articles on Axios by keyword.
+def axios_search(page: Page, request: AxiosSearchRequest) -> AxiosSearchResult:

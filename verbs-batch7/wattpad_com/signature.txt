@@ -1,0 +1,24 @@
+# Searches Wattpad (wattpad.com) for stories by keyword.
+# Extracts title, reads, votes, parts count, and description for each story.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "fantasy adventure"
+    max_results: int = 5
+
+@dataclass
+class StoryResult:
+    title: str = ""
+    reads: str = ""
+    votes: str = ""
+    parts: str = ""
+    description: str = ""
+
+@dataclass
+class SearchResult:
+    stories: list[StoryResult]
+
+def wattpad_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

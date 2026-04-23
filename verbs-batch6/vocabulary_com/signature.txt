@@ -1,0 +1,18 @@
+# Searches Vocabulary.com for word lists and definitions matching a query.
+# For each result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class WordRequest:
+    query: str = "SAT vocabulary words list"
+    max_results: int = 5
+
+@dataclass
+class Word:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class WordResult:
+    items: List[Word] = field(default_factory=list)
+
+def vocabulary_search(page: Page, request: WordRequest) -> WordResult:

@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class HomesSearchRequest:
+    location: str
+    max_results: int
+
+@dataclass
+class ListingItem:
+    address: str
+    price: str
+    beds: str
+    baths: str
+    sqft: str
+
+@dataclass
+class HomesSearchResult:
+    location: str
+    items: List[ListingItem]
+
+# Searches Homes.com for homes for sale in the given location and returns
+# up to max_results listings with address, price, beds, baths, sqft, and year built.
+def search_homes(page: Page, request: HomesSearchRequest) -> HomesSearchResult:

@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class OpencultureSearchRequest:
+    search_query: str = "philosophy"
+    max_results: int = 5
+
+@dataclass
+class OpencultureSearchItem:
+    course_name: str = ""
+    institution: str = ""
+    instructor: str = ""
+    subject: str = ""
+    format: str = ""
+    url: str = ""
+
+@dataclass
+class OpencultureSearchResult:
+    items: List[OpencultureSearchItem] = field(default_factory=list)
+
+def openculture_search(request: OpencultureSearchRequest) -> OpencultureSearchResult:
+    ...

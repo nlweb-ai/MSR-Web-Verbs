@@ -1,0 +1,20 @@
+# Searches Mountain Project for climbing routes matching a query. For each route,
+# extracts the name, grade, location, and URL.
+
+@dataclass(frozen=True)
+class RouteRequest:
+    query: str = "Yosemite trad climbing"
+    max_results: int = 5
+
+@dataclass
+class Route:
+    name: str = ""
+    grade: str = ""
+    location: str = ""
+    url: str = ""
+
+@dataclass
+class RouteResult:
+    routes: List[Route] = field(default_factory=list)
+
+def mountainproject_search(page: Page, request: RouteRequest) -> RouteResult:

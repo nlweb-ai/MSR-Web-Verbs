@@ -1,0 +1,22 @@
+# Extracts top things to do from TripAdvisor for a city. For each attraction,
+# extracts the name, rating, number of reviews, and category.
+
+@dataclass(frozen=True)
+class TripAdvisorRequest:
+    city: str = "Barcelona"
+    city_slug: str = "Barcelona_Catalonia"
+    geo_id: str = "g187497"
+    max_attractions: int = 5
+
+@dataclass
+class Attraction:
+    name: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+    category: str = ""
+
+@dataclass
+class TripAdvisorResult:
+    attractions: list = field(default_factory=list)
+
+def tripadvisor_things_to_do(page: Page, request: TripAdvisorRequest) -> TripAdvisorResult:

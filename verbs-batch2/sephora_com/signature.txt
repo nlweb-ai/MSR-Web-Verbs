@@ -1,0 +1,21 @@
+# Searches Sephora for beauty products matching a query, then extracts
+# up to max_results products with name, brand, price, and rating.
+
+@dataclass(frozen=True)
+class SephoraSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class SephoraProduct:
+    name: str
+    brand: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class SephoraSearchResult:
+    query: str
+    products: list[SephoraProduct]
+
+def search_sephora(page: Page, request: SephoraSearchRequest) -> SephoraSearchResult

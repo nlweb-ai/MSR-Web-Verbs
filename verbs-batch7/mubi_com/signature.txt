@@ -1,0 +1,23 @@
+# Extracts currently showing films from MUBI (mubi.com/en/showing).
+# Retrieves title, director, year, country, and description for each film.
+
+@dataclass(frozen=True)
+class Request:
+    max_results: int = 5
+
+@dataclass
+class Film:
+    title: str = ""
+    director: str = ""
+    year: str = ""
+    country: str = ""
+    description: str = ""
+
+@dataclass
+class Result:
+    films: list[Film]
+
+def now_showing(
+    page: Page,
+    request: Request,
+) -> Result:

@@ -1,0 +1,22 @@
+# Searches AlternativeTo for alternatives to a given software. For each alternative,
+# extracts the name, description, likes, platforms, and pricing.
+
+@dataclass(frozen=True)
+class AlternativeToSearchRequest:
+    software_name: str = "Photoshop"
+    software_slug: str = "adobe-photoshop"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class AlternativeToResult:
+    name: str = ""
+    description: str = ""
+    likes: str = ""
+    platforms: str = ""
+    pricing: str = ""
+
+@dataclass(frozen=True)
+class AlternativeToSearchResult:
+    alternatives: list = None  # list[AlternativeToResult]
+
+def alternativeto_search(page: Page, request: AlternativeToSearchRequest) -> AlternativeToSearchResult:

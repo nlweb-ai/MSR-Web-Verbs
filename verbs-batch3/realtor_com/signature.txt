@@ -1,0 +1,27 @@
+# Search for homes for sale on realtor.com filtered by location and price range,
+# then extract listing details (address, price, bedrooms, bathrooms, sqft).
+
+@dataclass(frozen=True)
+class RealtorSearchRequest:
+    location: str = "Austin_TX"
+    price_min: int = 300000
+    price_max: int = 500000
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class HomeListing:
+    address: str = "N/A"
+    price: str = "N/A"
+    bedrooms: str = "N/A"
+    bathrooms: str = "N/A"
+    sqft: str = "N/A"
+
+
+@dataclass(frozen=True)
+class RealtorSearchResult:
+    listings: list  # list[HomeListing]
+    total_found: int = 0
+
+
+def realtor_search(page: Page, request: RealtorSearchRequest) -> RealtorSearchResult:

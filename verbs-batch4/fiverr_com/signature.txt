@@ -1,0 +1,21 @@
+# Search for freelance services on fiverr.com matching a query and extract
+# seller names, service titles, starting prices, ratings, and review counts.
+
+@dataclass(frozen=True)
+class FiverrSearchRequest:
+    query: str = "logo design"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class FiverrGig:
+    seller_name: str = ""
+    service_title: str = ""
+    starting_price: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+
+@dataclass(frozen=True)
+class FiverrSearchResult:
+    gigs: list = None  # list[FiverrGig]
+
+def fiverr_search(page: Page, request: FiverrSearchRequest) -> FiverrSearchResult:

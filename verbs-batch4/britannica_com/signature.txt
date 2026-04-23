@@ -1,0 +1,21 @@
+# britannica_search — Search for an encyclopedia article on britannica.com,
+# click the top result, and extract the article title, introductory summary
+# paragraph, and key facts.
+
+@dataclass(frozen=True)
+class BritannicaSearchRequest:
+    search_term: str = "photosynthesis"
+    max_facts: int = 10
+
+@dataclass(frozen=True)
+class BritannicaArticle:
+    title: str = ""
+    summary: str = ""
+    facts: list = None  # list[str]
+    url: str = ""
+
+@dataclass(frozen=True)
+class BritannicaSearchResult:
+    article: BritannicaArticle = None
+
+def britannica_search(page: Page, request: BritannicaSearchRequest) -> BritannicaSearchResult:

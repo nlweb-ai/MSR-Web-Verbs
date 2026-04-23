@@ -1,0 +1,19 @@
+@dataclass
+class PluralsightRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class CourseItem:
+    title: str
+    author: str
+    skill_level: str
+    date: str
+
+@dataclass
+class PluralsightResult:
+    courses: List[CourseItem]
+
+# Searches Pluralsight for courses and extracts title,
+# author, skill level, and date.
+def search_pluralsight(page: Page, request: PluralsightRequest) -> PluralsightResult

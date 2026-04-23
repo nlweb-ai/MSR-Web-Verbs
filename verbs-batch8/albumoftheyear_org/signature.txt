@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class AlbumSearchRequest:
+    year: str = "2024"
+    max_results: int = 5
+
+
+@dataclass
+class AlbumItem:
+    title: str = ""
+    artist: str = ""
+    aggregate_score: str = ""
+    num_critic_reviews: str = ""
+    user_score: str = ""
+    genre: str = ""
+
+
+@dataclass
+class AlbumSearchResult:
+    items: List[AlbumItem] = field(default_factory=list)
+
+
+# Browse the highest-rated albums of a given year on Album of the Year.
+def albumoftheyear_search(page: Page, request: AlbumSearchRequest) -> AlbumSearchResult:

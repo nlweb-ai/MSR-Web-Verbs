@@ -1,0 +1,19 @@
+@dataclass
+class SephoraRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    brand: str
+    price: str
+    num_reviews: str
+
+@dataclass
+class SephoraResult:
+    products: List[ProductItem]
+
+# Searches Sephora for products and extracts name, brand,
+# price, and number of reviews.
+def search_sephora(page: Page, request: SephoraRequest) -> SephoraResult

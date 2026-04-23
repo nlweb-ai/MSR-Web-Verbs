@@ -1,0 +1,22 @@
+# Extracts recent articles and reviews from Literary Hub (lithub.com).
+# Retrieves title, author, date, and summary for each article.
+
+@dataclass(frozen=True)
+class ReviewSearchRequest:
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class ReviewSearchResult:
+    articles: list[Article]
+
+def review_search(
+    page: Page,
+    request: ReviewSearchRequest,
+) -> ReviewSearchResult:

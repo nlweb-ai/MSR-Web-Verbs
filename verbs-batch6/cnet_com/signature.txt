@@ -1,0 +1,20 @@
+# Searches CNET for product reviews matching a query. For each product, extracts
+# the name, rating, price, and summary.
+
+@dataclass(frozen=True)
+class ReviewRequest:
+    query: str = "best laptops"
+    max_results: int = 5
+
+@dataclass
+class Product:
+    name: str = ""
+    rating: str = ""
+    price: str = ""
+    summary: str = ""
+
+@dataclass
+class ReviewResult:
+    products: list = field(default_factory=list)
+
+def cnet_search(page: Page, request: ReviewRequest) -> ReviewResult:

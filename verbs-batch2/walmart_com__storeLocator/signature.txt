@@ -1,0 +1,21 @@
+# Searches the Walmart store finder for stores near a location and extracts
+# up to max_results stores with name, address, hours, and phone/ID.
+
+@dataclass(frozen=True)
+class WalmartStoresRequest:
+    location: str
+    max_results: int
+
+@dataclass(frozen=True)
+class WalmartStore:
+    name: str
+    address: str
+    hours: str
+    phone: str
+
+@dataclass(frozen=True)
+class WalmartStoresResult:
+    location: str
+    stores: list[WalmartStore]
+
+def search_walmart_stores(page: Page, request: WalmartStoresRequest) -> WalmartStoresResult

@@ -1,0 +1,20 @@
+# Searches Gap.com for products matching a query, then extracts
+# up to max_results products with name, price, and available sizes.
+
+@dataclass(frozen=True)
+class GapSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class GapProduct:
+    name: str
+    price: str
+    sizes: str
+
+@dataclass(frozen=True)
+class GapSearchResult:
+    query: str
+    products: list[GapProduct]
+
+def search_gap(page: Page, request: GapSearchRequest) -> GapSearchResult

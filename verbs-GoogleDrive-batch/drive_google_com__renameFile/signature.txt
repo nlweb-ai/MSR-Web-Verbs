@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDriveRenameFileRequest:
+    current_name: str
+    new_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveRenameFileResult:
+    success: bool
+    new_name: str
+    error: str
+
+
+# Renames a file in Google Drive.
+def google_drive_rename_file(
+    page: Page,
+    request: GoogleDriveRenameFileRequest,
+) -> GoogleDriveRenameFileResult:

@@ -1,0 +1,23 @@
+# Searches the Project Gutenberg ebook catalog for a given query and returns
+# up to max_results books. Each book has a title, author, ebook ID, download
+# count, and detail page URL.
+
+@dataclass(frozen=True)
+class GutenbergSearchRequest:
+    query: str = "frankenstein"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class GutenbergBook:
+    title: str
+    author: str
+    ebook_id: str
+    download_count: int
+    detail_url: str
+
+@dataclass(frozen=True)
+class GutenbergSearchResult:
+    query: str
+    books: list[GutenbergBook]
+
+def search_gutenberg_books(page: Page, request: GutenbergSearchRequest) -> GutenbergSearchResult

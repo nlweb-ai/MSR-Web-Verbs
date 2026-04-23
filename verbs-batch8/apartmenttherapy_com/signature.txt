@@ -1,0 +1,21 @@
+# Searches Apartment Therapy for articles matching a query. For each article,
+# extracts the title, author, publish date, category, and summary.
+
+@dataclass(frozen=True)
+class ApartmentTherapyRequest:
+    search_query: str = "small kitchen ideas"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+
+@dataclass
+class ApartmentTherapyResult:
+    articles: list = field(default_factory=list)
+
+def apartmenttherapy_search(page: Page, request: ApartmentTherapyRequest) -> ApartmentTherapyResult:

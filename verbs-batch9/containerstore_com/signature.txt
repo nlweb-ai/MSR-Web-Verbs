@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class ContainerStoreSearchRequest:
+    query: str = "closet organization"
+    max_results: int = 5
+
+
+@dataclass
+class ProductItem:
+    name: str = ""
+    price: str = ""
+    original_price: str = ""
+    review_count: str = ""
+
+
+@dataclass
+class ContainerStoreSearchResult:
+    query: str = ""
+    items: List[ProductItem] = field(default_factory=list)
+
+
+# Search The Container Store for products.
+def search_containerstore(page: Page, request: ContainerStoreSearchRequest) -> ContainerStoreSearchResult:

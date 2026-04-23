@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class AmazonSubscribeSaveRequest:
+    category: str = "baby"
+    max_results: int = 5
+
+
+@dataclass
+class SubscribeSaveItem:
+    product_name: str = ""
+    regular_price: str = ""
+    subscribe_price: str = ""
+    discount_pct: str = ""
+
+
+@dataclass
+class AmazonSubscribeSaveResult:
+    category: str = ""
+    items: List[SubscribeSaveItem] = field(default_factory=list)
+
+
+# Browses Amazon Subscribe & Save deals in a category.
+def browse_subscribe_save(page: Page, request: AmazonSubscribeSaveRequest) -> AmazonSubscribeSaveResult:

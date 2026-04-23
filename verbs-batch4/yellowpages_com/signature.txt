@@ -1,0 +1,21 @@
+## yellowpages_search
+Search Yellow Pages for businesses and extract listings.
+
+@dataclass
+class YellowPagesSearchRequest:
+    search_term: str    # e.g. "plumber"
+    location: str       # e.g. "Chicago, IL"
+    max_results: int    # number of listings to extract
+
+@dataclass
+class YellowPagesListing:
+    business_name: str  # name of the business
+    phone_number: str   # e.g. "(312) 555-1234"
+    address: str        # street address
+    rating: str         # e.g. "4.5" or "N/A"
+
+@dataclass
+class YellowPagesSearchResult:
+    listings: list  # list of YellowPagesListing
+
+def yellowpages_search(page: Page, request: YellowPagesSearchRequest) -> YellowPagesSearchResult

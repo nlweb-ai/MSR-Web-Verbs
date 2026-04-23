@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class ByrdieSearchRequest:
+    query: str = "retinol"
+    max_results: int = 5
+
+
+@dataclass
+class ArticleItem:
+    title: str = ""
+
+
+@dataclass
+class ByrdieSearchResult:
+    query: str = ""
+    items: List[ArticleItem] = field(default_factory=list)
+
+
+# Search Byrdie for skincare articles.
+def search_byrdie(page: Page, request: ByrdieSearchRequest) -> ByrdieSearchResult:

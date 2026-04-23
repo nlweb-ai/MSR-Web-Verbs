@@ -1,0 +1,24 @@
+# Retrieves the most popular (best-selling) items from the Allbirds Best Sellers
+# collection page. For each product, extracts the name, product handle (URL slug),
+# current price, compare-at (original) price when on sale, and detail page URL.
+
+@dataclass(frozen=True)
+class AllbirdsBestSellersRequest:
+    max_results: int
+
+@dataclass(frozen=True)
+class AllbirdsProduct:
+    name: str
+    handle: str
+    current_price: str
+    compare_at_price: str  # empty string if not on sale
+    detail_url: str
+
+@dataclass(frozen=True)
+class AllbirdsBestSellersResult:
+    products: list[AllbirdsProduct]
+
+def get_allbirds_best_sellers(
+    page: Page,
+    request: AllbirdsBestSellersRequest,
+) -> AllbirdsBestSellersResult:

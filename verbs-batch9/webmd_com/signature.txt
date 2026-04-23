@@ -1,0 +1,18 @@
+@dataclass
+class WebMDRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    article_type: str
+    description: str
+
+@dataclass
+class WebMDResult:
+    articles: List[ArticleItem]
+
+# Searches WebMD and extracts article title, type, and description
+# from search results.
+def search_webmd(page: Page, request: WebMDRequest) -> WebMDResult

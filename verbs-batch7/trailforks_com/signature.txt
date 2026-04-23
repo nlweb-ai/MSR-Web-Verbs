@@ -1,0 +1,24 @@
+# Lists mountain bike trails from Trailforks (trailforks.com) for a given region.
+# Extracts trail name, riding area, distance, descent, and climb for each trail.
+
+@dataclass(frozen=True)
+class TrailRequest:
+    region: str = "moab"
+    max_results: int = 5
+
+@dataclass
+class TrailResult:
+    name: str = ""
+    riding_area: str = ""
+    distance: str = ""
+    descent: str = ""
+    climb: str = ""
+
+@dataclass
+class TrailsResult:
+    trails: list[TrailResult]
+
+def trailforks_trails(
+    page: Page,
+    request: TrailRequest,
+) -> TrailsResult:

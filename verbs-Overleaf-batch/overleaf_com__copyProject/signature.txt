@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class OverleafCopyProjectRequest:
+    search_query: str
+    copy_name: str
+
+
+@dataclass(frozen=True)
+class OverleafCopyProjectResult:
+    success: bool
+    new_project_url: str
+    error: str
+
+
+# Searches for a project, opens it, and copies it with a new name.
+def overleaf_copy_project(
+    page: Page,
+    request: OverleafCopyProjectRequest,
+) -> OverleafCopyProjectResult:

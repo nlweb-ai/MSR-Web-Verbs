@@ -1,0 +1,18 @@
+# Searches PetMD for pet health articles matching a query. For each article,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "dog ear infection treatment"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def petmd_search(page: Page, request: ArticleRequest) -> ArticleResult:

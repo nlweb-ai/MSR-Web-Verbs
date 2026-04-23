@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class ClutchSearchRequest:
+    service: str = "web development"
+    max_results: int = 5
+
+
+@dataclass
+class AgencyItem:
+    name: str = ""
+    location: str = ""
+    min_project_size: str = ""
+    hourly_rate: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+
+
+@dataclass
+class ClutchSearchResult:
+    service: str = ""
+    items: List[AgencyItem] = field(default_factory=list)
+
+
+# Search Clutch.co for top agencies.
+def search_clutch(page: Page, request: ClutchSearchRequest) -> ClutchSearchResult:

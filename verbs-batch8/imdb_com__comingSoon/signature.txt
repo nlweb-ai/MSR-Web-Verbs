@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class ImdbComingSoonSearchRequest:
+    max_results: int = 10
+
+
+@dataclass
+class ImdbComingSoonItem:
+    movie_title: str = ""
+    release_date: str = ""
+    genres: str = ""
+    stars: str = ""
+    director: str = ""
+    synopsis: str = ""
+
+
+@dataclass
+class ImdbComingSoonSearchResult:
+    items: List[ImdbComingSoonItem] = field(default_factory=list)
+
+
+# Browse upcoming movie releases on IMDb.
+def imdb_coming_soon_search(page: Page, request: ImdbComingSoonSearchRequest) -> ImdbComingSoonSearchResult:

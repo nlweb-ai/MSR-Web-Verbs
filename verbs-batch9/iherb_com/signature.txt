@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class IHerbRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    brand: str
+    price: str
+    dosage: str
+    servings: str
+    rating: str
+
+@dataclass
+class IHerbResult:
+    query: str
+    items: List[ProductItem]
+
+# Searches iHerb for supplements matching the query and returns
+# up to max_results products with name, brand, price, dosage, servings, and rating.
+def search_iherb(page: Page, request: IHerbRequest) -> IHerbResult:

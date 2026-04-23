@@ -1,0 +1,25 @@
+# Search rome2rio.com for travel routes between two cities and return
+# transport options with mode, estimated duration, and price range.
+
+@dataclass(frozen=True)
+class Rome2rioSearchRequest:
+    origin: str = "Paris"
+    destination: str = "Amsterdam"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class TravelRoute:
+    mode: str = ""
+    duration: str = ""
+    price: str = ""
+
+
+@dataclass(frozen=True)
+class Rome2rioSearchResult:
+    origin: str = ""
+    destination: str = ""
+    routes: tuple = ()
+
+
+def rome2rio_search(page: Page, request: Rome2rioSearchRequest) -> Rome2rioSearchResult:

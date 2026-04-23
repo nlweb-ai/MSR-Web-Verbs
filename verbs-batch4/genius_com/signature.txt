@@ -1,0 +1,14 @@
+# genius_song — Search for a song on Genius and extract song details.
+
+@dataclass(frozen=True)
+class GeniusSongRequest:
+    query: str = "Bohemian Rhapsody Queen"
+
+@dataclass(frozen=True)
+class GeniusSongResult:
+    song_title: str = ""
+    artist: str = ""
+    album: str = ""
+    first_verse: str = ""
+
+def genius_song(page: Page, request: GeniusSongRequest) -> GeniusSongResult:

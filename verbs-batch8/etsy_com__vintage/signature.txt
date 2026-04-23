@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class EtsyVintageSearchRequest:
+    search_query: str = "vintage jewelry"
+    max_results: int = 5
+
+
+@dataclass
+class EtsyVintageItem:
+    item_name: str = ""
+    shop_name: str = ""
+    price: str = ""
+    original_price: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+    is_free_shipping: str = ""
+
+
+@dataclass
+class EtsyVintageSearchResult:
+    items: List[EtsyVintageItem] = field(default_factory=list)
+
+
+# Search for vintage items on Etsy.
+def etsy_vintage_search(page: Page, request: EtsyVintageSearchRequest) -> EtsyVintageSearchResult:

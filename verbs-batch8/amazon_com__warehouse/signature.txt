@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class WarehouseDealRequest:
+    category: str = "electronics"
+    max_results: int = 5
+
+
+@dataclass
+class WarehouseDealItem:
+    product_name: str = ""
+    original_price: str = ""
+    warehouse_price: str = ""
+    condition: str = ""
+    discount_percentage: str = ""
+
+
+@dataclass
+class WarehouseDealResult:
+    items: List[WarehouseDealItem] = field(default_factory=list)
+
+
+# Search Amazon Warehouse deals for a given category and extract deal listings.
+def amazon_warehouse_search(page: Page, request: WarehouseDealRequest) -> WarehouseDealResult:

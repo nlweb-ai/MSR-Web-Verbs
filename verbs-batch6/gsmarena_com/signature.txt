@@ -1,0 +1,18 @@
+# Searches GSMArena for phone specifications. Extracts the name, display size,
+# processor, RAM, battery, camera, and price.
+
+@dataclass(frozen=True)
+class PhoneRequest:
+    query: str = "Samsung Galaxy S24"
+
+@dataclass
+class PhoneResult:
+    name: str = ""
+    display_size: str = ""
+    processor: str = ""
+    ram: str = ""
+    battery: str = ""
+    camera: str = ""
+    price: str = ""
+
+def gsmarena_search(page: Page, request: PhoneRequest) -> PhoneResult:

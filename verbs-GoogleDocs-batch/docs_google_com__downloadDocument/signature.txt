@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GoogleDocsDownloadDocumentRequest:
+    document_url: str
+    format: str  # e.g. "PDF Document (.pdf)", "Microsoft Word (.docx)"
+
+
+@dataclass(frozen=True)
+class GoogleDocsDownloadDocumentResult:
+    success: bool
+    downloaded_file: str
+    error: str
+
+
+# Opens a Google Doc and downloads it in the specified format.
+def google_docs_download_document(
+    page: Page,
+    request: GoogleDocsDownloadDocumentRequest,
+) -> GoogleDocsDownloadDocumentResult:

@@ -1,0 +1,21 @@
+# Searches Bodybuilding.com exercise database for exercises by muscle group.
+# For each exercise, extracts the name, muscle group, equipment, and difficulty.
+# NOTE: Bodybuilding.com has shut down its exercise database (redirects to shop).
+
+@dataclass(frozen=True)
+class ExerciseRequest:
+    muscle: str = "chest"
+    max_exercises: int = 5
+
+@dataclass
+class Exercise:
+    name: str = ""
+    muscle_group: str = ""
+    equipment: str = ""
+    difficulty: str = ""
+
+@dataclass
+class ExerciseResult:
+    exercises: list = field(default_factory=list)
+
+def bodybuilding_exercises(page: Page, request: ExerciseRequest) -> ExerciseResult:

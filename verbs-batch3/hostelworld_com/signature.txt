@@ -1,0 +1,24 @@
+# Search for hostels on Hostelworld by city and number of guests.
+# Extracts hostel name, price per night, rating, and distance from city center.
+
+@dataclass(frozen=True)
+class HostelSearchRequest:
+    city: str
+    guests: int
+    max_results: int
+
+
+@dataclass(frozen=True)
+class Hostel:
+    name: str
+    price: str
+    rating: str
+    distance: str
+
+
+@dataclass(frozen=True)
+class HostelSearchResult:
+    hostels: list  # list[Hostel]
+
+
+def hostelworld_search(page: Page, request: HostelSearchRequest) -> HostelSearchResult:

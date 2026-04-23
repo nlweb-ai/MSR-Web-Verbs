@@ -1,0 +1,26 @@
+# Navigate to KBB and look up the value/pricing for a given vehicle year/make/model/trim.
+# Extracts fair purchase price, trade-in values, and private party values by condition.
+
+@dataclass(frozen=True)
+class KbbCarValueRequest:
+    make: str = "toyota"
+    model: str = "camry"
+    year: str = "2020"
+    trim: str = "se"
+    body_style: str = "sedan-4d"
+
+@dataclass(frozen=True)
+class ConditionValues:
+    excellent: str = "N/A"
+    very_good: str = "N/A"
+    good: str = "N/A"
+    fair: str = "N/A"
+
+@dataclass(frozen=True)
+class KbbCarValueResult:
+    vehicle: str = ""
+    fair_purchase_price: str = "N/A"
+    trade_in: ConditionValues = None
+    private_party: ConditionValues = None
+
+def kbb_car_value(page: Page, request: KbbCarValueRequest) -> KbbCarValueResult:

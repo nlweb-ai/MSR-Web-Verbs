@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class FiverrSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class GigItem:
+    title: str
+    seller: str
+    level: str
+    price: str
+    rating: str
+    reviews: str
+
+@dataclass
+class FiverrSearchResult:
+    query: str
+    items: List[GigItem]
+
+# Searches Fiverr.com for gigs matching the query and returns up to max_results
+# gigs with title, seller name, seller level, price, rating, and review count.
+def search_fiverr_gigs(page: Page, request: FiverrSearchRequest) -> FiverrSearchResult:

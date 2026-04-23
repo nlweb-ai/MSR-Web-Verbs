@@ -1,0 +1,21 @@
+# Searches Google Scholar for a paper by title (and optionally author),
+# then returns any Arxiv links found for that paper.
+
+@dataclass(frozen=True)
+class ScholarPaperSearchRequest:
+    paper_title: str
+    author: str = ""
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ScholarArxivLink:
+    title: str
+    arxiv_url: str
+
+@dataclass(frozen=True)
+class ScholarPaperSearchResult:
+    paper_title: str
+    author: str
+    links: list[ScholarArxivLink]
+
+def find_arxiv_links_for_paper(page: Page, request: ScholarPaperSearchRequest) -> ScholarPaperSearchResult

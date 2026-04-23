@@ -1,0 +1,21 @@
+# Searches LibraryThing for books matching a query. For each book, extracts
+# the title, author, rating, members count, and URL.
+
+@dataclass(frozen=True)
+class BookRequest:
+    query: str = "science fiction dystopia"
+    max_results: int = 5
+
+@dataclass
+class Book:
+    title: str = ""
+    author: str = ""
+    rating: str = ""
+    members: str = ""
+    url: str = ""
+
+@dataclass
+class BookResult:
+    books: List[Book] = field(default_factory=list)
+
+def librarything_search(page: Page, request: BookRequest) -> BookResult:

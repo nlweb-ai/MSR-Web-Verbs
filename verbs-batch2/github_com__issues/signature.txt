@@ -1,0 +1,20 @@
+# Navigates to a GitHub repository's issues page and extracts
+# up to max_results open issues with title, labels, and creation date.
+
+@dataclass(frozen=True)
+class GithubIssuesRequest:
+    repo: str
+    max_results: int
+
+@dataclass(frozen=True)
+class GithubIssue:
+    title: str
+    labels: str
+    created: str
+
+@dataclass(frozen=True)
+class GithubIssuesResult:
+    repo: str
+    issues: list[GithubIssue]
+
+def search_github_issues(page: Page, request: GithubIssuesRequest) -> GithubIssuesResult

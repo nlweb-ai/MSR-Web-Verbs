@@ -1,0 +1,22 @@
+# Searches Family Handyman (familyhandyman.com) for DIY and home improvement articles.
+# Extracts article title, URL, and summary for each search result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "plumbing repair guide"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+    summary: str = ""
+
+@dataclass
+class SearchResult:
+    articles: list[Article]
+
+def familyhandyman_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

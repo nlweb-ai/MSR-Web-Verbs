@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class GoogleDriveCreateFolderRequest:
+    folder_name: str
+
+
+@dataclass(frozen=True)
+class GoogleDriveCreateFolderResult:
+    success: bool
+    folder_name: str
+    error: str
+
+
+# Creates a new folder in Google Drive.
+def google_drive_create_folder(
+    page: Page,
+    request: GoogleDriveCreateFolderRequest,
+) -> GoogleDriveCreateFolderResult:

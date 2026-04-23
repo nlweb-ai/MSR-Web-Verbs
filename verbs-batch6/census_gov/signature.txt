@@ -1,0 +1,20 @@
+# Searches Census.gov for demographic data matching a query. For each table,
+# extracts the title, geographic area, year, and population.
+
+@dataclass(frozen=True)
+class CensusRequest:
+    query: str = "population New York"
+    max_tables: int = 5
+
+@dataclass
+class CensusTable:
+    title: str = ""
+    geographic_area: str = ""
+    year: str = ""
+    population: str = ""
+
+@dataclass
+class CensusResult:
+    tables: list = field(default_factory=list)
+
+def census_search(page: Page, request: CensusRequest) -> CensusResult:

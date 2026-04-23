@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class BoxOfficeMojoSearchRequest:
+    max_results: int = 10
+
+
+@dataclass
+class BoxOfficeMovieItem:
+    rank: str = ""
+    movie_title: str = ""
+    weekend_gross: str = ""
+    total_gross: str = ""
+    weeks_in_release: str = ""
+    distributor: str = ""
+
+
+@dataclass
+class BoxOfficeMojoSearchResult:
+    items: List[BoxOfficeMovieItem] = field(default_factory=list)
+
+
+# Browse the current weekend box office rankings on Box Office Mojo.
+def boxofficemojo_search(page: Page, request: BoxOfficeMojoSearchRequest) -> BoxOfficeMojoSearchResult:

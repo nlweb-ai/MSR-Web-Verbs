@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class BehanceSearchRequest:
+    search_query: str = "brand identity"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class BehanceProject:
+    title: str = ""
+    creator: str = ""
+    appreciations: str = ""
+    views: str = ""
+
+@dataclass(frozen=True)
+class BehanceSearchResult:
+    projects: list = None  # list[BehanceProject]
+
+def behance_search(page: Page, request: BehanceSearchRequest) -> BehanceSearchResult

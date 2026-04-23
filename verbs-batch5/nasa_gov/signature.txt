@@ -1,0 +1,20 @@
+# Searches NASA for articles matching a query. For each article, extracts
+# the title, publication date, summary, and article URL.
+
+@dataclass(frozen=True)
+class NasaRequest:
+    query: str = "Mars rover"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class NasaArticle:
+    title: str = ""
+    publication_date: str = ""
+    summary: str = ""
+    article_url: str = ""
+
+@dataclass(frozen=True)
+class NasaResult:
+    articles: list = None  # list[NasaArticle]
+
+def nasa_search(page: Page, request: NasaRequest) -> NasaResult:

@@ -1,0 +1,24 @@
+# Searches GoFundMe (gofundme.com) for fundraising campaigns by keyword.
+# Extracts title, organizer, amount raised, progress percentage, and URL.
+
+@dataclass(frozen=True)
+class CampaignSearchRequest:
+    search_query: str = "education"
+    max_results: int = 5
+
+@dataclass
+class Campaign:
+    title: str = ""
+    organizer: str = ""
+    raised: str = ""
+    progress_pct: str = ""
+    url: str = ""
+
+@dataclass
+class CampaignSearchResult:
+    campaigns: list[Campaign]
+
+def campaign_search(
+    page: Page,
+    request: CampaignSearchRequest,
+) -> CampaignSearchResult:

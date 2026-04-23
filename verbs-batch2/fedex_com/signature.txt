@@ -1,0 +1,15 @@
+# Tracks a FedEx package by tracking number and extracts the tracking
+# status, last location, and estimated delivery date.
+
+@dataclass(frozen=True)
+class FedexTrackingRequest:
+    tracking_number: str
+
+@dataclass(frozen=True)
+class FedexTrackingResult:
+    tracking_number: str
+    status: str
+    last_location: str
+    estimated_delivery: str
+
+def track_fedex_package(page: Page, request: FedexTrackingRequest) -> FedexTrackingResult

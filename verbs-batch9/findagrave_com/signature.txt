@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class FindAGraveSearchRequest:
+    last_name: str
+    location: str
+    max_results: int
+
+@dataclass
+class MemorialItem:
+    full_name: str
+    birth_date: str
+    death_date: str
+    cemetery: str
+    location: str
+
+@dataclass
+class FindAGraveSearchResult:
+    last_name: str
+    location: str
+    items: List[MemorialItem]
+
+# Searches FindAGrave.com for memorials matching the last name and location,
+# returning up to max_results with full name, birth/death dates, cemetery, and location.
+def search_findagrave(page: Page, request: FindAGraveSearchRequest) -> FindAGraveSearchResult:

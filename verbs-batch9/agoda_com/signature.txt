@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class AgodaSearchRequest:
+    destination: str = "Bangkok, Thailand"
+    checkin_date: date = None
+    checkout_date: date = None
+    max_results: int = 5
+
+
+@dataclass
+class HotelItem:
+    hotel_name: str
+    guest_score: str
+    price_per_night: str
+    location: str
+
+
+@dataclass
+class AgodaSearchResult:
+    destination: str = ""
+    items: List[HotelItem] = field(default_factory=list)
+
+
+# Searches Agoda for hotels in a destination and extracts hotel details.
+def search_agoda_hotels(page: Page, request: AgodaSearchRequest) -> AgodaSearchResult:

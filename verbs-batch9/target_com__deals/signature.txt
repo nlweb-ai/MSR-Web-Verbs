@@ -1,0 +1,18 @@
+@dataclass
+class TargetDealsRequest:
+    category: str
+    max_results: int
+
+@dataclass
+class DealItem:
+    name: str
+    price: str
+    deal_description: str
+
+@dataclass
+class TargetDealsResult:
+    deals: List[DealItem]
+
+# Browses Target Circle deals and extracts name, price,
+# and deal description.
+def get_target_deals(page: Page, request: TargetDealsRequest) -> TargetDealsResult

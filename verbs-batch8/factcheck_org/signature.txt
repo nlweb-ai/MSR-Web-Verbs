@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class FactcheckSearchRequest:
+    search_query: str = "climate change"
+    max_results: int = 5
+
+
+@dataclass
+class FactcheckArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    claim_reviewed: str = ""
+    verdict: str = ""
+    summary: str = ""
+
+
+@dataclass
+class FactcheckSearchResult:
+    items: List[FactcheckArticleItem] = field(default_factory=list)
+
+
+# Search for fact-check articles on FactCheck.org by keyword.
+def factcheck_search(page: Page, request: FactcheckSearchRequest) -> FactcheckSearchResult:

@@ -1,0 +1,20 @@
+# Searches Spotify for podcasts matching a query. For each podcast, extracts
+# the name, publisher, description, and rating.
+
+@dataclass(frozen=True)
+class SpotifyRequest:
+    query: str = "true crime"
+    max_podcasts: int = 5
+
+@dataclass
+class Podcast:
+    name: str = ""
+    publisher: str = ""
+    description: str = ""
+    rating: str = ""
+
+@dataclass
+class SpotifyResult:
+    podcasts: list = field(default_factory=list)
+
+def spotify_podcasts(page: Page, request: SpotifyRequest) -> SpotifyResult:

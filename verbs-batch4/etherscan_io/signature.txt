@@ -1,0 +1,24 @@
+# Navigate to Etherscan.io and look up an Ethereum address to extract
+# ETH balance, USD value, and recent transactions with details.
+
+@dataclass(frozen=True)
+class EtherscanAddressRequest:
+    address: str = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+    max_transactions: int = 5
+
+@dataclass(frozen=True)
+class EthTransaction:
+    hash: str = ""
+    from_addr: str = ""
+    to_addr: str = ""
+    value: str = ""
+    timestamp: str = ""
+
+@dataclass(frozen=True)
+class EtherscanAddressResult:
+    address: str = ""
+    eth_balance: str = ""
+    usd_value: str = ""
+    transactions: list = None  # list[EthTransaction]
+
+def etherscan_address(page: Page, request: EtherscanAddressRequest) -> EtherscanAddressResult:

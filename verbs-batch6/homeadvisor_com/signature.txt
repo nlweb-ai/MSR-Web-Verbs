@@ -1,0 +1,22 @@
+# Searches HomeAdvisor for service professionals in a given location. For each
+# professional, extracts the name, rating, reviews, years in business, and phone.
+
+@dataclass(frozen=True)
+class ServiceRequest:
+    service: str = "plumbing"
+    location: str = "Denver, CO"
+    max_results: int = 5
+
+@dataclass
+class Professional:
+    name: str = ""
+    rating: str = ""
+    reviews: str = ""
+    years_in_business: str = ""
+    phone: str = ""
+
+@dataclass
+class ServiceResult:
+    professionals: List[Professional] = field(default_factory=list)
+
+def homeadvisor_search(page: Page, request: ServiceRequest) -> ServiceResult:

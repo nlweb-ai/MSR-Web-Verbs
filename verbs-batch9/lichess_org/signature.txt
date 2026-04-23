@@ -1,0 +1,15 @@
+@dataclass
+class LichessRequest:
+    max_results: int
+
+@dataclass
+class PuzzleTheme:
+    theme: str
+    count: str
+
+@dataclass
+class LichessResult:
+    themes: List[PuzzleTheme]
+
+# Browses Lichess puzzle themes page and extracts theme names and puzzle counts.
+def browse_lichess_puzzles(page: Page, request: LichessRequest) -> LichessResult

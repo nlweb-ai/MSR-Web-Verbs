@@ -1,0 +1,22 @@
+# Browses SSENSE (ssense.com) for designer sneakers from a category page.
+# Extracts brand, product name, and price for each sneaker listing.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    category_url: str = "https://www.ssense.com/en-us/men/shoes/sneakers"
+    max_results: int = 5
+
+@dataclass
+class ProductResult:
+    brand: str = ""
+    product_name: str = ""
+    price: str = ""
+
+@dataclass
+class SearchResult:
+    products: list[ProductResult]
+
+def ssense_sneakers(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

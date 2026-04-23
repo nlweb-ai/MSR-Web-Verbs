@@ -1,0 +1,25 @@
+# Searches Letterboxd for film info and popular reviews. Extracts the film
+# title, year, director, average rating, and a list of reviews with reviewer
+# name, rating, and review snippet.
+
+@dataclass(frozen=True)
+class LetterboxdRequest:
+    film_title: str = "Parasite"
+    film_slug: str = "parasite-2019"
+    max_reviews: int = 5
+
+@dataclass(frozen=True)
+class Review:
+    reviewer_name: str = ""
+    rating: str = ""
+    review_snippet: str = ""
+
+@dataclass(frozen=True)
+class LetterboxdResult:
+    film_title: str = ""
+    year: str = ""
+    director: str = ""
+    average_rating: str = ""
+    reviews: list = None  # list[Review]
+
+def letterboxd_search(page: Page, request: LetterboxdRequest) -> LetterboxdResult:

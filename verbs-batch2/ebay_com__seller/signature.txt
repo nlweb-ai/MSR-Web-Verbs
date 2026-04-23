@@ -1,0 +1,15 @@
+# Searches eBay for a product query, clicks the first result, and extracts
+# the seller name, feedback score, and positive feedback percentage.
+
+@dataclass(frozen=True)
+class EbaySellerInfoRequest:
+    query: str
+
+@dataclass(frozen=True)
+class EbaySellerInfoResult:
+    query: str
+    seller_name: str
+    feedback_score: str
+    positive_feedback_pct: str
+
+def lookup_ebay_seller_info(page: Page, request: EbaySellerInfoRequest) -> EbaySellerInfoResult

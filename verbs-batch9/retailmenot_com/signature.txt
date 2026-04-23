@@ -1,0 +1,18 @@
+@dataclass
+class RetailMeNotRequest:
+    store: str
+    max_results: int
+
+@dataclass
+class CouponItem:
+    description: str
+    discount: str
+    offer_type: str
+
+@dataclass
+class RetailMeNotResult:
+    coupons: List[CouponItem]
+
+# Searches RetailMeNot for coupons and extracts description,
+# discount, and offer type.
+def search_retailmenot(page: Page, request: RetailMeNotRequest) -> RetailMeNotResult

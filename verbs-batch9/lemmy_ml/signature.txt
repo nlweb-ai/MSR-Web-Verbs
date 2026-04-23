@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class LemmyRequest:
+    max_results: int
+
+@dataclass
+class CommunityItem:
+    name: str
+    subscribers: str
+    posts: str
+    comments: str
+
+@dataclass
+class LemmyResult:
+    items: List[CommunityItem]
+
+# Browses the top communities on Lemmy and returns
+# up to max_results communities with name, subscriber count, post count, and comment count.
+def browse_lemmy_communities(page: Page, request: LemmyRequest) -> LemmyResult:

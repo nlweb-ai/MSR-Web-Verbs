@@ -1,0 +1,18 @@
+# Searches Skiresort.info for ski resorts matching a query. For each resort,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ResortRequest:
+    query: str = "best ski resorts Alps"
+    max_results: int = 5
+
+@dataclass
+class Resort:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ResortResult:
+    items: List[Resort] = field(default_factory=list)
+
+def skiresort_search(page: Page, request: ResortRequest) -> ResortResult:

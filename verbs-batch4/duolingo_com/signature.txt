@@ -1,0 +1,17 @@
+# Navigate to Duolingo's course catalog page and extract available language
+# courses with the language name and number of learners.
+
+@dataclass(frozen=True)
+class DuolingoCoursesRequest:
+    max_results: int = 10
+
+@dataclass(frozen=True)
+class DuolingoCourse:
+    language_name: str = ""
+    num_learners: str = ""
+
+@dataclass(frozen=True)
+class DuolingoCoursesResult:
+    courses: list = None  # list[DuolingoCourse]
+
+def duolingo_courses(page: Page, request: DuolingoCoursesRequest) -> DuolingoCoursesResult:

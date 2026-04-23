@@ -1,0 +1,20 @@
+@dataclass
+class NpmRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class PackageItem:
+    name: str
+    version: str
+    weekly_downloads: str
+    description: str
+    last_published: str
+
+@dataclass
+class NpmResult:
+    packages: List[PackageItem]
+
+# Searches npm for packages and extracts package name, version,
+# weekly downloads, description, and last publish date.
+def search_npm(page: Page, request: NpmRequest) -> NpmResult

@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class FarmersGovSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class ResourceItem:
+    title: str
+    description: str
+    link: str
+
+@dataclass
+class FarmersGovSearchResult:
+    query: str
+    items: List[ResourceItem]
+
+# Searches Farmers.gov for USDA resources matching the query and returns
+# up to max_results resources with title, description, and link.
+def search_farmers_gov(page: Page, request: FarmersGovSearchRequest) -> FarmersGovSearchResult:

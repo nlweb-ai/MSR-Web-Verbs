@@ -1,0 +1,21 @@
+# Looks up a bird species on All About Birds (allaboutbirds.org).
+# Navigates to the bird's guide page and extracts common name, scientific name,
+# size/wingspan, habitat, diet, and conservation status.
+
+@dataclass(frozen=True)
+class BirdRequest:
+    bird_name: str = "bald eagle"
+
+@dataclass
+class BirdResult:
+    common_name: str = ""
+    scientific_name: str = ""
+    size_wingspan: str = ""
+    habitat: str = ""
+    diet: str = ""
+    conservation_status: str = ""
+
+def allaboutbirds_lookup(
+    page: Page,
+    request: BirdRequest,
+) -> BirdResult:

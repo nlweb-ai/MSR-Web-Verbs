@@ -1,0 +1,20 @@
+# Searches Justia for legal cases matching a query. For each case, extracts
+# the name, court, date, and summary.
+
+@dataclass(frozen=True)
+class CaseRequest:
+    query: str = "employment discrimination"
+    max_results: int = 5
+
+@dataclass
+class LegalCase:
+    name: str = ""
+    court: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class CaseResult:
+    cases: List[LegalCase] = field(default_factory=list)
+
+def justia_search(page: Page, request: CaseRequest) -> CaseResult:

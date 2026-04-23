@@ -1,0 +1,21 @@
+# Searches Budget Bytes for recipes matching a query. For each recipe, extracts
+# the name, cost per serving, prep time, cook time, and servings.
+
+@dataclass(frozen=True)
+class RecipeRequest:
+    query: str = "meal prep"
+    max_recipes: int = 5
+
+@dataclass
+class Recipe:
+    name: str = ""
+    cost_per_serving: str = ""
+    prep_time: str = ""
+    cook_time: str = ""
+    servings: str = ""
+
+@dataclass
+class RecipeResult:
+    recipes: list = field(default_factory=list)
+
+def budgetbytes_search(page: Page, request: RecipeRequest) -> RecipeResult:

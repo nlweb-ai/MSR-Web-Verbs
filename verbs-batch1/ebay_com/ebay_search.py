@@ -1,0 +1,287 @@
+"""
+eBay – Vintage Mechanical Keyboard Search
+Search: "vintage mechanical keyboard" | Filter: Buy It Now | Sort: Price + Shipping lowest
+
+Pure Playwright – no AI. Uses .s-item CSS class selectors discovered via exploration.
+"""
+
+from datetime import date, timedelta
+import re
+import os
+import traceback
+from playwright.sync_api import Page, sync_playwright
+
+import sys as _sys
+import os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from playwright_debugger import checkpoint
+
+from dataclasses import dataclass
+from urllib.parse import quote_plus
+
+
+def dismiss_popups(page):
+    """Dismiss cookie / GDPR popups."""
+    for sel in [
+        "#gdpr-banner-accept",
+        "button:has-text('Accept')",
+        "button:has-text('Accept All')",
+        "button:has-text('Got it')",
+        "button:has-text('OK')",
+    ]:
+        try:
+            loc = page.locator(sel).first
+            if loc.is_visible(timeout=800):
+                checkpoint(f"Click dismiss popup: {sel}")
+                loc.evaluate("el => el.click()")
+                page.wait_for_timeout(300)
+        except Exception:
+            pass
+
+
+@dataclass(frozen=True)
+class EbaySearchRequest:
+    search_query: str
+    max_results: int
+
+
+@dataclass(frozen=True)
+class EbayListing:
+    title: str
+    price: str
+    shipping: str
+
+
+@dataclass(frozen=True)
+class EbaySearchResult:
+    search_query: str
+    listings: list[EbayListing]
+
+
+# Searches eBay for listings matching a query and returns up to max_results
+# results with title, price, and shipping cost.
+def search_ebay_listings(
+    page: Page,
+    request: EbaySearchRequest,
+) -> EbaySearchResult:
+    search_query = request.search_query
+    max_results = request.max_results
+    raw_results = []
+    print("=" * 60)
+    print("  eBay – Vintage Mechanical Keyboard Search")
+    print("=" * 60)
+    print(f'  Query: "{search_query}"')
+    print(f"  Filter: Buy It Now | Sort: Price + Shipping lowest")
+    print(f"  Max raw_results: {max_results}\n")
+    raw_results = []
+    try:
+        print("STEP 1: Navigate to eBay search raw_results...")
+        url = f"https://www.ebay.com/sch/i.html?_nkw={quote_plus(search_query)}&LH_BIN=1&_sop=15"
+        checkpoint(f"Navigate to eBay search: {url}")
+        page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        dismiss_popups(page)
+        print(f"   Loaded: {page.url}\n")
+
+        # Wait for raw_results to render — try most likely selector first
+        loaded = False
+        for wait_sel in [".srp-raw_results", "li.s-item", ".s-item__title", "[data-viewport]"]:
+            try:
+                page.wait_for_selector(wait_sel, timeout=2000)
+                print(f"   ✅ Selector '{wait_sel}' appeared")
+                loaded = True
+                break
+            except Exception:
+                pass
+
+        if not loaded:
+            print("   ⚠ No known result selector appeared — will try fallbacks")
+
+        # Scroll to trigger lazy loading
+        for _ in range(2):
+            checkpoint("Scroll down to trigger lazy loading")
+            page.evaluate("window.scrollBy(0, 600)")
+            page.wait_for_timeout(200)
+        checkpoint("Scroll back to top")
+        page.evaluate("window.scrollTo(0, 0)")
+        page.wait_for_timeout(200)
+
+        print("STEP 2: Extract product listings...")
+
+        # ──────────────────────────────────────────────────────
+        # Strategy 1: Single JS evaluate — extracts all at once
+        # Supports both new (s-card) and legacy (s-item) eBay layouts
+        # ──────────────────────────────────────────────────────
+        skip_phrases = ["shop on ebay", "picks for you", "raw_results matching", "related:", "save this search", "trending on", "see all", "sponsored"]
+
+        all_items = page.evaluate("""(max) => {
+            const raw_results = [];
+            const skip = ["shop on ebay", "picks for you", "raw_results matching", "related:", "save this search", "trending on", "see all", "sponsored"];
+
+            // New eBay layout: li.s-card inside ul.srp-results
+            let items = document.querySelectorAll('ul.srp-results > li.s-card');
+            if (items.length > 0) {
+                for (const item of items) {
+                    if (raw_results.length >= max) break;
+
+                    // Title via .s-card__title (role=heading)
+                    let title = '';
+                    const titleEl = item.querySelector('.s-card__title');
+                    if (titleEl) title = titleEl.innerText.trim();
+                    if (!title) {
+                        const linkEl = item.querySelector('a.s-card__link');
+                        if (linkEl) title = linkEl.innerText.trim();
+                    }
+                    title = title.replace(/Opens in a new window or tab/gi, '').trim();
+                    if (!title || title.length < 5) continue;
+                    const lower = title.toLowerCase();
+                    if (skip.some(s => lower.startsWith(s))) continue;
+
+                    // Price: first .s-card__attribute-row containing $
+                    let price = '';
+                    const attrRows = item.querySelectorAll('.s-card__attribute-row');
+                    for (const row of attrRows) {
+                        const txt = row.innerText.trim();
+                        const m = txt.match(/^\\$(\\d[\\d,.]*)/);
+                        if (m && !price) { price = '$' + m[1]; break; }
+                    }
+
+                    // Shipping: attribute row with delivery/shipping
+                    let shipping = 'N/A';
+                    for (const row of attrRows) {
+                        const txt = row.innerText.trim();
+                        if (/delivery|shipping|free/i.test(txt)) { shipping = txt; break; }
+                    }
+
+                    if (title && price) raw_results.push({ title: title.substring(0, 120), price, shipping });
+                }
+                return raw_results;
+            }
+
+            // Legacy eBay layout: li.s-item
+            items = document.querySelectorAll('li.s-item');
+            if (items.length === 0) items = document.querySelectorAll('.srp-results > li');
+
+            for (const item of items) {
+                if (raw_results.length >= max) break;
+
+                let title = '';
+                const titleEl = item.querySelector('.s-item__title') || item.querySelector('[role="heading"]');
+                if (titleEl) title = titleEl.innerText.trim();
+                if (!title) {
+                    const linkEl = item.querySelector('a.s-item__link, a');
+                    if (linkEl) title = linkEl.innerText.trim();
+                }
+                title = title.replace(/Opens in a new window or tab/gi, '').trim();
+
+                if (!title || title.length < 5) continue;
+                const lower = title.toLowerCase();
+                if (skip.some(s => lower.startsWith(s))) continue;
+
+                let price = '';
+                const priceEl = item.querySelector('.s-item__price') || item.querySelector('[class*="price"]');
+                if (priceEl) price = priceEl.innerText.trim();
+                if (!price) {
+                    const m = item.innerText.match(/\\$(\\d[\\d,.]*)/);
+                    if (m) price = '$' + m[1];
+                }
+
+                let shipping = 'N/A';
+                const shipEl = item.querySelector('.s-item__shipping') || item.querySelector('.s-item__freeXDays') || item.querySelector('[class*="shipping"]');
+                if (shipEl) shipping = shipEl.innerText.trim();
+                if (shipping === 'N/A') {
+                    const lines = item.innerText.split('\\n');
+                    for (const l of lines) {
+                        if (/shipping|free\\s/i.test(l.trim())) { shipping = l.trim(); break; }
+                    }
+                }
+
+                if (title && price) raw_results.push({ title: title.substring(0, 120), price, shipping });
+            }
+            return raw_results;
+        }""", max_results)
+
+        if all_items:
+            raw_results = all_items
+            print(f"   ✅ JS evaluate extracted {len(raw_results)} items")
+
+        # ──────────────────────────────────────────────────────
+        # Strategy 2: Fallback — full page text with regex
+        # ──────────────────────────────────────────────────────
+        if not raw_results:
+            print("   ⚠ JS evaluate returned 0 — trying text fallback...")
+            body = page.locator("body").inner_text(timeout=15000)
+            lines = [l.strip() for l in body.split("\n") if l.strip()]
+
+            i = 0
+            while i < len(lines) and len(raw_results) < max_results:
+                line = lines[i]
+                if (len(line) >= 20 and not line.startswith("$")
+                    and not any(line.lower().startswith(p) for p in skip_phrases)
+                    and any(c.isalpha() for c in line)):
+                    price = ""
+                    shipping = "N/A"
+                    for j in range(0, 6):
+                        if i + j >= len(lines):
+                            break
+                        nxt = lines[i + j]
+                        pm = re.search(r"\$[\d,.]+", nxt)
+                        if pm and not price:
+                            price = pm.group(0)
+                        if re.search(r"(shipping|free\s)", nxt, re.IGNORECASE) and shipping == "N/A":
+                            shipping = nxt.strip()[:80]
+                    if price:
+                        raw_results.append({"title": line[:120], "price": price, "shipping": shipping})
+                        i += 5
+                    else:
+                        i += 1
+                else:
+                    i += 1
+
+        print(f"\n" + "=" * 60)
+        print(f"  DONE – {len(raw_results)} raw_results")
+        print("=" * 60)
+        for i, r in enumerate(raw_results, 1):
+            print(f"  {i}. {r['title']}")
+            print(f"     Price:    {r['price']}")
+            print(f"     Shipping: {r['shipping']}")
+            print()
+
+    except Exception as e:
+        print(f"\nError: {e}")
+        traceback.print_exc()
+    return EbaySearchResult(
+        search_query=search_query,
+        listings=[EbayListing(title=r["title"], price=r["price"], shipping=r["shipping"]) for r in raw_results],
+    )
+def test_search_ebay_listings() -> None:
+    from playwright.sync_api import sync_playwright
+    request = EbaySearchRequest(search_query="mechanical keyboard", max_results=5)
+    user_data_dir = os.path.join(
+        os.environ["USERPROFILE"],
+        "AppData", "Local", "Google", "Chrome", "User Data", "Default"
+    )
+    with sync_playwright() as playwright:
+        context = playwright.chromium.launch_persistent_context(
+            user_data_dir,
+            channel="chrome",
+            headless=False,
+            viewport=None,
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--disable-infobars",
+                "--disable-extensions",
+            ],
+        )
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = search_ebay_listings(page, request)
+        finally:
+            context.close()
+    assert result.search_query == request.search_query
+    assert len(result.listings) <= request.max_results
+    print(f"\nTotal listings found: {len(result.listings)}")
+
+
+if __name__ == "__main__":
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_ebay_listings)

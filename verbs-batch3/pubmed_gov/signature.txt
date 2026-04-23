@@ -1,0 +1,22 @@
+# Search PubMed for articles matching a query and extract title, authors, journal, and publication date for each result.
+
+@dataclass(frozen=True)
+class PubmedSearchRequest:
+    query: str
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class PubmedArticle:
+    title: str
+    authors: str
+    journal: str
+    pub_date: str
+
+
+@dataclass(frozen=True)
+class PubmedSearchResult:
+    articles: list  # list[PubmedArticle]
+
+
+def pubmed_search(page: Page, request: PubmedSearchRequest) -> PubmedSearchResult:

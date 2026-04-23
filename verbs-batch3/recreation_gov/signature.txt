@@ -1,0 +1,20 @@
+# Search recreation.gov for campgrounds matching a query and extract listing details
+# including name, location, number of sites, and nightly fee.
+
+@dataclass(frozen=True)
+class RecreationSearchRequest:
+    query: str = "Yellowstone"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class Campground:
+    name: str = ""
+    location: str = ""
+    sites: str = ""
+    fee: str = ""
+
+@dataclass(frozen=True)
+class RecreationSearchResult:
+    campgrounds: list = None  # list[Campground]
+
+def recreation_search(page: Page, request: RecreationSearchRequest) -> RecreationSearchResult:

@@ -1,0 +1,20 @@
+# Searches Goodreads for an author and extracts up to max_results
+# of their top rated books with title, average rating, and number of ratings.
+
+@dataclass(frozen=True)
+class GoodreadsAuthorRequest:
+    author: str
+    max_results: int
+
+@dataclass(frozen=True)
+class GoodreadsBook:
+    title: str
+    avg_rating: str
+    num_ratings: str
+
+@dataclass(frozen=True)
+class GoodreadsAuthorResult:
+    author: str
+    books: list[GoodreadsBook]
+
+def search_goodreads_author(page: Page, request: GoodreadsAuthorRequest) -> GoodreadsAuthorResult

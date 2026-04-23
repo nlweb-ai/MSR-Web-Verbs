@@ -1,0 +1,20 @@
+# Searches Twitch for live streams matching a query, then extracts
+# up to max_results streams with streamer name, viewer count, and title.
+
+@dataclass(frozen=True)
+class TwitchSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class TwitchStream:
+    streamer: str
+    viewers: str
+    title: str
+
+@dataclass(frozen=True)
+class TwitchSearchResult:
+    query: str
+    streams: list[TwitchStream]
+
+def search_twitch(page: Page, request: TwitchSearchRequest) -> TwitchSearchResult

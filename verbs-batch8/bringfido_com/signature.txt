@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class BringFidoSearchRequest:
+    city: str = "san-francisco-ca"
+    max_results: int = 5
+
+
+@dataclass
+class BringFidoHotelItem:
+    hotel_name: str = ""
+    address: str = ""
+    rating: str = ""
+    price_range: str = ""
+    pet_policy: str = ""
+    amenities: str = ""
+
+
+@dataclass
+class BringFidoSearchResult:
+    items: List[BringFidoHotelItem] = field(default_factory=list)
+
+
+# Search for pet-friendly hotels on BringFido by destination.
+def bringfido_search(page: Page, request: BringFidoSearchRequest) -> BringFidoSearchResult:

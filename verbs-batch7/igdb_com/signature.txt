@@ -1,0 +1,23 @@
+# Searches IGDB (igdb.com) for video games by title/keyword.
+# Extracts title, release year, platforms, and category for each game.
+
+@dataclass(frozen=True)
+class GameSearchRequest:
+    query: str = "The Legend of Zelda"
+    max_results: int = 5
+
+@dataclass
+class Game:
+    title: str = ""
+    release_year: str = ""
+    platforms: str = ""
+    category: str = ""
+
+@dataclass
+class GameSearchResult:
+    games: list[Game]
+
+def game_search(
+    page: Page,
+    request: GameSearchRequest,
+) -> GameSearchResult:

@@ -1,0 +1,22 @@
+# Searches Audible for audiobooks matching the given query and returns up to max_results
+# audiobooks with title, author, narrator, length, and rating.
+
+@dataclass(frozen=True)
+class AudibleSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class AudibleAudiobook:
+    title: str
+    author: str
+    narrator: str
+    length: str
+    rating: str
+
+@dataclass(frozen=True)
+class AudibleSearchResult:
+    query: str
+    audiobooks: list[AudibleAudiobook]
+
+def search_audible_audiobooks(page: Page, request: AudibleSearchRequest) -> AudibleSearchResult

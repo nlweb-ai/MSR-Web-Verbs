@@ -1,0 +1,19 @@
+visit_overleaf_project(page, request)
+
+Searches for a project on the Overleaf dashboard and opens it in the LaTeX editor.
+
+Parameters:
+  page: Page (Playwright Page object)
+  request: OverleafVisitProjectRequest
+    - search_query (str): Text to search for in the project list (required)
+
+Returns: OverleafVisitProjectResult
+  - success (bool): Whether the task completed successfully
+  - project_url (str): URL of the visited project (e.g., "https://www.overleaf.com/project/...")
+  - error (str): Error message if failed
+
+Example:
+  request = OverleafVisitProjectRequest(search_query="My paper")
+  result = visit_overleaf_project(page, request)
+  # result.success = True
+  # result.project_url = "https://www.overleaf.com/project/69e6b0a3d05bcdbdf251587c"

@@ -1,0 +1,20 @@
+@dataclass(frozen=True)
+class BLSUnemploymentRequest:
+    query: str = "unemployment rate"
+    max_results: int = 5
+
+
+@dataclass
+class LaborStatItem:
+    group: str = ""
+    rate: str = ""
+
+
+@dataclass
+class BLSUnemploymentResult:
+    current_rate: str = ""
+    statistics: List[LaborStatItem] = field(default_factory=list)
+
+
+# Get unemployment data from BLS.
+def get_bls_unemployment(page: Page, request: BLSUnemploymentRequest) -> BLSUnemploymentResult:

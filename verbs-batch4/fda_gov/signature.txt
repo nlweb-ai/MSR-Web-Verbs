@@ -1,0 +1,21 @@
+# Search for drug approval information on fda.gov matching a query and extract
+# drug name, active ingredient, approval date, manufacturer, and indications.
+
+@dataclass(frozen=True)
+class FdaDrugSearchRequest:
+    query: str = "ozempic"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class FdaDrugInfo:
+    drug_name: str = ""
+    active_ingredient: str = ""
+    approval_date: str = ""
+    manufacturer: str = ""
+    indications: str = ""
+
+@dataclass(frozen=True)
+class FdaDrugSearchResult:
+    drugs: list = None  # list[FdaDrugInfo]
+
+def fda_drug_search(page: Page, request: FdaDrugSearchRequest) -> FdaDrugSearchResult:

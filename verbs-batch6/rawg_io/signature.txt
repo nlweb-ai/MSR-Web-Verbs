@@ -1,0 +1,18 @@
+# Searches RAWG.io for video games matching a query. For each game, extracts
+# the title and URL.
+
+@dataclass(frozen=True)
+class GameRequest:
+    query: str = "best RPG games 2024"
+    max_results: int = 5
+
+@dataclass
+class Game:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class GameResult:
+    items: List[Game] = field(default_factory=list)
+
+def rawg_search(page: Page, request: GameRequest) -> GameResult:

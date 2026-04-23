@@ -1,0 +1,20 @@
+# Searches Nike.com store locator for stores near a location and extracts
+# up to max_results stores with name, address, and hours.
+
+@dataclass(frozen=True)
+class NikeStoresRequest:
+    location: str
+    max_results: int
+
+@dataclass(frozen=True)
+class NikeStore:
+    name: str
+    address: str
+    hours: str
+
+@dataclass(frozen=True)
+class NikeStoresResult:
+    location: str
+    stores: list[NikeStore]
+
+def search_nike_stores(page: Page, request: NikeStoresRequest) -> NikeStoresResult

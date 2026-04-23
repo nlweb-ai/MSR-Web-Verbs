@@ -1,0 +1,302 @@
+"""
+Google Maps – Driving Directions (Space Needle → Pike Place Market)
+Pure Playwright – no AI.
+"""
+from datetime import date, timedelta
+import re, os, sys, time, traceback, shutil, tempfile
+from playwright.sync_api import Page, sync_playwright
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
+
+from dataclasses import dataclass
+import subprocess
+import json
+from urllib.request import urlopen
+
+
+@dataclass(frozen=True)
+class MapsDirectionsRequest:
+    origin: str
+    destination: str
+
+
+@dataclass(frozen=True)
+class MapsDirectionsResult:
+    origin: str
+    destination: str
+    route: str
+    time: str
+    distance: str
+    steps: tuple
+
+
+# Gets driving directions between two locations using Google Maps, returning
+# route summary, estimated travel time, distance, and turn-by-turn steps.
+def get_maps_directions(
+    page: Page,
+    request: MapsDirectionsRequest,
+) -> MapsDirectionsResult:
+    ORIGIN = request.origin
+    DESTINATION = request.destination
+    result = {"route": "", "time": "", "distance": "", "steps": []}
+    result = {"route": "", "time": "", "distance": "", "steps": []}
+    try:
+        print("STEP 1: Navigate to Google Maps directions...")
+        checkpoint("Navigate to Google Maps directions page")
+        page.goto("https://www.google.com/maps/dir//", wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_timeout(5000)
+
+        # Dismiss popups
+        for sel in ["button:has-text('Accept')", "button:has-text('OK')",
+                     "[aria-label='Close']"]:
+            try:
+                loc = page.locator(sel).first
+                if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup: {sel}")
+                    loc.evaluate("el => el.click()")
+                    page.wait_for_timeout(500)
+            except Exception:
+                pass
+
+        # Fill in the origin
+        print(f"  Entering origin: {ORIGIN}")
+        origin_box = page.locator("input[aria-label*='tarting point'], input[aria-label*='Choose starting point']").first
+        checkpoint("Click origin input box")
+        origin_box.click(timeout=5000)
+        checkpoint(f"Fill origin: {ORIGIN}")
+        origin_box.fill(ORIGIN)
+        page.wait_for_timeout(1500)
+        checkpoint("Press Enter to confirm origin")
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(3000)
+
+        # Fill in the destination
+        print(f"  Entering destination: {DESTINATION}")
+        dest_box = page.locator("input[aria-label*='estination'], input[aria-label*='Choose destination']").first
+        checkpoint("Click destination input box")
+        dest_box.click(timeout=5000)
+        checkpoint(f"Fill destination: {DESTINATION}")
+        dest_box.fill(DESTINATION)
+        page.wait_for_timeout(1500)
+        checkpoint("Press Enter to confirm destination")
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(5000)
+
+        # Ensure driving mode is selected
+        try:
+            driving_btn = page.locator("[data-travel_mode='0'], [aria-label*='Driving']").first
+            if driving_btn.is_visible(timeout=2000):
+                checkpoint("Click driving mode button")
+                driving_btn.evaluate("el => el.click()")
+                page.wait_for_timeout(3000)
+        except Exception:
+            pass
+
+        print("STEP 2: Extract route information...")
+
+        # Strategy 1: known Google Maps selectors
+        # Route summary
+        for sel in ["#section-directions-trip-0 h1", "[data-trip-index='0'] h1",
+                     ".directions-mode-group h1", ".trip-details h1"]:
+            try:
+                el = page.locator(sel).first
+                val = el.inner_text(timeout=2000).strip()
+                if val:
+                    result["route"] = val
+                    break
+            except Exception:
+                continue
+
+        # Duration and distance from trip details
+        for sel in ["#section-directions-trip-0", "[data-trip-index='0']",
+                     ".directions-mode-group", "[class*='trip-summary']"]:
+            try:
+                el = page.locator(sel).first
+                text = el.inner_text(timeout=2000)
+                # duration: "7 min", "1 hr 5 min"
+                m_time = re.search(r"(\d+\s*(?:hr|hour)s?\s*)?(\d+\s*min)", text)
+                if m_time:
+                    result["time"] = m_time.group(0).strip()
+                # distance: "1.1 miles" or "2.3 km" (avoid matching 'min')
+                m_dist = re.search(r"(\d+\.?\d*)\s*(miles|mi\b|km|kilometers)", text)
+                if m_dist:
+                    result["distance"] = m_dist.group(0).strip()
+                break
+            except Exception:
+                continue
+
+        # Strategy 2: body text parsing
+        body = page.inner_text("body")
+        lines = [l.strip() for l in body.splitlines() if l.strip()]
+
+        if not result["time"]:
+            m = re.search(r"(\d+\s*(?:hr|hour)s?\s+)?\d+\s*min", body)
+            if m:
+                result["time"] = m.group(0).strip()
+
+        if not result["distance"]:
+            m = re.search(r"(\d+\.?\d*)\s*(miles|mi\b|km)", body)
+            if m:
+                result["distance"] = m.group(0).strip()
+
+        if not result["route"]:
+            # Look for "via <road name>"
+            m = re.search(r"via\s+(.+?)(?:\n|$)", body)
+            if m:
+                result["route"] = m.group(0).strip()
+
+        # Extract turn-by-turn steps
+        # Click on the first route to expand it and show steps
+        try:
+            for expand_sel in ["[data-trip-index='0']", ".trip-details-header",
+                              "[class*='trip'] [class*='summary']",
+                              "button[aria-label*='Details']",
+                              "[class*='route-option']:first-child"]:
+                try:
+                    el = page.locator(expand_sel).first
+                    if el.is_visible(timeout=1500):
+                        checkpoint(f"Expand route details: {expand_sel}")
+                        el.evaluate("el => el.click()")
+                        page.wait_for_timeout(3000)
+                        break
+                except Exception:
+                    continue
+        except Exception:
+            pass
+
+        # Look for step containers
+        step_sels = [
+            "[class*='directions-mode-step']",
+            ".DdSteps div[class*='step']",
+            "[data-step-index]",
+        ]
+        for sel in step_sels:
+            try:
+                step_els = page.locator(sel).all()
+                if step_els:
+                    for s_el in step_els:
+                        text = s_el.inner_text(timeout=1500).strip()
+                        first_line = text.splitlines()[0].strip() if text else ""
+                        if first_line and len(first_line) > 5 and len(first_line) < 200:
+                            result["steps"].append(first_line)
+                    if result["steps"]:
+                        break
+            except Exception:
+                continue
+
+        # Fallback: parse steps from body text (re-read after possible click)
+        if not result["steps"]:
+            body = page.inner_text("body")
+            lines = [l.strip() for l in body.splitlines() if l.strip()]
+            step_pattern = re.compile(
+                r"(Head\s+\w+|Turn\s+\w+|Keep\s+\w+|Take\s+\w+|Merge\s+\w+|Continue\s+\w+|Slight\s+\w+|Use\s+\w+|"
+                r"Take the .+? exit|Enter .+|Exit .+|Drive .+|Walk .+).*",
+                re.IGNORECASE,
+            )
+            for ln in lines:
+                m = step_pattern.match(ln)
+                if m and len(ln) < 200:
+                    result["steps"].append(ln)
+
+        # If still no steps, extract route alternatives as info
+        if not result["steps"]:
+            body = page.inner_text("body")
+            lines = [l.strip() for l in body.splitlines() if l.strip()]
+            route_info = []
+            i = 0
+            while i < len(lines):
+                if re.match(r"^\d+\s*min$", lines[i]):
+                    time_val = lines[i]
+                    dist_val = lines[i + 1] if i + 1 < len(lines) else ""
+                    via_val = lines[i + 2] if i + 2 < len(lines) else ""
+                    if "mile" in dist_val.lower() or "km" in dist_val.lower():
+                        route_info.append(f"{via_val} — {time_val}, {dist_val}")
+                        i += 3
+                        continue
+                i += 1
+            if route_info:
+                result["steps"] = route_info
+
+        has_data = result["time"] or result["distance"] or result["steps"]
+        if not has_data:
+            print("❌ ERROR: Could not extract directions.")
+
+        print(f"\nDONE – Driving Directions:")
+        print(f"  Route:    {result['route'] or 'N/A'}")
+        print(f"  Time:     {result['time'] or 'N/A'}")
+        print(f"  Distance: {result['distance'] or 'N/A'}")
+        if result["steps"]:
+            print(f"  Steps ({len(result['steps'])}):")
+            for i, step in enumerate(result["steps"][:10], 1):
+                print(f"    {i}. {step}")
+        else:
+            print("  Steps: N/A")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        traceback.print_exc()
+    return MapsDirectionsResult(
+        origin=request.origin,
+        destination=request.destination,
+        route=result.get("route",""),
+        time=result.get("time",""),
+        distance=result.get("distance",""),
+        steps=tuple(result.get("steps",[])),
+    )
+def test_get_maps_directions() -> None:
+    from playwright.sync_api import sync_playwright
+    request = MapsDirectionsRequest(
+        origin="Space Needle, Seattle, WA",
+        destination="Pike Place Market, Seattle, WA",
+    )
+    port = get_free_port()
+    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
+    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
+    chrome_proc = subprocess.Popen(
+        [
+            chrome,
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={profile_dir}",
+            "--remote-allow-origins=*",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1280,987",
+            "about:blank",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    ws_url = None
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        try:
+            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
+            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
+            if ws_url:
+                break
+        except Exception:
+            pass
+        time.sleep(0.4)
+    if not ws_url:
+        raise TimeoutError("Chrome CDP not ready")
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.connect_over_cdp(ws_url)
+        context = browser.contexts[0]
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = get_maps_directions(page, request)
+        finally:
+            chrome_proc.terminate()
+            shutil.rmtree(profile_dir, ignore_errors=True)
+    assert result.origin == request.origin
+    print(f"\nRoute: {result.route}")
+    print(f"  Time: {result.time}  Distance: {result.distance}")
+    print(f"  Steps: {len(result.steps)}")
+
+
+if __name__ == "__main__":
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_get_maps_directions)

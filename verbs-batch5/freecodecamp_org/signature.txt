@@ -1,0 +1,20 @@
+# Searches freeCodeCamp news for tutorials matching a query. For each article,
+# extracts the title, author, publication date, and tags.
+
+@dataclass(frozen=True)
+class FCCSearchRequest:
+    search_query: str = "Python web scraping"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class FCCArticle:
+    title: str = ""
+    author: str = ""
+    publication_date: str = ""
+    tags: str = ""
+
+@dataclass(frozen=True)
+class FCCSearchResult:
+    articles: list = None  # list[FCCArticle]
+
+def fcc_search(page: Page, request: FCCSearchRequest) -> FCCSearchResult:

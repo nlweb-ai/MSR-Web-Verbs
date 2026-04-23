@@ -1,0 +1,21 @@
+# Searches Codecademy for courses matching the given query and returns up to max_results
+# courses with title, type, skill level, and estimated duration.
+
+@dataclass(frozen=True)
+class CodecademySearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class CodecademyCourse:
+    title: str
+    course_type: str
+    level: str
+    duration: str
+
+@dataclass(frozen=True)
+class CodecademySearchResult:
+    query: str
+    courses: list[CodecademyCourse]
+
+def search_codecademy_courses(page: Page, request: CodecademySearchRequest) -> CodecademySearchResult

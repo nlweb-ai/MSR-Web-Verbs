@@ -1,0 +1,20 @@
+# Searches the Trader Joe's store locator for stores near a location and extracts
+# up to max_results stores with name, address, and hours.
+
+@dataclass(frozen=True)
+class TraderJoesStoresRequest:
+    location: str
+    max_results: int
+
+@dataclass(frozen=True)
+class TraderJoesStore:
+    name: str
+    address: str
+    hours: str
+
+@dataclass(frozen=True)
+class TraderJoesStoresResult:
+    location: str
+    stores: list[TraderJoesStore]
+
+def search_traderjoes_stores(page: Page, request: TraderJoesStoresRequest) -> TraderJoesStoresResult

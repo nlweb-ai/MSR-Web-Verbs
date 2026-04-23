@@ -1,0 +1,20 @@
+@dataclass
+class MLBRequest:
+    league: str
+
+@dataclass
+class TeamStanding:
+    team: str
+    wins: str
+    losses: str
+    win_pct: str
+    games_behind: str
+    last_10: str
+
+@dataclass
+class MLBResult:
+    teams: List[TeamStanding]
+
+# Browses MLB standings for a league and extracts team name,
+# wins, losses, win percentage, games behind, and last 10 record.
+def get_mlb_standings(page: Page, request: MLBRequest) -> MLBResult

@@ -1,0 +1,24 @@
+@dataclass(frozen=True)
+class AsosSearchRequest:
+    query: str = "women's dresses"
+    max_price: int = 50
+    max_results: int = 5
+
+
+@dataclass
+class AsosProductItem:
+    product_name: str = ""
+    brand: str = ""
+    price: str = ""
+    sizes: str = ""
+    colors: str = ""
+
+
+@dataclass
+class AsosSearchResult:
+    query: str = ""
+    items: List[AsosProductItem] = field(default_factory=list)
+
+
+# Search ASOS for products.
+def search_asos(page: Page, request: AsosSearchRequest) -> AsosSearchResult:

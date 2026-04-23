@@ -1,0 +1,19 @@
+@dataclass
+class NikeRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ShoeItem:
+    name: str
+    category: str
+    price: str
+    colors: str
+
+@dataclass
+class NikeResult:
+    products: List[ShoeItem]
+
+# Searches Nike for running shoes and extracts shoe name,
+# category, price, and color count.
+def search_nike(page: Page, request: NikeRequest) -> NikeResult

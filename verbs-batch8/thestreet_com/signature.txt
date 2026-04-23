@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class ThestreetSearchRequest:
+    search_query: str = "stock market"
+    max_results: int = 5
+
+
+@dataclass
+class ThestreetArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+
+
+@dataclass
+class ThestreetSearchResult:
+    items: List[ThestreetArticleItem] = field(default_factory=list)
+
+
+# Search for financial news and stock analysis on TheStreet by keyword.
+def thestreet_search(page: Page, request: ThestreetSearchRequest) -> ThestreetSearchResult:

@@ -1,0 +1,20 @@
+# Searches Booking.com Attractions for a given city and extracts up to
+# max_results attractions with name, rating, and price.
+
+@dataclass(frozen=True)
+class BookingAttractionsRequest:
+    city: str
+    max_results: int
+
+@dataclass(frozen=True)
+class BookingAttraction:
+    name: str
+    rating: str
+    price: str
+
+@dataclass(frozen=True)
+class BookingAttractionsResult:
+    city: str
+    attractions: list[BookingAttraction]
+
+def search_booking_attractions(page: Page, request: BookingAttractionsRequest) -> BookingAttractionsResult

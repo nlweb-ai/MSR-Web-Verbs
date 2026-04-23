@@ -1,0 +1,20 @@
+# Searches Healthline for health articles matching a query. For each article,
+# extracts the title, author, date, and summary.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "intermittent fasting benefits"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    author: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: List[Article] = field(default_factory=list)
+
+def healthline_search(page: Page, request: ArticleRequest) -> ArticleResult:

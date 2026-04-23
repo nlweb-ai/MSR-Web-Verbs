@@ -1,0 +1,20 @@
+# Searches Food52 for recipes matching a query. For each recipe, extracts the
+# name, author, rating, and description.
+
+@dataclass(frozen=True)
+class RecipeRequest:
+    query: str = "sourdough bread"
+    max_results: int = 5
+
+@dataclass
+class Recipe:
+    name: str = ""
+    author: str = ""
+    rating: str = ""
+    description: str = ""
+
+@dataclass
+class RecipeResult:
+    recipes: list = field(default_factory=list)
+
+def food52_search(page: Page, request: RecipeRequest) -> RecipeResult:

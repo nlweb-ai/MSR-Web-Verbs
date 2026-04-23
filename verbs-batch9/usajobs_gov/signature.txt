@@ -1,0 +1,21 @@
+@dataclass
+class USAJobsRequest:
+    query: str
+    location: str
+    max_results: int
+
+@dataclass
+class JobItem:
+    title: str
+    department: str
+    location: str
+    salary: str
+    closing: str
+
+@dataclass
+class USAJobsResult:
+    jobs: List[JobItem]
+
+# Searches USAJobs for federal positions and extracts job title,
+# department, location, salary, and closing date.
+def search_usajobs(page: Page, request: USAJobsRequest) -> USAJobsResult

@@ -1,0 +1,18 @@
+# Searches USGS for geological reports and data matching a query. For each
+# report, extracts the title and URL.
+
+@dataclass(frozen=True)
+class ReportRequest:
+    query: str = "earthquake California recent"
+    max_results: int = 5
+
+@dataclass
+class Report:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ReportResult:
+    items: List[Report] = field(default_factory=list)
+
+def usgs_search(page: Page, request: ReportRequest) -> ReportResult:

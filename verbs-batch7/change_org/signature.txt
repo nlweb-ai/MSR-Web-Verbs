@@ -1,0 +1,24 @@
+# Searches Change.org for petitions matching a query.
+# Extracts petition title, URL, number of signatures, location, and start date.
+
+@dataclass(frozen=True)
+class PetitionSearchRequest:
+    search_query: str = "environmental protection"
+    max_results: int = 5
+
+@dataclass
+class Petition:
+    title: str = ""
+    url: str = ""
+    num_signatures: str = ""
+    location: str = ""
+    start_date: str = ""
+
+@dataclass
+class PetitionSearchResult:
+    petitions: list[Petition]
+
+def change_search(
+    page: Page,
+    request: PetitionSearchRequest,
+) -> PetitionSearchResult:

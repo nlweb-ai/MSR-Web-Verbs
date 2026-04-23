@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class ApartmentListSearchRequest:
+    location: str = "Seattle, WA"
+    max_results: int = 5
+
+
+@dataclass
+class ApartmentItem:
+    property_name: str
+    rent_range: str
+    bedrooms: str
+    rating: str
+
+
+@dataclass
+class ApartmentListSearchResult:
+    location: str = ""
+    items: List[ApartmentItem] = field(default_factory=list)
+
+
+# Search ApartmentList for apartments.
+def search_apartmentlist(page: Page, request: ApartmentListSearchRequest) -> ApartmentListSearchResult:

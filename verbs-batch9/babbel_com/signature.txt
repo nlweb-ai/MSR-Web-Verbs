@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class BabbelLanguagesRequest:
+    max_results: int = 5
+
+
+@dataclass
+class LanguageItem:
+    language_name: str
+
+
+@dataclass
+class BabbelLanguagesResult:
+    items: List[LanguageItem] = field(default_factory=list)
+
+
+# Browse available languages on Babbel.
+def browse_babbel_languages(page: Page, request: BabbelLanguagesRequest) -> BabbelLanguagesResult:

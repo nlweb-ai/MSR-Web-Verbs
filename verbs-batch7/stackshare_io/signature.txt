@@ -1,0 +1,20 @@
+# Looks up a technology on StackShare (stackshare.io) by slug.
+# Extracts tech name, category, description, stacks count, followers count, and pros.
+
+@dataclass(frozen=True)
+class TechRequest:
+    tech_slug: str = "react"
+
+@dataclass
+class TechResult:
+    tech_name: str = ""
+    category: str = ""
+    description: str = ""
+    stacks_count: str = ""
+    followers_count: str = ""
+    pros: list[str]
+
+def stackshare_tech(
+    page: Page,
+    request: TechRequest,
+) -> TechResult:

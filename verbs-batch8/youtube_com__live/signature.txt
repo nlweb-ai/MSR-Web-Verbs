@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class YoutubeLiveSearchRequest:
+    search_query: str = "music"
+    max_results: int = 5
+
+
+@dataclass
+class YoutubeLiveItem:
+    video_title: str = ""
+    channel_name: str = ""
+    viewer_count: str = ""
+    started_time: str = ""
+    category: str = ""
+    url: str = ""
+
+
+@dataclass
+class YoutubeLiveSearchResult:
+    items: List[YoutubeLiveItem] = field(default_factory=list)
+
+
+# Browse current live streams on YouTube.
+def youtube_live_search(page: Page, request: YoutubeLiveSearchRequest) -> YoutubeLiveSearchResult:

@@ -1,0 +1,25 @@
+# Searches YouTube for a playlist by keyword and extracts video information.
+# Retrieves playlist title and for each video: index, title, channel, duration, and views info.
+
+@dataclass(frozen=True)
+class PlaylistRequest:
+    search_query: str = "Lo-Fi Hip Hop Radio"
+    max_results: int = 10
+
+@dataclass
+class VideoResult:
+    index: str = ""
+    title: str = ""
+    channel: str = ""
+    duration: str = ""
+    views_info: str = ""
+
+@dataclass
+class PlaylistResult:
+    playlist_title: str = ""
+    videos: list[VideoResult]
+
+def youtube_playlist(
+    page: Page,
+    request: PlaylistRequest,
+) -> PlaylistResult:

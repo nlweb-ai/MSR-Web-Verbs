@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class LawCornellSearchRequest:
+    search_query: str = "first amendment"
+    max_results: int = 5
+
+@dataclass
+class LawCornellSearchItem:
+    title: str = ""
+    code_section: str = ""
+    jurisdiction: str = ""
+    summary: str = ""
+    url: str = ""
+
+@dataclass
+class LawCornellSearchResult:
+    items: List[LawCornellSearchItem] = field(default_factory=list)
+    query: str = ""
+    result_count: int = 0
+
+def law_cornell_search(request: LawCornellSearchRequest) -> LawCornellSearchResult:
+    ...

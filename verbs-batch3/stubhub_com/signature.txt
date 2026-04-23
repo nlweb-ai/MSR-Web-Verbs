@@ -1,0 +1,25 @@
+# Search StubHub for event tickets matching a query. Navigate to the search results page,
+# parse event listings for name/venue/date, then visit each event's detail page to extract
+# the lowest ticket price. Return up to max_results events.
+
+@dataclass(frozen=True)
+class StubhubSearchRequest:
+    query: str = "NBA"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class StubhubEvent:
+    name: str = ""
+    venue: str = ""
+    date: str = ""
+    location: str = ""
+    lowest_price: str = "N/A"
+
+
+@dataclass(frozen=True)
+class StubhubSearchResult:
+    events: list = None  # list[StubhubEvent]
+
+
+def stubhub_search(page: Page, request: StubhubSearchRequest) -> StubhubSearchResult:

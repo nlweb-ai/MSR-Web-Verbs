@@ -1,0 +1,25 @@
+@dataclass(frozen=True)
+class AbeBooksSearchRequest:
+    search_query: str = "To Kill a Mockingbird first edition"
+    max_results: int = 5
+
+
+@dataclass
+class BookListingItem:
+    title: str = ""
+    author: str = ""
+    edition: str = ""
+    condition: str = ""
+    seller: str = ""
+    price: str = ""
+
+
+@dataclass
+class AbeBooksSearchResult:
+    query: str = ""
+    items: List[BookListingItem] = field(default_factory=list)
+
+
+# Searches AbeBooks for books matching a query and extracts listing details
+# including title, author, edition, condition, seller, and price.
+def search_abebooks(page: Page, request: AbeBooksSearchRequest) -> AbeBooksSearchResult:

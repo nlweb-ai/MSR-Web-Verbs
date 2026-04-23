@@ -1,0 +1,24 @@
+# Searches Goodreads lists (goodreads.com) by keyword and extracts books from the top matching list.
+# Extracts list title and each book's rank, title, author, and score.
+
+@dataclass(frozen=True)
+class ListSearchRequest:
+    search_query: str = "best science fiction"
+    max_results: int = 5
+
+@dataclass
+class Book:
+    rank: str = ""
+    title: str = ""
+    author: str = ""
+    score: str = ""
+
+@dataclass
+class ListSearchResult:
+    list_title: str = ""
+    books: list[Book]
+
+def list_search(
+    page: Page,
+    request: ListSearchRequest,
+) -> ListSearchResult:

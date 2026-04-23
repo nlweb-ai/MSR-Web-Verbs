@@ -1,0 +1,21 @@
+# mapquest_directions — Get driving directions on MapQuest and extract route details.
+
+@dataclass(frozen=True)
+class MapquestDirectionsRequest:
+    from_location: str = "Times Square, New York, NY"
+    to_location: str = "Central Park, New York, NY"
+
+@dataclass(frozen=True)
+class DirectionStep:
+    instruction: str = ""
+    distance: str = ""
+
+@dataclass(frozen=True)
+class MapquestDirectionsResult:
+    from_location: str = ""
+    to_location: str = ""
+    total_distance: str = ""
+    estimated_time: str = ""
+    steps: list = None  # list[DirectionStep]
+
+def mapquest_directions(page: Page, request: MapquestDirectionsRequest) -> MapquestDirectionsResult:

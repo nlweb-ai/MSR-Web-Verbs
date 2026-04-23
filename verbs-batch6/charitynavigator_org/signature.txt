@@ -1,0 +1,21 @@
+# Searches Charity Navigator for charities matching a query. For each charity,
+# extracts the name, rating, financial score, accountability score, and URL.
+
+@dataclass(frozen=True)
+class CharityRequest:
+    query: str = "disaster relief"
+    max_charities: int = 5
+
+@dataclass
+class Charity:
+    name: str = ""
+    rating: str = ""
+    financial_score: str = ""
+    accountability_score: str = ""
+    url: str = ""
+
+@dataclass
+class CharityResult:
+    charities: list = field(default_factory=list)
+
+def charitynavigator_search(page: Page, request: CharityRequest) -> CharityResult:

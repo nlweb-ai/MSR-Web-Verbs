@@ -1,0 +1,19 @@
+## youtube_trending
+Navigate to YouTube Trending and extract video listings.
+
+@dataclass
+class YouTubeTrendingRequest:
+    max_results: int    # number of trending videos to extract
+
+@dataclass
+class YouTubeTrendingVideo:
+    title: str          # video title
+    channel_name: str   # channel name
+    view_count: str     # e.g. "1.2M views"
+    upload_time: str    # e.g. "2 hours ago"
+
+@dataclass
+class YouTubeTrendingResult:
+    videos: list  # list of YouTubeTrendingVideo
+
+def youtube_trending(page: Page, request: YouTubeTrendingRequest) -> YouTubeTrendingResult

@@ -1,0 +1,19 @@
+@dataclass
+class TVDBRequest:
+    show: str
+    max_results: int
+
+@dataclass
+class TVDBItem:
+    name: str
+    year: str
+    media_type: str
+    description: str
+
+@dataclass
+class TVDBResult:
+    items: List[TVDBItem]
+
+# Searches TheTVDB for a show/movie and extracts name, year,
+# media type, and description from search results.
+def search_tvdb(page: Page, request: TVDBRequest) -> TVDBResult

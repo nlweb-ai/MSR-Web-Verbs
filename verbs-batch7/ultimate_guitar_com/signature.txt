@@ -1,0 +1,23 @@
+# Searches Ultimate Guitar (ultimate-guitar.com) for guitar tabs by song/artist.
+# Extracts title, artist, rating, and tab type for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "Wonderwall Oasis"
+    max_results: int = 5
+
+@dataclass
+class TabResult:
+    title: str = ""
+    artist: str = ""
+    rating: str = ""
+    type: str = ""
+
+@dataclass
+class SearchResult:
+    tabs: list[TabResult]
+
+def ultimateguitar_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

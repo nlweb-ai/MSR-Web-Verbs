@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class BonAppetitSearchRequest:
+    search_query: str = "pasta"
+    max_results: int = 5
+
+
+@dataclass
+class BonAppetitRecipeItem:
+    recipe_name: str = ""
+    author: str = ""
+    rating: str = ""
+    total_time: str = ""
+    description: str = ""
+    image_url: str = ""
+
+
+@dataclass
+class BonAppetitSearchResult:
+    items: List[BonAppetitRecipeItem] = field(default_factory=list)
+
+
+# Search for recipes on Bon Appetit.
+def bonappetit_search(page: Page, request: BonAppetitSearchRequest) -> BonAppetitSearchResult:

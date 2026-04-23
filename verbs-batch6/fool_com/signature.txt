@@ -1,0 +1,20 @@
+# Searches Motley Fool for articles matching a query. For each article, extracts
+# the headline, author, date, and summary.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "dividend stocks 2025"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    headline: str = ""
+    author: str = ""
+    date: str = ""
+    summary: str = ""
+
+@dataclass
+class ArticleResult:
+    articles: list = field(default_factory=list)
+
+def fool_search(page: Page, request: ArticleRequest) -> ArticleResult:

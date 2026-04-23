@@ -1,0 +1,184 @@
+"""
+Spotify – Search for "jazz playlist"
+Generated: 2026-02-28T18:49:46.024Z
+Pure Playwright – no AI.
+NOTE: Does not require Spotify login for public search results.
+"""
+import re, os, traceback, shutil, tempfile
+from playwright.sync_api import Page, sync_playwright
+
+import sys as _sys
+import os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
+
+from dataclasses import dataclass
+import subprocess
+import json
+import time
+from urllib.request import urlopen
+
+
+@dataclass(frozen=True)
+class SpotifySearchRequest:
+    query: str = "jazz playlist"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class SpotifyPlaylist:
+    name: str
+    creator: str
+
+
+@dataclass(frozen=True)
+class SpotifySearchResult:
+    query: str
+    playlists: list[SpotifyPlaylist]
+def search_spotify_playlists(page: Page, request: SpotifySearchRequest) -> SpotifySearchResult:
+    playlists = []
+    try:
+        print("STEP 1: Navigate to Spotify search...")
+        checkpoint("Navigate to Spotify search page")
+        page.goto("https://open.spotify.com/search/jazz%20playlist", wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_timeout(8000)
+
+        # dismiss cookie banner
+        for sel in ["button:has-text('Accept')", "#onetrust-accept-btn-handler", "button:has-text('OK')"]:
+            try:
+                loc = page.locator(sel).first
+                if loc.is_visible(timeout=800):
+                    checkpoint("Dismiss cookie banner")
+                    loc.evaluate("el => el.click()")
+            except Exception:
+                pass
+
+        # Click on "Playlists" tab if available
+        try:
+            pl_tab = page.locator("button:has-text('Playlists'), a:has-text('Playlists')").first
+            if pl_tab.is_visible(timeout=2000):
+                checkpoint("Click Playlists tab")
+                pl_tab.evaluate("el => el.click()")
+                page.wait_for_timeout(3000)
+        except Exception:
+            pass
+
+        for _ in range(5):
+            checkpoint("Scroll down to load more results")
+            page.evaluate("window.scrollBy(0, 500)")
+            page.wait_for_timeout(600)
+
+        print("STEP 2: Extract playlist data...")
+
+        # ── Strategy 1: .Card selector ──
+        cards = page.locator(".Card").all()
+        print(f"   Found {len(cards)} .Card elements")
+
+        for card in cards:
+            if len(playlists) >= request.max_results:
+                break
+            try:
+                txt = card.inner_text(timeout=3000)
+                lines = [l.strip() for l in txt.splitlines() if l.strip()]
+                if not lines:
+                    continue
+                name = lines[0]
+                creator = "N/A"
+                for ln in lines[1:]:
+                    m = re.match(r'^[Bb]y\s+(.+)', ln)
+                    if m:
+                        creator = m.group(1).strip()
+                        break
+                if name and len(name) >= 2:
+                    playlists.append({"name": name, "creator": creator})
+            except Exception:
+                continue
+
+        # ── Strategy 2: body text fallback (name / By creator alternating) ──
+        if not playlists:
+            print("   Strategy 1 found 0 — trying body text...")
+            body = page.inner_text("body")
+            lines = [l.strip() for l in body.splitlines() if l.strip()]
+            i = 0
+            while i < len(lines) - 1 and len(playlists) < request.max_results:
+                ln = lines[i]
+                # Look for "By ..." on one of the next 2 non-empty lines
+                for j in range(i + 1, min(i + 3, len(lines))):
+                    m = re.match(r'^[Bb]y\s+(.+)', lines[j])
+                    if m:
+                        # ln is the playlist name
+                        if 2 <= len(ln) <= 120 and not ln.startswith("By "):
+                            playlists.append({"name": ln, "creator": m.group(1).strip()})
+                        i = j + 1
+                        break
+                else:
+                    i += 1
+
+        if not playlists:
+            print("❌ ERROR: Extraction failed — no playlists found from the page.")
+
+        print(f"\nDONE – Top {len(playlists)} Jazz Playlists:")
+        for i, p in enumerate(playlists, 1):
+            print(f"  {i}. {p['name']} | By: {p['creator']}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        traceback.print_exc()
+    return SpotifySearchResult(
+        query=request.query,
+        playlists=[SpotifyPlaylist(name=p['name'], creator=p['creator']) for p in playlists],
+    )
+
+
+def test_spotify_playlists():
+    from playwright.sync_api import sync_playwright
+    request = SpotifySearchRequest(query="jazz playlist", max_results=5)
+    port = get_free_port()
+    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
+    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
+    chrome_proc = subprocess.Popen(
+        [
+            chrome,
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={profile_dir}",
+            "--remote-allow-origins=*",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1280,987",
+            "about:blank",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    ws_url = None
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        try:
+            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
+            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
+            if ws_url:
+                break
+        except Exception:
+            pass
+        time.sleep(0.4)
+    if not ws_url:
+        raise TimeoutError("Chrome CDP not ready")
+    with sync_playwright() as pl:
+        browser = pl.chromium.connect_over_cdp(ws_url)
+        context = browser.contexts[0]
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = search_spotify_playlists(page, request)
+        finally:
+            chrome_proc.terminate()
+            shutil.rmtree(profile_dir, ignore_errors=True)
+    print(f"\nTotal playlists: {len(result.playlists)}")
+    for i, p in enumerate(result.playlists, 1):
+        print(f"  {i}. {p.name}  by {p.creator}")
+
+
+if __name__ == "__main__":
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_spotify_playlists)

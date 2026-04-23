@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class KingArthurRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class RecipeItem:
+    title: str
+    reviews: str
+
+@dataclass
+class KingArthurResult:
+    query: str
+    items: List[RecipeItem]
+
+# Searches King Arthur Baking for recipes matching the query and returns
+# up to max_results recipes with title and review count.
+def search_kingarthur_recipes(page: Page, request: KingArthurRequest) -> KingArthurResult:

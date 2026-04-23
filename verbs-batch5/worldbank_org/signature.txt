@@ -1,0 +1,25 @@
+# Looks up an economic indicator on World Bank Data for a country. Extracts the
+# country name, indicator name, most recent value, year, and related indicators.
+
+@dataclass(frozen=True)
+class WorldBankRequest:
+    indicator: str = "GDP per capita"
+    country: str = "Germany"
+    country_slug: str = "germany"
+    max_related: int = 5
+
+@dataclass
+class IndicatorResult:
+    country_name: str = ""
+    indicator_name: str = ""
+    most_recent_value: str = ""
+    year: str = ""
+    related_indicators: list = field(default_factory=list)
+
+@dataclass
+class RelatedIndicator:
+    name: str = ""
+    value: str = ""
+    year: str = ""
+
+def worldbank_lookup(page: Page, request: WorldBankRequest) -> IndicatorResult:

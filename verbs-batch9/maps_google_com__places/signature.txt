@@ -1,0 +1,19 @@
+@dataclass
+class GMapsRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class PlaceItem:
+    name: str
+    rating: str
+    address: str
+
+@dataclass
+class GMapsResult:
+    query: str
+    places: List[PlaceItem]
+
+# Searches Google Maps for places matching the query and returns
+# up to max_results places with name, rating, and address.
+def search_gmaps_places(page: Page, request: GMapsRequest) -> GMapsResult

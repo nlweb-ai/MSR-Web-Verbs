@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class AirbnbLuxeSearchRequest:
+    location: str = "Malibu, California"
+    max_results: int = 5
+
+
+@dataclass
+class LuxePropertyItem:
+    property_name: str
+    price: str
+    bedrooms: str
+    rating: str
+
+
+@dataclass
+class AirbnbLuxeSearchResult:
+    location: str = ""
+    items: List[LuxePropertyItem] = field(default_factory=list)
+
+
+# Browses Airbnb Luxe listings in a location and extracts property details.
+def search_airbnb_luxe(page: Page, request: AirbnbLuxeSearchRequest) -> AirbnbLuxeSearchResult:

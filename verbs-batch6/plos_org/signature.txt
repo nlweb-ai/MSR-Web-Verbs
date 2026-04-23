@@ -1,0 +1,18 @@
+# Searches PLOS for scientific articles matching a query. For each article,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ArticleRequest:
+    query: str = "climate change impact ocean"
+    max_results: int = 5
+
+@dataclass
+class Article:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ArticleResult:
+    items: List[Article] = field(default_factory=list)
+
+def plos_search(page: Page, request: ArticleRequest) -> ArticleResult:

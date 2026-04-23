@@ -1,0 +1,23 @@
+# Searches eBay (ebay.com) for completed/sold listings by query.
+# Extracts item title, sold price, sold date, and condition for each result.
+
+@dataclass(frozen=True)
+class SoldSearchRequest:
+    query: str = "Nintendo Switch OLED"
+    max_results: int = 5
+
+@dataclass
+class SoldItem:
+    title: str = ""
+    sold_price: str = ""
+    sold_date: str = ""
+    condition: str = ""
+
+@dataclass
+class SoldSearchResult:
+    items: list[SoldItem]
+
+def ebay_sold_search(
+    page: Page,
+    request: SoldSearchRequest,
+) -> SoldSearchResult:

@@ -1,0 +1,20 @@
+# Extracts salary data from PayScale for a given job title. Returns the average
+# salary, salary range, bonus range, total pay range, number of profiles, and
+# experience levels.
+
+@dataclass(frozen=True)
+class PayScaleRequest:
+    job_title: str = "Data Scientist"
+    job_slug: str = "Data_Scientist"
+
+@dataclass(frozen=True)
+class PayScaleResult:
+    average_salary: str = ""
+    salary_range_low: str = ""
+    salary_range_high: str = ""
+    bonus_range: str = ""
+    total_pay_range: str = ""
+    num_profiles: str = ""
+    experience_levels: list = None  # list of dicts
+
+def payscale_salary(page: Page, request: PayScaleRequest) -> PayScaleResult:

@@ -1,0 +1,19 @@
+# Browses Exercism exercises for a given programming track. For each exercise,
+# extracts the name, difficulty, and description.
+
+@dataclass(frozen=True)
+class ExercismRequest:
+    track: str = "python"
+    max_results: int = 10
+
+@dataclass(frozen=True)
+class ExercismExercise:
+    exercise_name: str = ""
+    difficulty: str = ""
+    description: str = ""
+
+@dataclass(frozen=True)
+class ExercismResult:
+    exercises: list = None  # list[ExercismExercise]
+
+def exercism_exercises(page: Page, request: ExercismRequest) -> ExercismResult:

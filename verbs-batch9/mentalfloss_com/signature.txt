@@ -1,0 +1,19 @@
+@dataclass
+class MentalFlossRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    date: str
+    category: str
+
+@dataclass
+class MentalFlossResult:
+    articles: List[ArticleItem]
+
+# Searches Mental Floss for articles and extracts title,
+# author, publish date, and category.
+def search_mentalfloss(page: Page, request: MentalFlossRequest) -> MentalFlossResult

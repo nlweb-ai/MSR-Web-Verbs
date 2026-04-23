@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class CntravelerSearchRequest:
+    search_query: str = "best beaches"
+    max_results: int = 5
+
+
+@dataclass
+class CntravelerArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+    image_url: str = ""
+
+
+@dataclass
+class CntravelerSearchResult:
+    items: List[CntravelerArticleItem] = field(default_factory=list)
+
+
+# Search for travel articles on Condé Nast Traveler by keyword.
+def cntraveler_search(page: Page, request: CntravelerSearchRequest) -> CntravelerSearchResult:

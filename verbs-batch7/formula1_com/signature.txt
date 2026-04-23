@@ -1,0 +1,23 @@
+# Extracts F1 driver standings from Formula1.com (formula1.com/en/results).
+# For each driver, retrieves position, name, nationality, team, and points.
+
+@dataclass(frozen=True)
+class StandingsRequest:
+    max_results: int = 10
+
+@dataclass
+class Driver:
+    position: int = 0
+    driver_name: str = ""
+    nationality: str = ""
+    team: str = ""
+    points: int = 0
+
+@dataclass
+class StandingsResult:
+    drivers: list[Driver]
+
+def f1_standings(
+    page: Page,
+    request: StandingsRequest,
+) -> StandingsResult:

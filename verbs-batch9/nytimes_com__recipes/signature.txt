@@ -1,0 +1,20 @@
+@dataclass
+class NYTRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class RecipeItem:
+    name: str
+    author: str
+    rating: str
+    num_ratings: str
+    prep_time: str
+
+@dataclass
+class NYTResult:
+    recipes: List[RecipeItem]
+
+# Searches NYT Cooking for recipes and extracts recipe name,
+# author, rating, number of ratings, and prep time.
+def search_nyt_recipes(page: Page, request: NYTRequest) -> NYTResult

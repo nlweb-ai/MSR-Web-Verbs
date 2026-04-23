@@ -1,0 +1,17 @@
+@dataclass
+class MTGRequest:
+    format: str
+    max_results: int
+
+@dataclass
+class DeckItem:
+    name: str
+    meta_share: str
+
+@dataclass
+class MTGResult:
+    decks: List[DeckItem]
+
+# Browses MTGGoldfish metagame page and extracts top decks
+# including deck name and meta share percentage.
+def get_mtg_metagame(page: Page, request: MTGRequest) -> MTGResult

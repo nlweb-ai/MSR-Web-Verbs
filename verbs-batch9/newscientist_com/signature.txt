@@ -1,0 +1,18 @@
+@dataclass
+class NewScientistRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    date: str
+    summary: str
+
+@dataclass
+class NewScientistResult:
+    articles: List[ArticleItem]
+
+# Searches New Scientist for articles and extracts title,
+# publish date, and summary.
+def search_newscientist(page: Page, request: NewScientistRequest) -> NewScientistResult

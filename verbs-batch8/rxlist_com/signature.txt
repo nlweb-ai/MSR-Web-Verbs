@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class RxlistSearchRequest:
+    search_query: str = "ibuprofen"
+    max_results: int = 5
+
+
+@dataclass
+class RxlistDrugItem:
+    drug_name: str = ""
+    generic_name: str = ""
+    drug_class: str = ""
+    uses: str = ""
+    side_effects: str = ""
+    dosage_forms: str = ""
+
+
+@dataclass
+class RxlistSearchResult:
+    items: List[RxlistDrugItem] = field(default_factory=list)
+
+
+# Search for medication information on RxList by keyword.
+def rxlist_search(page: Page, request: RxlistSearchRequest) -> RxlistSearchResult:

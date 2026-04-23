@@ -1,0 +1,18 @@
+@dataclass
+class SSARequest:
+    topic: str
+
+@dataclass
+class ResourceSection:
+    title: str
+    description: str
+
+@dataclass
+class SSAResult:
+    topic: str
+    summary: str
+    sections: List[ResourceSection]
+
+# Extracts SSA retirement benefits info including summary
+# and key resource sections with descriptions.
+def get_ssa_info(page: Page, request: SSARequest) -> SSAResult

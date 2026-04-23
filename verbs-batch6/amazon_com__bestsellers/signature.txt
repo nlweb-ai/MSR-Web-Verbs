@@ -1,0 +1,21 @@
+# Gets Amazon Best Sellers in Books. For each book, extracts the rank, title,
+# author, price, and rating.
+
+@dataclass(frozen=True)
+class BestsellersRequest:
+    category: str = "Books"
+    max_books: int = 5
+
+@dataclass
+class Book:
+    rank: str = ""
+    title: str = ""
+    author: str = ""
+    price: str = ""
+    rating: str = ""
+
+@dataclass
+class BestsellersResult:
+    books: list = field(default_factory=list)
+
+def amazon_bestsellers(page: Page, request: BestsellersRequest) -> BestsellersResult:

@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class GGDealsRequest:
+    max_results: int
+
+@dataclass
+class DealItem:
+    title: str
+    original_price: str
+    current_price: str
+    discount: str
+
+@dataclass
+class GGDealsResult:
+    items: List[DealItem]
+
+# Browses GG.deals for the best current PC game deals and returns
+# up to max_results deals with title, original price, current price, and discount.
+def browse_ggdeals(page: Page, request: GGDealsRequest) -> GGDealsResult:

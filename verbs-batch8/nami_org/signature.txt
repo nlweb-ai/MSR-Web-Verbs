@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class NamiSearchRequest:
+    search_query: str = "depression"
+    max_results: int = 5
+
+@dataclass
+class NamiSearchItem:
+    title: str = ""
+    category: str = ""
+    summary: str = ""
+    url: str = ""
+    resource_type: str = ""
+
+@dataclass
+class NamiSearchResult:
+    items: List[NamiSearchItem] = field(default_factory=list)
+    query: str = ""
+    result_count: int = 0
+
+def nami_search(request: NamiSearchRequest) -> NamiSearchResult:
+    ...

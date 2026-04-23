@@ -1,0 +1,25 @@
+# Looks up an artist on Last.fm (last.fm) and extracts profile information.
+# Retrieves artist name, listeners, scrobbles, bio, and top tracks with listener counts.
+
+@dataclass(frozen=True)
+class ArtistLookupRequest:
+    artist: str = "Radiohead"
+    max_tracks: int = 5
+
+@dataclass
+class Track:
+    name: str = ""
+    listeners: str = ""
+
+@dataclass
+class ArtistLookupResult:
+    artist_name: str = ""
+    listeners: str = ""
+    scrobbles: str = ""
+    bio: str = ""
+    top_tracks: list[Track]
+
+def artist_lookup(
+    page: Page,
+    request: ArtistLookupRequest,
+) -> ArtistLookupResult:

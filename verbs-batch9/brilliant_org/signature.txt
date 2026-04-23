@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class BrilliantCoursesRequest:
+    category: str = "Mathematics"
+    max_results: int = 5
+
+
+@dataclass
+class CourseItem:
+    name: str = ""
+
+
+@dataclass
+class BrilliantCoursesResult:
+    category: str = ""
+    items: List[CourseItem] = field(default_factory=list)
+
+
+# Browse Brilliant.org courses by category.
+def browse_brilliant_courses(page: Page, request: BrilliantCoursesRequest) -> BrilliantCoursesResult:

@@ -1,0 +1,31 @@
+overleaf_git_clone(page, request)
+
+Looks up an Overleaf project by name on the dashboard, extracts
+the project ID, and clones it locally via git.overleaf.com.
+
+Parameters:
+  page: Page (Playwright Page object)
+  request: OverleafGitCloneRequest
+    - search_query (str): Text to search for in the Overleaf project list (required)
+    - local_dir (str): Local directory path to clone into (required)
+    - overleaf_git_token (str): Overleaf Git authentication token (required, from Account Settings)
+
+Returns: OverleafGitCloneResult
+    - success (bool): Whether the clone succeeded
+    - project_id (str): Overleaf project ID extracted from the URL
+    - local_path (str): Absolute path to the local clone
+    - error (str): Error message if not successful
+
+@dataclass(frozen=True)
+class OverleafGitCloneRequest:
+    search_query: str
+    local_dir: str
+    overleaf_git_token: str
+
+@dataclass(frozen=True)
+class OverleafGithubCloneResult:
+    success: bool
+    project_id: str
+    local_path: str
+    github_remote_url: str
+    error: str

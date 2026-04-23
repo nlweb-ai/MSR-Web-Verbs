@@ -1,0 +1,21 @@
+# Searches Instructables for DIY projects matching a query. For each project,
+# extracts the title, author, views, favorites, and project URL.
+
+@dataclass(frozen=True)
+class InstructablesRequest:
+    search_query: str = "LED lamp"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class InstructablesProject:
+    project_title: str = ""
+    author: str = ""
+    views: str = ""
+    favorites: str = ""
+    project_url: str = ""
+
+@dataclass(frozen=True)
+class InstructablesResult:
+    projects: list = None  # list[InstructablesProject]
+
+def instructables_search(page: Page, request: InstructablesRequest) -> InstructablesResult:

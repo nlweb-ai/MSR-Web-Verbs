@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class TastingtableSearchRequest:
+    search_query: str = "pasta recipe"
+    max_results: int = 5
+
+
+@dataclass
+class TastingtableArticleItem:
+    title: str = ""
+    author: str = ""
+    publish_date: str = ""
+    category: str = ""
+    summary: str = ""
+
+
+@dataclass
+class TastingtableSearchResult:
+    items: List[TastingtableArticleItem] = field(default_factory=list)
+
+
+# Search for food articles and recipes on Tasting Table by keyword.
+def tastingtable_search(page: Page, request: TastingtableSearchRequest) -> TastingtableSearchResult:

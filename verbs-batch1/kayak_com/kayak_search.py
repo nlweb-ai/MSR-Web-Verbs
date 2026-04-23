@@ -1,0 +1,220 @@
+"""
+Kayak – Flights Boston to Miami
+Generated: 2026-02-28T15:40:42.281Z
+Pure Playwright – no AI.
+"""
+import re, os, traceback
+from datetime import date, timedelta
+from playwright.sync_api import Page, sync_playwright
+
+import sys as _sys
+import os as _os
+_sys.path.insert(0, _os.path.join(_os.path.dirname(__file__), ".."))
+from cdp_utils import get_free_port, get_temp_profile_dir, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
+import shutil
+
+from dataclasses import dataclass
+from dateutil.relativedelta import relativedelta
+import subprocess
+import tempfile
+import json
+import time
+from urllib.request import urlopen
+
+
+@dataclass(frozen=True)
+class KayakFlightSearchRequest:
+    origin: str
+    destination: str
+    departure_date: date
+    return_date: date
+    max_results: int
+
+
+@dataclass(frozen=True)
+class KayakFlight:
+    airline: str
+    itinerary: str
+    price: str
+
+
+@dataclass(frozen=True)
+class KayakFlightSearchResult:
+    origin: str
+    destination: str
+    departure_date: date
+    return_date: date
+    flights: list[KayakFlight]
+
+
+# Searches Kayak for round-trip flights between origin and destination on given
+# dates, returning up to max_results options sorted by price.
+def search_kayak_flights(
+    page: Page,
+    request: KayakFlightSearchRequest,
+) -> KayakFlightSearchResult:
+    depart = request.departure_date
+    ret    = request.return_date
+    max_results = request.max_results
+    raw_results = []
+    flights = []
+    try:
+        depart = request.departure_date
+        ret = request.return_date
+        d_str = depart.strftime("%Y-%m-%d")
+        r_str = ret.strftime("%Y-%m-%d")
+
+        print(f"STEP 1: Navigate to Kayak ({request.origin}→{request.destination}, {d_str} to {r_str})...")
+        url = f"https://www.kayak.com/flights/{request.origin}-{request.destination}/{d_str}/{r_str}?sort=price_a"
+        checkpoint("Navigate to Kayak flight search results")
+        page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_timeout(10000)
+
+        for sel in ["button:has-text('Accept')", "button:has-text('OK')", ".dCLk-close"]:
+            try:
+                loc = page.locator(sel).first
+                if loc.is_visible(timeout=800):
+                    checkpoint("Dismiss popup or overlay")
+                    loc.evaluate("el => el.click()")
+            except Exception:
+                pass
+
+        for _ in range(6):
+            page.evaluate("window.scrollBy(0, 600)")
+            page.wait_for_timeout(800)
+
+        print("STEP 2: Extract flight data...")
+
+        # Try structured result card selectors first
+        card_selectors = [
+            "[class*='resultInner']", "[class*='nrc6']",
+            "[class*='result-item']", "div[class*='flight']",
+        ]
+        for card_sel in card_selectors:
+            cards = page.locator(card_sel)
+            count = cards.count()
+            if count == 0:
+                continue
+            for i in range(min(count, 15)):
+                if len(flights) >= 5:
+                    break
+                try:
+                    card = cards.nth(i)
+                    txt = card.inner_text(timeout=2000)
+                    lines_c = [l.strip() for l in txt.split("\n") if l.strip()]
+                    full = " ".join(lines_c)
+                    pm = re.search(r"\$(\d[\d,]*)", full)
+                    if not pm:
+                        continue
+                    price = f"${pm.group(1)}"
+                    airline = ""
+                    itinerary = ""
+                    for ln in lines_c:
+                        if re.search(r"AM|PM|am|pm|\d{1,2}:\d{2}", ln) and len(ln) < 120:
+                            itinerary = (itinerary + "\n" + ln).strip() if itinerary else ln
+                        elif len(ln) > 3 and len(ln) < 50 and not re.search(r"\$|filter|sort|stop|nonstop|layover", ln, re.IGNORECASE) and not re.search(r"\d+h|\d+m", ln):
+                            if not airline:
+                                airline = ln
+                    flights.append({"airline": airline or "N/A", "itinerary": itinerary or "N/A", "price": price})
+                except Exception:
+                    pass
+            if flights:
+                break
+
+        if not flights:
+            body = page.locator("body").inner_text(timeout=10000)
+            lines = [l.strip() for l in body.split("\n") if l.strip()]
+            for i, line in enumerate(lines):
+                if "$" in line and re.search(r"\$\d+", line):
+                    m = re.search(r"\$([\d,]+)", line)
+                    if m:
+                        price = f"${m.group(1)}"
+                        airline = ""
+                        itinerary = ""
+                        for j in range(max(0, i-5), i):
+                            nl = lines[j]
+                            if re.search(r"AM|PM|\d{1,2}:\d{2}", nl):
+                                itinerary = nl[:100]
+                            elif len(nl) > 3 and len(nl) < 40 and not re.search(r"\$|filter|sort", nl, re.IGNORECASE):
+                                airline = nl
+                        flights.append({"airline": airline or "N/A", "itinerary": itinerary or "N/A", "price": price})
+                if len(flights) >= 5:
+                    break
+
+        print(f"\nDONE – Top {len(flights)} Cheapest Flights:")
+        for i, f in enumerate(flights, 1):
+            print(f"  {i}. {f.get('airline', 'N/A')} | {f.get('itinerary', 'N/A')} | {f.get('price', 'N/A')}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        traceback.print_exc()
+    return KayakFlightSearchResult(
+        origin=request.origin,
+        destination=request.destination,
+        departure_date=request.departure_date,
+        return_date=request.return_date,
+        flights=[KayakFlight(airline=f.get('airline','N/A'), itinerary=f.get('itinerary','N/A'), price=f.get('price','N/A')) for f in flights],
+    )
+
+
+def test_search_kayak_flights() -> None:
+    from dateutil.relativedelta import relativedelta
+    from playwright.sync_api import sync_playwright
+    today = date.today()
+    departure = today + relativedelta(months=2)
+    request = KayakFlightSearchRequest(
+        origin="BOS",
+        destination="MIA",
+        departure_date=departure,
+        return_date=departure + timedelta(days=7),
+        max_results=5,
+    )
+    port = get_free_port()
+    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
+    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
+    chrome_proc = subprocess.Popen(
+        [
+            chrome,
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={profile_dir}",
+            "--remote-allow-origins=*",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1280,987",
+            "about:blank",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    ws_url = None
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        try:
+            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
+            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
+            if ws_url:
+                break
+        except Exception:
+            pass
+        time.sleep(0.4)
+    if not ws_url:
+        raise TimeoutError("Chrome CDP not ready")
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.connect_over_cdp(ws_url)
+        context = browser.contexts[0]
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = search_kayak_flights(page, request)
+        finally:
+            chrome_proc.terminate()
+            shutil.rmtree(profile_dir, ignore_errors=True)
+    assert result.origin == request.origin
+    assert len(result.flights) <= request.max_results
+    print(f"\nTotal flights found: {len(result.flights)}")
+
+
+if __name__ == "__main__":
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_search_kayak_flights)

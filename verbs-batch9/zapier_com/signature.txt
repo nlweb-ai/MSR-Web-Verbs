@@ -1,0 +1,17 @@
+@dataclass
+class ZapierRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ZapItem:
+    name: str
+    apps: str
+
+@dataclass
+class ZapierResult:
+    zaps: List[ZapItem]
+
+# Searches Zapier for integrations and extracts Zap name
+# and connected apps.
+def search_zapier(page: Page, request: ZapierRequest) -> ZapierResult

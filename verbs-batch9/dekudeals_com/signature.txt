@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class DekuDealsBrowseRequest:
+    max_results: int = 5
+
+
+@dataclass
+class GameDealItem:
+    title: str = ""
+    current_price: str = ""
+    regular_price: str = ""
+    discount: str = ""
+    sale_ends: str = ""
+
+
+@dataclass
+class DekuDealsBrowseResult:
+    items: List[GameDealItem] = field(default_factory=list)
+
+
+# Browse Deku Deals for Nintendo Switch game deals.
+def browse_dekudeals(page: Page, request: DekuDealsBrowseRequest) -> DekuDealsBrowseResult:

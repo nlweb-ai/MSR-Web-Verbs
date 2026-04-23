@@ -1,0 +1,19 @@
+@dataclass
+class SlashdotRequest:
+    max_results: int
+
+@dataclass
+class StoryItem:
+    headline: str
+    department: str
+    author: str
+    comments: str
+    post_date: str
+
+@dataclass
+class SlashdotResult:
+    stories: List[StoryItem]
+
+# Browses Slashdot and extracts headline, department tag,
+# author, comment count, and post date.
+def get_slashdot_stories(page: Page, request: SlashdotRequest) -> SlashdotResult

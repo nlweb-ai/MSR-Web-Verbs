@@ -1,0 +1,18 @@
+@dataclass
+class MarketBeatRequest:
+    ticker: str
+
+@dataclass
+class StockInfo:
+    ticker: str
+    price: str
+    market_cap: str
+    pe_ratio: str
+    dividend_yield: str
+    high_52w: str
+    low_52w: str
+    analyst_rating: str
+
+# Looks up stock information on MarketBeat for the given ticker
+# and returns price, market cap, P/E, dividend yield, 52-week range, analyst rating.
+def lookup_marketbeat_stock(page: Page, request: MarketBeatRequest) -> StockInfo

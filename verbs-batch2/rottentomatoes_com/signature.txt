@@ -1,0 +1,15 @@
+# Looks up a movie on Rotten Tomatoes and extracts the Tomatometer score,
+# audience score, and synopsis.
+
+@dataclass(frozen=True)
+class RottenTomatoesMovieRequest:
+    movie_name: str
+
+@dataclass(frozen=True)
+class RottenTomatoesMovieResult:
+    movie_name: str
+    tomatometer: str
+    audience_score: str
+    synopsis: str
+
+def lookup_rottentomatoes_movie(page: Page, request: RottenTomatoesMovieRequest) -> RottenTomatoesMovieResult

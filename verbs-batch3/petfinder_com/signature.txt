@@ -1,0 +1,22 @@
+# Search for adoptable pets on petfinder.com by animal type and ZIP code,
+# then extract pet listings with name, breed, age, gender, and shelter name.
+
+@dataclass(frozen=True)
+class PetfinderSearchRequest:
+    animal_type: str = "dogs"
+    location: str = "90210"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class PetListing:
+    name: str = ""
+    breed: str = ""
+    age: str = ""
+    gender: str = ""
+    shelter: str = ""
+
+@dataclass(frozen=True)
+class PetfinderSearchResult:
+    pets: tuple = ()
+
+def petfinder_search(page: Page, request: PetfinderSearchRequest) -> PetfinderSearchResult:

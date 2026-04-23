@@ -1,0 +1,19 @@
+@dataclass
+class TheRealRealRequest:
+    designer: str
+    max_results: int
+
+@dataclass
+class ConsignmentItem:
+    name: str
+    designer: str
+    price: str
+    discount: str
+
+@dataclass
+class TheRealRealResult:
+    items: List[ConsignmentItem]
+
+# Searches The RealReal for consignment items and extracts name,
+# designer, price, and discount info.
+def search_therealreal(page: Page, request: TheRealRealRequest) -> TheRealRealResult

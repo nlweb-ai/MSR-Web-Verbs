@@ -1,0 +1,17 @@
+# Looks up a brand's sustainability rating on Good On You. Extracts the name,
+# overall rating, planet score, people score, animals score, and summary.
+
+@dataclass(frozen=True)
+class BrandRequest:
+    brand: str = "Patagonia"
+
+@dataclass
+class BrandResult:
+    name: str = ""
+    overall_rating: str = ""
+    planet_score: str = ""
+    people_score: str = ""
+    animals_score: str = ""
+    summary: str = ""
+
+def goodonyou_search(page: Page, request: BrandRequest) -> BrandResult:

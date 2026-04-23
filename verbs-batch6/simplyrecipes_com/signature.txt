@@ -1,0 +1,18 @@
+# Searches Simply Recipes for recipes matching a query. For each recipe,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class RecipeRequest:
+    query: str = "chocolate chip cookies"
+    max_results: int = 5
+
+@dataclass
+class Recipe:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class RecipeResult:
+    items: List[Recipe] = field(default_factory=list)
+
+def simplyrecipes_search(page: Page, request: RecipeRequest) -> RecipeResult:

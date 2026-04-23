@@ -1,0 +1,20 @@
+@dataclass
+class MensHealthRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ArticleItem:
+    title: str
+    author: str
+    date: str
+    category: str
+    summary: str
+
+@dataclass
+class MensHealthResult:
+    articles: List[ArticleItem]
+
+# Searches Men's Health for fitness articles and extracts title,
+# author, publish date, category, and summary.
+def search_menshealth(page: Page, request: MensHealthRequest) -> MensHealthResult

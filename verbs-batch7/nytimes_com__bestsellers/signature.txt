@@ -1,0 +1,23 @@
+# Extracts top fiction bestsellers from the NYT Best Sellers list (nytimes.com/books/best-sellers).
+# Retrieves rank, title, author, weeks on list, and description for each book.
+
+@dataclass(frozen=True)
+class Request:
+    max_results: int = 5
+
+@dataclass
+class Book:
+    rank: int = 0
+    title: str = ""
+    author: str = ""
+    weeks_on_list: str = ""
+    description: str = ""
+
+@dataclass
+class Result:
+    books: list[Book]
+
+def nyt_bestsellers(
+    page: Page,
+    request: Request,
+) -> Result:

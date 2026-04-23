@@ -1,0 +1,22 @@
+# Searches ArtStation for artwork matching a query. For each artwork,
+# extracts the title, artist name, medium, likes, views, and tags.
+
+@dataclass(frozen=True)
+class ArtStationRequest:
+    search_query: str = "concept art"
+    max_results: int = 5
+
+@dataclass
+class Artwork:
+    title: str = ""
+    artist_name: str = ""
+    medium: str = ""
+    num_likes: str = ""
+    num_views: str = ""
+    tags: str = ""
+
+@dataclass
+class ArtStationResult:
+    artworks: list = field(default_factory=list)
+
+def artstation_search(page: Page, request: ArtStationRequest) -> ArtStationResult:

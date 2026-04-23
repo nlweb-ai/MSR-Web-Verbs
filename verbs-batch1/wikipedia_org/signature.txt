@@ -1,0 +1,17 @@
+@dataclass(frozen=True)
+class WikipediaSearchRequest:
+    search_term: str = "Space Needle"
+
+@dataclass(frozen=True)
+class WikipediaInfoboxFacts:
+    location: str
+    height: str
+    opened: str
+
+@dataclass(frozen=True)
+class WikipediaArticleResult:
+    search_term: str
+    summary: str
+    infobox: WikipediaInfoboxFacts
+
+def search_wikipedia_article(page: Page, request: WikipediaSearchRequest) -> WikipediaArticleResult

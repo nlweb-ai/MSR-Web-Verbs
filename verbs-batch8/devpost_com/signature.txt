@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class DevpostSearchRequest:
+    search_query: str = "machine learning"
+    max_results: int = 5
+
+
+@dataclass
+class DevpostProjectItem:
+    project_name: str = ""
+    tagline: str = ""
+    num_likes: str = ""
+    num_comments: str = ""
+    built_with: str = ""
+    hackathon_name: str = ""
+
+
+@dataclass
+class DevpostSearchResult:
+    items: List[DevpostProjectItem] = field(default_factory=list)
+
+
+# Search for hackathon projects on Devpost.
+def devpost_search(page: Page, request: DevpostSearchRequest) -> DevpostSearchResult:

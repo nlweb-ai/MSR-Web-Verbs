@@ -1,0 +1,20 @@
+# Looks up currency exchange rate on XE. Extracts the current rate, inverse
+# rate, 30-day high/low/average, and volatility.
+
+@dataclass(frozen=True)
+class XERequest:
+    from_currency: str = "USD"
+    to_currency: str = "EUR"
+
+@dataclass
+class ExchangeRate:
+    from_currency: str = ""
+    to_currency: str = ""
+    current_rate: str = ""
+    inverse_rate: str = ""
+    high_30d: str = ""
+    low_30d: str = ""
+    avg_30d: str = ""
+    volatility_30d: str = ""
+
+def xe_lookup(page: Page, request: XERequest) -> ExchangeRate:

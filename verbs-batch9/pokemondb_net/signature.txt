@@ -1,0 +1,25 @@
+@dataclass
+class PokemonRequest:
+    pokemon: str
+
+@dataclass
+class PokemonInfo:
+    name: str
+    pokedex_number: str
+    types: str
+    abilities: str
+    hp: str
+    attack: str
+    defense: str
+    sp_atk: str
+    sp_def: str
+    speed: str
+    evolution_chain: str
+
+@dataclass
+class PokemonResult:
+    info: PokemonInfo
+
+# Looks up a Pokemon on PokemonDB and extracts name, Pokedex number,
+# types, abilities, base stats, and evolution chain.
+def get_pokemon_info(page: Page, request: PokemonRequest) -> PokemonResult

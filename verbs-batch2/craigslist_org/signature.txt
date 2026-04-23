@@ -1,0 +1,22 @@
+# Searches Craigslist For Sale in a given region for a query and extracts
+# up to max_results listings with title, price, and location.
+
+@dataclass(frozen=True)
+class CraigslistSearchRequest:
+    query: str
+    region: str
+    max_results: int
+
+@dataclass(frozen=True)
+class CraigslistListing:
+    title: str
+    price: str
+    location: str
+
+@dataclass(frozen=True)
+class CraigslistSearchResult:
+    query: str
+    region: str
+    listings: list[CraigslistListing]
+
+def search_craigslist(page: Page, request: CraigslistSearchRequest) -> CraigslistSearchResult

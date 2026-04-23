@@ -1,0 +1,23 @@
+# Search for products on samsclub.com by query and extract listings
+# including product name, price, unit price, and rating.
+
+@dataclass(frozen=True)
+class SamsclubSearchRequest:
+    query: str = "protein bars"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class SamsclubProduct:
+    name: str = ""
+    price: str = "N/A"
+    unit_price: str = "N/A"
+    rating: str = "N/A"
+
+
+@dataclass(frozen=True)
+class SamsclubSearchResult:
+    products: tuple = ()
+
+
+def samsclub_search(page: Page, request: SamsclubSearchRequest) -> SamsclubSearchResult:

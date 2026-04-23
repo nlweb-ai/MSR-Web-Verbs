@@ -1,0 +1,21 @@
+# Searches PetSmart for products matching a query. For each product, extracts
+# the name, brand, price, rating, and number of reviews.
+
+@dataclass(frozen=True)
+class PetSmartRequest:
+    query: str = "dog food grain free"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class PetSmartProduct:
+    product_name: str = ""
+    brand: str = ""
+    price: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+
+@dataclass(frozen=True)
+class PetSmartResult:
+    products: list = None  # list[PetSmartProduct]
+
+def petsmart_search(page: Page, request: PetSmartRequest) -> PetSmartResult:

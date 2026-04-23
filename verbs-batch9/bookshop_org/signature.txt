@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class BookshopSearchRequest:
+    query: str = "science fiction"
+    max_results: int = 5
+
+
+@dataclass
+class BookItem:
+    title: str = ""
+    author: str = ""
+    price: str = ""
+    format: str = ""
+
+
+@dataclass
+class BookshopSearchResult:
+    query: str = ""
+    items: List[BookItem] = field(default_factory=list)
+
+
+# Search Bookshop.org for books.
+def search_bookshop(page: Page, request: BookshopSearchRequest) -> BookshopSearchResult:

@@ -1,0 +1,20 @@
+# Searches Newegg for products matching a query, then extracts
+# up to max_results products with name, price, and rating.
+
+@dataclass(frozen=True)
+class NeweggSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class NeweggProduct:
+    name: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class NeweggSearchResult:
+    query: str
+    products: list[NeweggProduct]
+
+def search_newegg(page: Page, request: NeweggSearchRequest) -> NeweggSearchResult

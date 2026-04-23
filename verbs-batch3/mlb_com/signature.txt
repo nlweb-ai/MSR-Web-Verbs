@@ -1,0 +1,20 @@
+# Navigate to mlb.com/standings, scrape the standings table for the requested league,
+# and return the top N teams sorted by wins with name, wins, losses, and games behind.
+
+@dataclass(frozen=True)
+class MlbStandingsRequest:
+    league: str = "American League"
+    max_teams: int = 5
+
+@dataclass(frozen=True)
+class MlbTeamStanding:
+    name: str = ""
+    wins: int = 0
+    losses: int = 0
+    gb: str = "-"
+
+@dataclass(frozen=True)
+class MlbStandingsResult:
+    teams: tuple = ()
+
+def mlb_standings(page: Page, request: MlbStandingsRequest) -> MlbStandingsResult:

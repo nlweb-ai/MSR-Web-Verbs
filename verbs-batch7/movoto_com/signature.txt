@@ -1,0 +1,25 @@
+# Searches Movoto (movoto.com) for home listings by city and state.
+# Extracts address, price, bedrooms, bathrooms, and square footage for each listing.
+
+@dataclass(frozen=True)
+class ListingSearchRequest:
+    city: str = "denver"
+    state: str = "co"
+    max_results: int = 5
+
+@dataclass
+class Listing:
+    address: str = ""
+    price: str = ""
+    bedrooms: str = ""
+    bathrooms: str = ""
+    sqft: str = ""
+
+@dataclass
+class ListingSearchResult:
+    listings: list[Listing]
+
+def listing_search(
+    page: Page,
+    request: ListingSearchRequest,
+) -> ListingSearchResult:

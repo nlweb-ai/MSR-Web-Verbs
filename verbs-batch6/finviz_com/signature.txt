@@ -1,0 +1,19 @@
+# Looks up stock information on Finviz for a given ticker. Extracts the ticker,
+# price, market cap, P/E ratio, EPS, dividend yield, 52-week range, and target price.
+
+@dataclass(frozen=True)
+class StockRequest:
+    ticker: str = "MSFT"
+
+@dataclass
+class StockResult:
+    ticker: str = ""
+    price: str = ""
+    market_cap: str = ""
+    pe_ratio: str = ""
+    eps: str = ""
+    dividend_yield: str = ""
+    week52_range: str = ""
+    target_price: str = ""
+
+def finviz_lookup(page: Page, request: StockRequest) -> StockResult:

@@ -1,0 +1,18 @@
+# Extracts Oscar winners from the most recent ceremony on IMDb. For each
+# category, extracts the category name, winner name, and film title.
+
+@dataclass(frozen=True)
+class OscarRequest:
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class OscarCategory:
+    category_name: str = ""
+    winner_name: str = ""
+    film_title: str = ""
+
+@dataclass(frozen=True)
+class OscarResult:
+    categories: list = None  # list[OscarCategory]
+
+def oscar_winners(page: Page, request: OscarRequest) -> OscarResult:

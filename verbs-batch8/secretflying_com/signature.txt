@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class SecretflyingSearchRequest:
+    region: str = "usa"
+    max_results: int = 10
+
+
+@dataclass
+class SecretflyingDealItem:
+    origin: str = ""
+    destination: str = ""
+    price: str = ""
+    airline: str = ""
+    travel_dates: str = ""
+    deal_type: str = ""
+
+
+@dataclass
+class SecretflyingSearchResult:
+    items: List[SecretflyingDealItem] = field(default_factory=list)
+
+
+# Browse cheap flight deals on Secret Flying by region.
+def secretflying_search(page: Page, request: SecretflyingSearchRequest) -> SecretflyingSearchResult:

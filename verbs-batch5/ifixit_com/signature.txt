@@ -1,0 +1,21 @@
+# Searches iFixit for repair guides matching a query. For each guide, extracts
+# the title, difficulty, estimated time, number of steps, and guide URL.
+
+@dataclass(frozen=True)
+class IFixitSearchRequest:
+    search_query: str = "iPhone 15 battery replacement"
+    max_results: int = 3
+
+@dataclass(frozen=True)
+class IFixitGuide:
+    guide_title: str = ""
+    difficulty: str = ""
+    estimated_time: str = ""
+    num_steps: int = 0
+    guide_url: str = ""
+
+@dataclass(frozen=True)
+class IFixitSearchResult:
+    guides: list = None  # list[IFixitGuide]
+
+def ifixit_search(page: Page, request: IFixitSearchRequest) -> IFixitSearchResult:

@@ -1,0 +1,19 @@
+@dataclass
+class NordstromRequest:
+    query: str
+    max_results: int
+
+@dataclass
+class ProductItem:
+    name: str
+    price: str
+    rating: str
+    num_reviews: str
+
+@dataclass
+class NordstromResult:
+    products: List[ProductItem]
+
+# Searches Nordstrom for dress shoes and extracts product name,
+# price, rating, and number of reviews.
+def search_nordstrom(page: Page, request: NordstromRequest) -> NordstromResult

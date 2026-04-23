@@ -1,0 +1,18 @@
+# Calculates mortgage on Zillow given a home price and down payment percentage,
+# and extracts the monthly payment, principal & interest, property tax, and insurance.
+
+@dataclass(frozen=True)
+class ZillowMortgageRequest:
+    home_price: str
+    down_payment_pct: str
+
+@dataclass(frozen=True)
+class ZillowMortgageResult:
+    home_price: str
+    down_payment_pct: str
+    monthly_payment: str
+    principal_interest: str
+    property_tax: str
+    insurance: str
+
+def calculate_zillow_mortgage(page: Page, request: ZillowMortgageRequest) -> ZillowMortgageResult

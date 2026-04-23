@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class OverleafCompileAndDownloadPDFRequest:
+    project_id: str
+    download_dir: str
+
+
+@dataclass(frozen=True)
+class OverleafCompileAndDownloadPDFResult:
+    success: bool
+    pdf_file_path: str
+    error: str
+
+
+# Navigates to a project by ID, recompiles, and downloads the PDF.
+def overleaf_compile_and_download_pdf(
+    page: Page,
+    request: OverleafCompileAndDownloadPDFRequest,
+) -> OverleafCompileAndDownloadPDFResult:

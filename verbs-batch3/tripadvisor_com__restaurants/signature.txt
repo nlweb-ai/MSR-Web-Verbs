@@ -1,0 +1,20 @@
+# Search for restaurants in a given city on TripAdvisor via Google redirect,
+# extracting name, cuisine type, rating, and price level for each result.
+
+@dataclass(frozen=True)
+class TripadvisorRestaurantSearchRequest:
+    destination: str          # city to search (e.g. "New Orleans, LA")
+    max_results: int = 5      # maximum number of restaurants to return
+
+@dataclass(frozen=True)
+class RestaurantInfo:
+    name: str
+    cuisine: str
+    rating: str
+    price_level: str
+
+@dataclass(frozen=True)
+class TripadvisorRestaurantSearchResult:
+    restaurants: list  # list[RestaurantInfo]
+
+def tripadvisor_restaurant_search(page: Page, request: TripadvisorRestaurantSearchRequest) -> TripadvisorRestaurantSearchResult:

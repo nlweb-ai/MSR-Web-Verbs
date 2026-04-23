@@ -1,0 +1,19 @@
+# Searches OpenCritic (opencritic.com) for a video game and extracts review details.
+# Retrieves title, top critic average, percent recommended, platforms, and release date.
+
+@dataclass(frozen=True)
+class Request:
+    Game_Name: str = "Elden Ring"
+
+@dataclass
+class Result:
+    title: str = ""
+    top_critic_average: str = ""
+    percent_recommended: str = ""
+    platforms: str = ""
+    release_date: str = ""
+
+def game_search(
+    page: Page,
+    request: Request,
+) -> Result:

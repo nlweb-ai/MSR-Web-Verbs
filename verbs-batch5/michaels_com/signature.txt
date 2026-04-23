@@ -1,0 +1,21 @@
+# Searches Michaels for products matching a query. For each product, extracts
+# the name, brand, price, rating, and availability.
+
+@dataclass(frozen=True)
+class MichaelsRequest:
+    query: str = "acrylic paint set"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class MichaelsProduct:
+    product_name: str = ""
+    brand: str = ""
+    price: str = ""
+    rating: str = ""
+    availability: str = ""
+
+@dataclass(frozen=True)
+class MichaelsResult:
+    products: list = None  # list[MichaelsProduct]
+
+def michaels_search(page: Page, request: MichaelsRequest) -> MichaelsResult:

@@ -1,0 +1,15 @@
+# Searches MedlinePlus for a health topic. Extracts the title, summary,
+# key points, and related links.
+
+@dataclass(frozen=True)
+class TopicRequest:
+    topic: str = "high blood pressure"
+
+@dataclass
+class TopicResult:
+    title: str = ""
+    summary: str = ""
+    key_points: List[str] = field(default_factory=list)
+    related_links: List[str] = field(default_factory=list)
+
+def medlineplus_search(page: Page, request: TopicRequest) -> TopicResult:

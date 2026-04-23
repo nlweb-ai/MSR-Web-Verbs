@@ -1,0 +1,18 @@
+@dataclass(frozen=True)
+class KBBRequest:
+    make: str
+    model: str
+    year: str
+
+@dataclass
+class KBBResult:
+    make: str
+    model: str
+    year: str
+    trade_in: str
+    private_party: str
+    fair_purchase_price: str
+
+# Looks up the Kelley Blue Book value for a vehicle specified by make, model, and year.
+# Returns trade-in value, private party value, and fair purchase price.
+def lookup_kbb_value(page: Page, request: KBBRequest) -> KBBResult:

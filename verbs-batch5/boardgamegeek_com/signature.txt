@@ -1,0 +1,21 @@
+# Searches BoardGameGeek for board games matching a query. For each game,
+# extracts the name, year published, geek rating, average rating, and number of voters.
+
+@dataclass(frozen=True)
+class BGGSearchRequest:
+    search_query: str = "cooperative"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class BGGResult:
+    game_name: str = ""
+    year_published: str = ""
+    geek_rating: str = ""
+    avg_rating: str = ""
+    num_voters: str = ""
+
+@dataclass(frozen=True)
+class BGGSearchResult:
+    games: list = None  # list[BGGResult]
+
+def bgg_search(page: Page, request: BGGSearchRequest) -> BGGSearchResult:

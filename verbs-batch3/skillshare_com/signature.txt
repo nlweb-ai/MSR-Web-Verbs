@@ -1,0 +1,24 @@
+# Search for classes on Skillshare by keyword.
+# Navigate to the search results page, then parse the body text to extract
+# up to max_results classes with title, teacher name, duration, and student count.
+
+@dataclass(frozen=True)
+class SkillshareSearchRequest:
+    query: str = "illustration"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class SkillshareClass:
+    title: str = ""
+    teacher: str = ""
+    duration: str = ""
+    students: str = ""
+
+
+@dataclass(frozen=True)
+class SkillshareSearchResult:
+    classes: tuple = ()
+
+
+def skillshare_search(page: Page, request: SkillshareSearchRequest) -> SkillshareSearchResult:

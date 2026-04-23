@@ -1,0 +1,20 @@
+# Searches CourtListener for court opinions matching a query. For each opinion,
+# extracts the case name, court, date filed, and summary.
+
+@dataclass(frozen=True)
+class OpinionRequest:
+    query: str = "freedom of speech"
+    max_results: int = 5
+
+@dataclass
+class Opinion:
+    case_name: str = ""
+    court: str = ""
+    date_filed: str = ""
+    summary: str = ""
+
+@dataclass
+class OpinionResult:
+    opinions: list = field(default_factory=list)
+
+def courtlistener_search(page: Page, request: OpinionRequest) -> OpinionResult:

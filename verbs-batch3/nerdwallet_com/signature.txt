@@ -1,0 +1,23 @@
+# Navigate to NerdWallet's best credit cards page for the given query category,
+# extract up to max_results cards with name, category, annual fee, rewards rate,
+# and sign-up bonus (intro offer), and return them as a list of CreditCard objects.
+
+@dataclass(frozen=True)
+class NerdwalletCardsRequest:
+    query: str = "cash back"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class CreditCard:
+    name: str = "N/A"
+    category: str = "N/A"
+    annual_fee: str = "N/A"
+    rewards_rate: str = "N/A"
+    intro_offer: str = "N/A"
+
+@dataclass(frozen=True)
+class NerdwalletCardsResult:
+    cards: list = None
+    query: str = ""
+
+def nerdwallet_cards(page: Page, request: NerdwalletCardsRequest) -> NerdwalletCardsResult:

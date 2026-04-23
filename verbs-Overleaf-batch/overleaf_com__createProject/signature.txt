@@ -1,0 +1,20 @@
+create_overleaf_project(page, request)
+
+Creates a new Overleaf project from a template by searching templates, opening the first match, and renaming the project.
+
+Parameters:
+  page: Page (Playwright Page object)
+  request: OverleafCreateProjectRequest
+    - template_query (str): Search query for templates (required)
+    - project_name (str): Name to give the new project (required)
+
+Returns: OverleafCreateProjectResult
+  - success (bool): Whether the task completed successfully
+  - project_url (str): URL of the created project (e.g., "https://www.overleaf.com/project/...")
+  - error (str): Error message if failed
+
+Example:
+  request = OverleafCreateProjectRequest(template_query="ieee conference", project_name="My Paper 1")
+  result = create_overleaf_project(page, request)
+  # result.success = True
+  # result.project_url = "https://www.overleaf.com/project/69e6b0191f3d8404d33db385"

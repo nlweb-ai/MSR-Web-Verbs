@@ -1,0 +1,18 @@
+@dataclass
+class PlutoRequest:
+    category: str
+    max_results: int
+
+@dataclass
+class ChannelItem:
+    current_program: str
+    time_remaining: str
+    next_program: str
+
+@dataclass
+class PlutoResult:
+    channels: List[ChannelItem]
+
+# Browses Pluto TV live guide and extracts current program,
+# time remaining, and next program.
+def get_pluto_channels(page: Page, request: PlutoRequest) -> PlutoResult

@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class EverydayHealthSearchRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class HealthArticleItem:
+    title: str
+    author: str
+    medical_reviewer: str
+    publish_date: str
+    summary: str
+
+@dataclass
+class EverydayHealthSearchResult:
+    query: str
+    items: List[HealthArticleItem]
+
+# Searches EverydayHealth.com for articles matching the query and returns
+# up to max_results articles with title, author, medical reviewer, publish date, and summary.
+def search_everydayhealth_articles(page: Page, request: EverydayHealthSearchRequest) -> EverydayHealthSearchResult:

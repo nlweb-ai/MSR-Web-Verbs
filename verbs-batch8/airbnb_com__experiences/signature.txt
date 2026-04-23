@@ -1,0 +1,23 @@
+@dataclass(frozen=True)
+class ExperienceSearchRequest:
+    city: str = "Tokyo, Japan"
+    max_results: int = 5
+
+
+@dataclass
+class ExperienceItem:
+    title: str = ""
+    host_name: str = ""
+    duration: str = ""
+    price_per_person: str = ""
+    rating: str = ""
+    num_reviews: str = ""
+
+
+@dataclass
+class ExperienceSearchResult:
+    items: List[ExperienceItem] = field(default_factory=list)
+
+
+# Search for Airbnb Experiences in a given city and extract listing details.
+def airbnb_experience_search(page: Page, request: ExperienceSearchRequest) -> ExperienceSearchResult:

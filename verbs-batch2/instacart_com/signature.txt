@@ -1,0 +1,20 @@
+# Searches Instacart for grocery products matching a query and extracts
+# up to max_results products with name, price, and store.
+
+@dataclass(frozen=True)
+class InstacartSearchRequest:
+    query: str
+    max_results: int
+
+@dataclass(frozen=True)
+class InstacartProduct:
+    name: str
+    price: str
+    store: str
+
+@dataclass(frozen=True)
+class InstacartSearchResult:
+    query: str
+    products: list[InstacartProduct]
+
+def search_instacart(page: Page, request: InstacartSearchRequest) -> InstacartSearchResult

@@ -1,0 +1,16 @@
+# Looks up a game review on Common Sense Media. Extracts the title, age rating,
+# quality rating, one-liner, and parents-need-to-know summary.
+
+@dataclass(frozen=True)
+class CSMReviewRequest:
+    game_slug: str = "minecraft"
+
+@dataclass(frozen=True)
+class CSMReviewResult:
+    title: str = ""
+    age_rating: str = ""
+    quality_rating: str = ""
+    one_liner: str = ""
+    parents_need_to_know: str = ""
+
+def csm_review(page: Page, request: CSMReviewRequest) -> CSMReviewResult:

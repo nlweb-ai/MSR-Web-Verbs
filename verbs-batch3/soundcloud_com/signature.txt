@@ -1,0 +1,24 @@
+# Search for tracks on SoundCloud by keyword query.
+# Navigates to the search results page filtered to tracks, parses the body text
+# to extract track title, artist, duration, and play count for up to max_results tracks.
+
+@dataclass(frozen=True)
+class SoundcloudSearchRequest:
+    query: str = "lo-fi hip hop"
+    max_results: int = 5
+
+
+@dataclass(frozen=True)
+class SoundcloudTrack:
+    title: str = "N/A"
+    artist: str = "N/A"
+    duration: str = "N/A"
+    plays: str = "N/A"
+
+
+@dataclass(frozen=True)
+class SoundcloudSearchResult:
+    tracks: tuple = ()
+
+
+def soundcloud_search(page: Page, request: SoundcloudSearchRequest) -> SoundcloudSearchResult:

@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class RottenTomatoesComingSoonSearchRequest:
+    max_results: int = 10
+
+
+@dataclass
+class RottenTomatoesMovieItem:
+    movie_title: str = ""
+    tomatometer_score: str = ""
+    audience_score: str = ""
+    release_date: str = ""
+    synopsis: str = ""
+    critics_consensus: str = ""
+
+
+@dataclass
+class RottenTomatoesComingSoonSearchResult:
+    items: List[RottenTomatoesMovieItem] = field(default_factory=list)
+
+
+# Browse upcoming movie releases on Rotten Tomatoes.
+def rottentomatoes_coming_soon_search(page: Page, request: RottenTomatoesComingSoonSearchRequest) -> RottenTomatoesComingSoonSearchResult:

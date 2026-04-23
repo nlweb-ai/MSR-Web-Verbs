@@ -1,0 +1,21 @@
+# Searches AllEvents for events in a given city matching a query. For each event,
+# extracts the event name, date, venue, and event URL.
+
+@dataclass(frozen=True)
+class EventSearchRequest:
+    city: str = "Austin"
+    query: str = "music festival"
+    max_results: int = 5
+
+@dataclass
+class Event:
+    event_name: str = ""
+    date: str = ""
+    venue: str = ""
+    event_url: str = ""
+
+@dataclass
+class EventSearchResult:
+    events: list = field(default_factory=list)
+
+def allevents_search(page: Page, request: EventSearchRequest) -> EventSearchResult:

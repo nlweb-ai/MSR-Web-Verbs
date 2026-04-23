@@ -1,0 +1,13 @@
+tvguide_search(search_query: str = "drama", max_results: int = 5) -> list[dict]
+
+Browse live TV listings on TV Guide.
+
+Parameters:
+  search_query (str): The search query. Default: "drama"
+  max_results (int): Maximum number of results to return. Default: 5
+
+Returns:
+  list[dict]: A list of dictionaries, each containing:
+    - show_title (str): The title of the TV show
+    - air_time (str): The air time of the show
+    - network (str): The network airing the show

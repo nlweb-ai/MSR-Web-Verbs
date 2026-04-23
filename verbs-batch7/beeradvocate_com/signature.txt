@@ -1,0 +1,26 @@
+# Searches BeerAdvocate (beeradvocate.com) for top-rated beers of a given style.
+# Extracts beer name, brewery, style, ABV, rating score, and number of reviews.
+
+@dataclass(frozen=True)
+class BeerSearchRequest:
+    beer_style: str = "stout"
+    style_id: int = 157
+    max_beers: int = 5
+
+@dataclass
+class Beer:
+    beer_name: str = ""
+    brewery: str = ""
+    style: str = ""
+    abv: str = ""
+    rating_score: str = ""
+    num_reviews: str = ""
+
+@dataclass
+class BeerSearchResult:
+    beers: list[Beer]
+
+def beeradvocate_search(
+    page: Page,
+    request: BeerSearchRequest,
+) -> BeerSearchResult:

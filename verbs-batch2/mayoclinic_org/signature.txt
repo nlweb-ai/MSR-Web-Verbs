@@ -1,0 +1,15 @@
+# Looks up a medical condition on Mayo Clinic and extracts
+# the overview, symptoms, and causes sections.
+
+@dataclass(frozen=True)
+class MayoClinicConditionRequest:
+    condition: str
+
+@dataclass(frozen=True)
+class MayoClinicConditionResult:
+    condition: str
+    overview: str
+    symptoms: str
+    causes: str
+
+def lookup_mayoclinic_condition(page: Page, request: MayoClinicConditionRequest) -> MayoClinicConditionResult

@@ -1,0 +1,21 @@
+# Extracts real-time world population statistics from Worldometers (worldometers.info).
+# Retrieves world population, births/deaths today and this year, and net population growth.
+
+@dataclass(frozen=True)
+class StatsRequest:
+    pass
+
+@dataclass
+class StatsResult:
+    world_population: str = ""
+    births_today: str = ""
+    deaths_today: str = ""
+    net_growth_today: str = ""
+    births_this_year: str = ""
+    deaths_this_year: str = ""
+    net_growth_this_year: str = ""
+
+def worldometers_stats(
+    page: Page,
+    request: StatsRequest,
+) -> StatsResult:

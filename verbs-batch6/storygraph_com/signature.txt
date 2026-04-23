@@ -1,0 +1,18 @@
+# Searches The StoryGraph for books matching a query. For each book, extracts
+# the title and URL.
+
+@dataclass(frozen=True)
+class BookRequest:
+    query: str = "fantasy books 2024"
+    max_results: int = 5
+
+@dataclass
+class Book:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class BookResult:
+    items: List[Book] = field(default_factory=list)
+
+def storygraph_search(page: Page, request: BookRequest) -> BookResult:

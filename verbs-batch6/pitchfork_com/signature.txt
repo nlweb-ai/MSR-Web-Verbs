@@ -1,0 +1,18 @@
+# Searches Pitchfork for album reviews matching a query. For each review,
+# extracts the title and URL.
+
+@dataclass(frozen=True)
+class ReviewRequest:
+    query: str = "Radiohead album review"
+    max_results: int = 5
+
+@dataclass
+class Review:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ReviewResult:
+    reviews: List[Review] = field(default_factory=list)
+
+def pitchfork_search(page: Page, request: ReviewRequest) -> ReviewResult:

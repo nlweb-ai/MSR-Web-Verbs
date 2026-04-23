@@ -1,0 +1,24 @@
+# Searches Energy.gov for articles and news by keyword.
+# Extracts title, URL, date, content type, and issuing office for each result.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    search_query: str = "renewable energy"
+    max_results: int = 5
+
+@dataclass
+class SearchItem:
+    title: str = ""
+    url: str = ""
+    date: str = ""
+    content_type: str = ""
+    office: str = ""
+
+@dataclass
+class SearchResult:
+    items: list[SearchItem]
+
+def energy_search(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

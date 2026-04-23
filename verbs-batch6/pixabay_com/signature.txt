@@ -1,0 +1,18 @@
+# Searches Pixabay for free images matching a query. For each image, extracts
+# the title and URL.
+
+@dataclass(frozen=True)
+class ImageRequest:
+    query: str = "ocean waves"
+    max_results: int = 5
+
+@dataclass
+class ImageItem:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class ImageResult:
+    images: List[ImageItem] = field(default_factory=list)
+
+def pixabay_search(page: Page, request: ImageRequest) -> ImageResult:

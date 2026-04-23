@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class EdxSearchRequest:
+    search_query: str = "data science"
+    max_results: int = 5
+
+
+@dataclass
+class CourseItem:
+    name: str = ""
+    institution: str = ""
+    duration: str = ""
+    level: str = ""
+
+
+@dataclass
+class EdxSearchResult:
+    query: str = ""
+    items: List[CourseItem] = field(default_factory=list)
+
+
+# Search edX for online courses.
+def search_edx(page: Page, request: EdxSearchRequest) -> EdxSearchResult:

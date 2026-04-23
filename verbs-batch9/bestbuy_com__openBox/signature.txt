@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class BestBuyOpenBoxRequest:
+    category: str = "laptops"
+    max_results: int = 5
+
+
+@dataclass
+class OpenBoxItem:
+    product_name: str
+    open_box_price: str
+    original_price: str
+    rating: str
+
+
+@dataclass
+class BestBuyOpenBoxResult:
+    category: str = ""
+    items: List[OpenBoxItem] = field(default_factory=list)
+
+
+# Browse Best Buy open-box deals.
+def browse_bestbuy_openbox(page: Page, request: BestBuyOpenBoxRequest) -> BestBuyOpenBoxResult:

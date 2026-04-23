@@ -1,0 +1,19 @@
+# apple_podcasts_search — Search for podcasts on Apple Podcasts and extract details.
+
+@dataclass(frozen=True)
+class ApplePodcastsSearchRequest:
+    query: str = "true crime"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ApplePodcast:
+    podcast_name: str = ""
+    publisher: str = ""
+    url: str = ""
+    artwork_url: str = ""
+
+@dataclass(frozen=True)
+class ApplePodcastsSearchResult:
+    podcasts: list = None  # list[ApplePodcast]
+
+def apple_podcasts_search(page: Page, request: ApplePodcastsSearchRequest) -> ApplePodcastsSearchResult:

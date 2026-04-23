@@ -1,0 +1,21 @@
+# Searches We Work Remotely for remote jobs matching a query. For each job,
+# extracts the title, company, job type, region, and posting date.
+
+@dataclass(frozen=True)
+class WWRRequest:
+    query: str = "backend developer"
+    max_jobs: int = 5
+
+@dataclass
+class RemoteJob:
+    title: str = ""
+    company: str = ""
+    job_type: str = ""
+    region: str = ""
+    posting_date: str = ""
+
+@dataclass
+class WWRResult:
+    jobs: list = field(default_factory=list)
+
+def wwr_search(page: Page, request: WWRRequest) -> WWRResult:

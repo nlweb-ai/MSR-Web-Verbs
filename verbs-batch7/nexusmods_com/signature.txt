@@ -1,0 +1,26 @@
+# Browses trending mods on Nexus Mods (nexusmods.com) for a specified game.
+# Extracts mod name, author, category, description, endorsements, downloads, and URL.
+
+@dataclass(frozen=True)
+class SearchRequest:
+    game: str = "skyrimspecialedition"
+    max_results: int = 5
+
+@dataclass
+class Mod:
+    mod_name: str = ""
+    author: str = ""
+    category: str = ""
+    description: str = ""
+    endorsements: str = ""
+    downloads: str = ""
+    url: str = ""
+
+@dataclass
+class SearchResult:
+    mods: list[Mod]
+
+def nexusmods_trending(
+    page: Page,
+    request: SearchRequest,
+) -> SearchResult:

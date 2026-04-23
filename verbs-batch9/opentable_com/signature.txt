@@ -1,0 +1,22 @@
+@dataclass
+class OpenTableRequest:
+    location: str
+    cuisine: str
+    max_results: int
+
+@dataclass
+class RestaurantItem:
+    name: str
+    cuisine: str
+    price_range: str
+    rating: str
+    num_reviews: str
+    next_available: str
+
+@dataclass
+class OpenTableResult:
+    restaurants: List[RestaurantItem]
+
+# Searches OpenTable for restaurants and extracts name, cuisine,
+# price range, rating, reviews, and next available time.
+def search_opentable(page: Page, request: OpenTableRequest) -> OpenTableResult

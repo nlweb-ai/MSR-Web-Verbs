@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class BallotpediaSearchRequest:
+    search_query: str = "2024 Senate election"
+    max_results: int = 5
+
+
+@dataclass
+class BallotpediaResultItem:
+    title: str = ""
+    snippet: str = ""
+    url: str = ""
+    category: str = ""
+
+
+@dataclass
+class BallotpediaSearchResult:
+    items: List[BallotpediaResultItem] = field(default_factory=list)
+
+
+# Search for election information on Ballotpedia.
+def ballotpedia_search(page: Page, request: BallotpediaSearchRequest) -> BallotpediaSearchResult:

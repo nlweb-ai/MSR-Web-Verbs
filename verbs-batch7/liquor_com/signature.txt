@@ -1,0 +1,21 @@
+# Searches Liquor.com for cocktail recipes by keyword.
+# Extracts cocktail name and list of ingredients for each recipe.
+
+@dataclass(frozen=True)
+class CocktailSearchRequest:
+    query: str = "margarita"
+    max_results: int = 3
+
+@dataclass
+class Cocktail:
+    name: str = ""
+    ingredients: list[str]
+
+@dataclass
+class CocktailSearchResult:
+    cocktails: list[Cocktail]
+
+def cocktail_search(
+    page: Page,
+    request: CocktailSearchRequest,
+) -> CocktailSearchResult:

@@ -1,0 +1,22 @@
+@dataclass(frozen=True)
+class MinimalistBakerSearchRequest:
+    search_query: str = "vegan pasta"
+    max_results: int = 5
+
+@dataclass
+class MinimalistBakerSearchItem:
+    recipe_name: str = ""
+    total_time: str = ""
+    servings: str = ""
+    rating: str = ""
+    description: str = ""
+    diet_tags: str = ""
+
+@dataclass
+class MinimalistBakerSearchResult:
+    items: List[MinimalistBakerSearchItem] = field(default_factory=list)
+    query: str = ""
+    result_count: int = 0
+
+def minimalistbaker_search(request: MinimalistBakerSearchRequest) -> MinimalistBakerSearchResult:
+    ...

@@ -1,0 +1,21 @@
+# Searches the National Gallery of Art collection for artworks matching a query.
+# For each artwork, extracts the title, artist, date, medium, and URL.
+
+@dataclass(frozen=True)
+class ArtworkRequest:
+    query: str = "Monet impressionism"
+    max_results: int = 5
+
+@dataclass
+class Artwork:
+    title: str = ""
+    artist: str = ""
+    date: str = ""
+    medium: str = ""
+    url: str = ""
+
+@dataclass
+class ArtworkResult:
+    artworks: List[Artwork] = field(default_factory=list)
+
+def nga_search(page: Page, request: ArtworkRequest) -> ArtworkResult:

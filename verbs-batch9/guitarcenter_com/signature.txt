@@ -1,0 +1,21 @@
+@dataclass(frozen=True)
+class GuitarCenterRequest:
+    search_query: str
+    max_results: int
+
+@dataclass
+class GuitarItem:
+    name: str
+    brand: str
+    price: str
+    body_type: str
+    rating: str
+
+@dataclass
+class GuitarCenterResult:
+    query: str
+    items: List[GuitarItem]
+
+# Searches Guitar Center for products matching the query and returns
+# up to max_results items with name, brand, price, body type, and rating.
+def search_guitarcenter(page: Page, request: GuitarCenterRequest) -> GuitarCenterResult:

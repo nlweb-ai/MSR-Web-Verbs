@@ -1,0 +1,170 @@
+"""
+IRS.gov – Popular Forms & Publications
+Extract up to 10 popular IRS forms with form number and URL.
+Pure Playwright – no AI.
+"""
+from datetime import date, timedelta
+import re, os, sys, traceback, shutil, tempfile
+from playwright.sync_api import Page, sync_playwright
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from cdp_utils import get_free_port, launch_chrome, wait_for_cdp_ws, find_chrome_executable
+from playwright_debugger import checkpoint
+
+from dataclasses import dataclass
+import subprocess
+import json
+import time
+from urllib.request import urlopen
+
+
+@dataclass(frozen=True)
+class IrsFormsRequest:
+    max_results: int
+
+
+@dataclass(frozen=True)
+class IrsForm:
+    form: str
+    url: str
+
+
+@dataclass(frozen=True)
+class IrsFormsResult:
+    forms: list[IrsForm]
+
+
+# Fetches the most popular IRS forms and publications, returning up to max_results items with form name and URL.
+def get_irs_popular_forms(
+    page: Page,
+    request: IrsFormsRequest,
+) -> IrsFormsResult:
+    max_results = request.max_results
+    raw_results = []
+    forms = []
+    try:
+        print("STEP 1: Navigate to IRS Forms & Instructions page...")
+        checkpoint("Navigate to IRS Forms & Instructions page")
+        page.goto(
+            "https://www.irs.gov/forms-instructions",
+            wait_until="domcontentloaded", timeout=30000,
+        )
+        page.wait_for_timeout(4000)
+
+        # Dismiss any popups
+        for sel in ["button:has-text('Accept')", "#close-button", "[aria-label='Close']"]:
+            try:
+                loc = page.locator(sel).first
+                if loc.is_visible(timeout=800):
+                    checkpoint(f"Dismiss popup via {sel}")
+                    loc.evaluate("el => el.click()")
+            except Exception:
+                pass
+
+        for _ in range(3):
+            checkpoint("Scroll down to load more content")
+            page.evaluate("window.scrollBy(0, 500)")
+            page.wait_for_timeout(500)
+
+        print("STEP 2: Extract popular forms...")
+
+        # Strategy 1: links containing "Form" text with IRS URLs
+        form_links = page.locator("a[href*='/forms-pubs/'], a[href*='/pub/irs-pdf/']").all()
+        seen = set()
+        for link in form_links:
+            if len(forms) >= request.max_results:
+                break
+            try:
+                text = link.inner_text(timeout=1500).strip()
+                href = link.get_attribute("href") or ""
+                # Filter for actual form references
+                if re.match(r'^(Form|Schedule|Pub)', text) and len(text) < 120:
+                    key = text.lower()
+                    if key not in seen:
+                        seen.add(key)
+                        full_url = href if href.startswith("http") else f"https://www.irs.gov{href}"
+                        forms.append({"form": text, "url": full_url})
+            except Exception:
+                continue
+
+        # Strategy 2: body text — look for form numbers
+        if not forms:
+            print("   Strategy 1 found 0 — trying body text...")
+            body = page.inner_text("body")
+            lines = [l.strip() for l in body.splitlines() if l.strip()]
+            for ln in lines:
+                if len(forms) >= request.max_results:
+                    break
+                m = re.match(r'^(Form\s+[\w-]+(?:\s*\(.*?\))?)', ln)
+                if m and len(ln) < 120:
+                    form_name = m.group(1).strip()
+                    if form_name.lower() not in seen:
+                        seen.add(form_name.lower())
+                        forms.append({"form": form_name, "url": "N/A"})
+
+        if not forms:
+            print("❌ ERROR: Extraction failed — no forms found from the page.")
+
+        print(f"\nDONE – {len(forms)} Popular IRS Forms:")
+        for i, f in enumerate(forms, 1):
+            print(f"  {i}. {f['form']}")
+            print(f"     URL: {f['url']}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+        traceback.print_exc()
+    return IrsFormsResult(
+        forms=[IrsForm(form=f['form'], url=f['url']) for f in forms],
+    )
+
+
+def test_get_irs_popular_forms() -> None:
+    from playwright.sync_api import sync_playwright
+    request = IrsFormsRequest(max_results=5)
+    port = get_free_port()
+    profile_dir = tempfile.mkdtemp(prefix="chrome_cdp_")
+    chrome = os.environ.get("CHROME_PATH") or find_chrome_executable()
+    chrome_proc = subprocess.Popen(
+        [
+            chrome,
+            f"--remote-debugging-port={port}",
+            f"--user-data-dir={profile_dir}",
+            "--remote-allow-origins=*",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1280,987",
+            "about:blank",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    ws_url = None
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        try:
+            resp = urlopen(f"http://127.0.0.1:{port}/json/version", timeout=2)
+            ws_url = json.loads(resp.read()).get("webSocketDebuggerUrl", "")
+            if ws_url:
+                break
+        except Exception:
+            pass
+        time.sleep(0.4)
+    if not ws_url:
+        raise TimeoutError("Chrome CDP not ready")
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.connect_over_cdp(ws_url)
+        context = browser.contexts[0]
+        page = context.pages[0] if context.pages else context.new_page()
+        try:
+            result = get_irs_popular_forms(page, request)
+        finally:
+            chrome_proc.terminate()
+            shutil.rmtree(profile_dir, ignore_errors=True)
+    assert len(result.forms) <= request.max_results
+    print(f"\nTotal forms found: {len(result.forms)}")
+
+
+if __name__ == "__main__":
+    from playwright_debugger import run_with_debugger
+    run_with_debugger(test_get_irs_popular_forms)

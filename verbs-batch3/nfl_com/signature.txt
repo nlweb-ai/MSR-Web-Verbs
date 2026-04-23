@@ -1,0 +1,24 @@
+# Navigate to the ESPN schedule page for a given NFL team, parse recent/postseason
+# game results (week, date, opponent, result, record), and return up to max_games
+# most recent games in chronological order.
+
+@dataclass(frozen=True)
+class NflScheduleRequest:
+    team_slug: str = "sea"
+    team: str = "Seattle Seahawks"
+    max_games: int = 5
+
+@dataclass(frozen=True)
+class NflGame:
+    week: str
+    date: str
+    opponent: str
+    result: str
+    record: str
+
+@dataclass(frozen=True)
+class NflScheduleResult:
+    team: str
+    games: list  # list[NflGame]
+
+def nfl_schedule(page: Page, request: NflScheduleRequest) -> NflScheduleResult:

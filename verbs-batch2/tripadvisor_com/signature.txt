@@ -1,0 +1,20 @@
+# Searches TripAdvisor for hotels at a destination (via Google) and extracts
+# up to max_results hotels with name, price, and rating.
+
+@dataclass(frozen=True)
+class TripAdvisorHotelsRequest:
+    destination: str
+    max_results: int
+
+@dataclass(frozen=True)
+class TripAdvisorHotel:
+    name: str
+    price: str
+    rating: str
+
+@dataclass(frozen=True)
+class TripAdvisorHotelsResult:
+    destination: str
+    hotels: list[TripAdvisorHotel]
+
+def search_tripadvisor_hotels(page: Page, request: TripAdvisorHotelsRequest) -> TripAdvisorHotelsResult

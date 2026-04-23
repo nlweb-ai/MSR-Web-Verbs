@@ -1,0 +1,20 @@
+# Search for photos on flickr.com matching a query and extract photo
+# titles, photographer names, photo urls, and image urls.
+
+@dataclass(frozen=True)
+class FlickrSearchRequest:
+    query: str = "northern lights"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class FlickrPhoto:
+    title: str = ""
+    photographer: str = ""
+    url: str = ""
+    image_url: str = ""
+
+@dataclass(frozen=True)
+class FlickrSearchResult:
+    photos: list = None  # list[FlickrPhoto]
+
+def flickr_search(page: Page, request: FlickrSearchRequest) -> FlickrSearchResult:

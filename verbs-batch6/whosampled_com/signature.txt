@@ -1,0 +1,18 @@
+# Searches WhoSampled for music sample information matching a query. For each
+# result, extracts the title and URL.
+
+@dataclass(frozen=True)
+class SampleRequest:
+    query: str = "Kanye West samples"
+    max_results: int = 5
+
+@dataclass
+class Sample:
+    title: str = ""
+    url: str = ""
+
+@dataclass
+class SampleResult:
+    items: List[Sample] = field(default_factory=list)
+
+def whosampled_search(page: Page, request: SampleRequest) -> SampleResult:

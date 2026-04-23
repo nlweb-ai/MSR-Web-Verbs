@@ -1,0 +1,22 @@
+# Retrieves the latest N papers from an arXiv subject-category listing page.
+# For each paper, extracts the title, authors, abstract, arXiv ID, and PDF URL.
+
+@dataclass(frozen=True)
+class ArxivPapersRequest:
+    category: str = "cs.CR"
+    max_results: int = 5
+
+@dataclass(frozen=True)
+class ArxivPaper:
+    arxiv_id: str
+    title: str
+    authors: list[str]
+    pdf_url: str
+    abstract: str
+
+@dataclass(frozen=True)
+class ArxivPapersResult:
+    category: str
+    papers: list[ArxivPaper]
+
+def search_arxiv_papers(page: Page, request: ArxivPapersRequest) -> ArxivPapersResult

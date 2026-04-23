@@ -1,0 +1,24 @@
+# Looks up a GitHub user profile by username. Extracts the display name, bio,
+# location, public repos count, followers, and top repositories with descriptions and stars.
+
+@dataclass(frozen=True)
+class ProfileRequest:
+    username: str = "torvalds"
+    max_repos: int = 5
+
+@dataclass
+class Repo:
+    name: str = ""
+    description: str = ""
+    stars: str = ""
+
+@dataclass
+class ProfileResult:
+    display_name: str = ""
+    bio: str = ""
+    location: str = ""
+    public_repos: str = ""
+    followers: str = ""
+    repos: list = field(default_factory=list)
+
+def github_profile(page: Page, request: ProfileRequest) -> ProfileResult:

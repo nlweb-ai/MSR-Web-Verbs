@@ -1,0 +1,19 @@
+@dataclass(frozen=True)
+class BridesSearchRequest:
+    query: str = "outdoor wedding ideas"
+    max_results: int = 5
+
+
+@dataclass
+class ArticleItem:
+    title: str = ""
+
+
+@dataclass
+class BridesSearchResult:
+    query: str = ""
+    items: List[ArticleItem] = field(default_factory=list)
+
+
+# Search Brides.com for articles.
+def search_brides(page: Page, request: BridesSearchRequest) -> BridesSearchResult:

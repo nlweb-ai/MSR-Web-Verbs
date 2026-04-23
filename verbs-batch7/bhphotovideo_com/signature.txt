@@ -1,0 +1,23 @@
+# Searches B&H Photo (bhphotovideo.com) for products by query.
+# Extracts product name, price, customer rating, and availability for each result.
+
+@dataclass(frozen=True)
+class ProductSearchRequest:
+    search_query: str = "Sony A7 IV"
+    max_products: int = 5
+
+@dataclass
+class Product:
+    product_name: str = ""
+    price: str = ""
+    customer_rating: str = ""
+    availability: str = ""
+
+@dataclass
+class ProductSearchResult:
+    products: list[Product]
+
+def bhphoto_search(
+    page: Page,
+    request: ProductSearchRequest,
+) -> ProductSearchResult:
