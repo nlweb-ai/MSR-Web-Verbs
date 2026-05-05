@@ -37,6 +37,20 @@ From the `UI` directory, run:
 python app.py
 ```
 
+### macOS
+
+`app.py` uses Windows-only APIs (`ctypes.windll`, `LOCALAPPDATA`). On macOS, run the port:
+
+```
+python UI/app_mac.py
+```
+
+It uses `~/Library/Application Support/Google/Chrome` as the profile root and skips the Chrome window-snap (Chrome opens at the position passed via `--window-position` and stays there). Install the standalone Copilot CLI via npm instead of `gh extension`:
+
+```
+npm install -g @github/copilot
+```
+
 > **Note:** Some verbs require signed-in sessions (e.g., Uber, airline sites). The app launches Chrome with a persistent profile. On first launch, sign in to the websites you need, then close and restart the app. Your sessions will be preserved for subsequent runs. (We will make this process smoother later.) 
 
 ## An earlier video demo (January 2026)
